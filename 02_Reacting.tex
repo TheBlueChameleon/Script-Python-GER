@@ -1,0 +1,369 @@
+\chapter{Usereingaben und Entscheidungen}
+\epigraph{
+	We must believe in free will -- we have no choice.
+}{Isaac Bashevis Singer}
+
+Im vorigen Kapitel lief unser Programm wie auf Schinen: einmal in Gang gesetzt konnte es nicht von dem vorgeschriebenen Pfad abweichen, das Ergebnis jeder Zeile war vorherbestimmt. In diesem Kapitel wollen wir dies auflockern, indem wir Eingaben des Benutzers annehmen und darauf reagieren.
+
+\section{Usereingaben -- \inPy{input}}
+Die Funktion \inPy{input} kann benutzt werden, um Eingaben von der Tastatur zu lesen. Diese werden als String gespeichert und können an eigene Variablen übergeben werden. Optional kann ein \emph{Prompt} angezeigt werden, also ein Text, der den User zur Texteingabe auffordert.
+
+\begin{codebox}[Syntax: \texttt{input}]
+\inPy{variable = input(prompt)}
+\end{codebox}
+
+In dieser Zeile erkennen Sie ein Schema, das Sie beim Programmieren in Python (und in vielen anderen Sprachen) täglich benutzen werden:
+
+Eine \emph{Funktion} wird aufgerufen, indem ihr Name genannt wird, und in Klammern dahinter eine \emph{Parameterliste} übergeben wird. Dies ist eine durch Kommata getrennte Liste von Werten, wie sie es schon von \inPy{print} kennen. Die Funktion berechnet auf Basis der Argumente in der Parameterliste einen Wert, der wiederum in einer (oder mehreren) Variablen gespeichert oder auch verworfen werdem kann. Neben der Berechnung von Werten können Funktionen auch Nebeneffekte haben, wie etwa die Ausgabe von Text auf dem Bildschirm\footnote{\inPy{print} ist eine Funktion. Sie hat den \enquote{Nebeneffekt}, dass Text ausgegeben wird, und den Rückgabewert \inPy{None}. Mehr dazu später.}.
+
+\begin{codebox}[Beispiel: \texttt{input}]
+\begin{minted}[linenos]{python}
+inText   = input("Bitte geben Sie eine Zahl ein: ")
+inNumber = float(inText)
+print("Das Quadrat dieser Zahl ist", inNumber ** 2)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabebeispiel \texttt{input} (1)]
+\begin{minted}{text}
+Bitte geben Sie eine Zahl ein: 1.5
+Das Quadrat dieser Zahl ist 2.25
+\end{minted}
+\end{cmdbox}
+
+
+\begin{cmdbox}[Ausgabebeispiel \texttt{input} (2)]
+\begin{minted}{text}
+Bitte geben Sie eine Zahl ein: eins
+Traceback (most recent call last):
+  File "inputTest.py", line 2, in <module>
+    inNumber = float(inText)
+ValueError: could not convert string to float: 'eins'
+\end{minted}
+\end{cmdbox}
+
+\begin{hintbox}[Tipp: \texttt{input} beim Entwickeln auskommentieren]
+Sie werden feststellen, dass es einige Zeit dauert, bis Ihr Code das tut, was Sie möchten. Erst nach einigen Ausführungen des Codes werden Sie alle Fehler gefunden und behoben haben. Wenn Sie für jeden Test neu manuell die Eingaben tätigen müssen, die Sie von Ihrem End-User schließlich verlangen, wird Sie das beim Entwickeln Ihres Codes ausbremsen.
+
+Es bietet sich daher an, \inPy{input}-Zeilen auszukommentieren und stattdessen konstante Werte vorzugeben. Schreiben Sie zum Beispiel:
+\begin{codebox}[\texttt{input} auskommentieren]
+\begin{minted}[linenos]{python}
+inText   = "1.5" # input("Bitte geben Sie eine Zahl ein: ")
+inNumber = float(inText)
+print("Das Quadrat dieser Zahl ist", inNumber ** 2)
+\end{minted}
+\end{codebox}
+bis Sie sich sicher sind, dass die Codezeilen, die Ihrer Eingabe folgen, tatsächlich Ihre Wünsche erfüllen. Vergessen Sie danach nicht, die Eingabemöglichkeit wiederherzustellen!
+\end{hintbox}
+
+\section{Bedingte Codeausführung}
+Da wir nun eine Möglichkeit gefunden haben, Eingaben des Users in unseren Programmablauf einzuführen, ist das Ergebnis unseres Programmes nicht mehr schon vor der Ausführung vorherbestimmt. Wir wollen darauf aufbauen, und abhängig von Eingaben Entscheidungen treffen: Einzelne Programmteile sollen nur dann ausgeführt werden, wenn eine \emph{Bedingung} erfüllt ist. Hierzu jedoch zunächst etwas Theorie:
+
+\subsection{Booleans -- Wahrheitswerte}
+Mathematischen Ausdrücken können \emph{Wahrheitswerte} zugeordnet werden. Diese Wahrheitswerte sagen aus, ob es sich um eine \enquote{wahre} oder \enquote{falsche} Aussage handelt. Ein Beispiel für einen solchen Ausdruck ist:
+\begin{center}
+\inPy{1 + 5 * 8 + 1 == 42}
+\end{center}
+Der Wahrheitswert dieses Ausdrucks ist offensichtlich \emph{wahr} (bzw. \inPy{True}).
+
+Beachten Sie bitte, dass für den \emph{Vergleich} zweier Zahlen das \emph{doppelte Gleichheitszeichen} \inPy{==} verwendet wird. Das einfache Gleichheitszeichen \inPy{=} dient ausschließlich der \emph{Wertzuweisung} an Variablen.
+
+Tabelle \ref{tab:OperatorsComparison} listet weitere Vergleichsoperatoren auf.
+\begin{table}[h!]
+	\newcolumntype{C}{>{         \centering\arraybackslash} p{.245\linewidth}}
+	\newcolumntype{O}{>{\ttfamily\centering\arraybackslash} p{.200\linewidth}}
+
+	\rowcolors{1}{tabhighlight}{white}
+\begin{center}
+\begin{tabularx}
+	{\linewidth}
+	{CO|CO}
+\toprule[1pt]
+	
+	\textbf{Vergleich}  & \normalfont \textbf{Zeichen}  &  
+	\textbf{Vergleich}  & \normalfont \textbf{Zeichen}
+\tabcrlf
+
+	Gleichheit          & ==                   &  Ungleichheit         & != \textrm{oder} <>\\
+	Kleiner als         & <                    &  Größer als           & >  \\
+	Kleiner oder gleich & <=                   &  Größer oder gleich   & >= \\
+	
+\bottomrule[1pt]
+\end{tabularx}
+\end{center}
+\caption{Vergleichsoperatoren in Python}\label{tab:OperatorsComparison}
+\end{table}
+
+Das Ergebnis eines Vergleichs ist selbst eine Information, die in einer Variablen gespeichert werden kann. Der \emph{Datentyp} eines solches Vergleichs nennt sich \inPy{bool}\footnote{Häufig spricht man auch von \emph{Booleans}, benannt nach dem englischen Mathematiker George Boole.}. Ein solcher Boolean kann nur entweder \inPy{True} oder \inPy{False} sein.
+
+Theoretisch reicht also ein einziges Bit, um die Information \inPy{True/False} zu kodieren. Aus technischen Gründen können jedoch nur Gruppen zu mindestens 8 Bit -- also 1 Byte -- verarbeitet werden. Intern werden \inPy{bool}s daher als \inPy{int}s abgelegt und anders herum \inPy{int}s wie \inPy{bool}s behandelt. Als \inPy{True} gilt dabei jeder Wert, der von \inPy{0} verschieden ist. Sie können Booleans also auch als eine besondere Darstellungsform von \inPy{int}s verstehen.
+
+Mit diesen \emph{Booleans} kann nun auch wieder gerechnet werden. Wenig sinnvoll (aber durchaus möglich) sind die Grundrechenarten (Addition, Subtraktion, ...). Hier zählt \inPy{True} als der \inPy{int 1} während \inPy{False} wie eine \inPy{0} behandelt wird.
+
+Interessanter dagegen sind \emph{logische Verknüpfungen}: Wir können uns eine Gesamtaussage vorstellen, die aus zwei oder mehreren Teilaussagen besteht. So kann die Gesamtaussage \emph{Es ist angenehm warm} dann erfüllt (\inPy{True}) sein, wenn sowohl die Teilaussage \emph{Es ist wärmer als 20°C}, ALS AUCH die Teilaussage \emph{Es ist kälter als 25°C} erfüllt ist. Formal wird dies mit dem \emph{logischen Operator} \inPy{and} ausgedrückt: Nur wenn beide Booleans \inPy{True} sind, ist das Ergebnis von \inPy{and} auch \inPy{True}. Folgendes Beispiel zeigt Ihnen die Anwendung des logischen Operators \inPy{and}:
+
+\begin{codebox}[Beispiel: \texttt{and}]
+\begin{minted}[linenos]{python}
+temperature = float(input("Bitte geben Sie die aktuelle Temperatur ein: "))
+
+warmEnough = temperature > 20
+coldEnough = temperature < 25
+
+pleasantTemperature = warmEnough and coldEnough
+
+print("Die Aussage 'es ist angenehm warm' ist", pleasantTemperature)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabebeispiel \texttt{and}]
+\begin{minted}{text}
+Bitte geben Sie die aktuelle Temperatur ein: 18
+Die Aussage 'es ist angenehm warm' ist False
+\end{minted}
+\end{cmdbox}
+
+Hier wird \inPy{warmEnough} zu \inPy{False} ausgewertet, während \inPy{coldEnough} den Wert \inPy{True} zugewiesen bekommt. Das Ergebnis von \inPy{False and True} ist nach Boole'scher Algebra wiederum \inPy{False}.
+
+Beachten Sie, dass die \inPy{and}-Zeile auch ohne Hilfsvariablen auskommt:
+\begin{center}
+	\inPy{pleasantTemperature = (temperature > 20) and (temperature < 25)}
+\end{center}
+wird genauso ausgewertet wie der oben gezeigte Code.
+
+Neben dem logischen Und (\inPy{and}) gibt es auch das logische Oder (\inPy{or}). Auch hier werden zwei Teilaussagen zu einer Gesamtaussage verknüpft. Beim Oder reicht es aber, wenn nur wenigstens eine Aussage \inPy{True} ist. Ich kann also die Idee \emph{Ich habe keine Probleme, wenn mir jemand zur Seite steht, oder wenn ich keine Hose trage}\footnote{frei nach der Regensburger Philosophin M. Mühlbauer, die mit dem Credo \emph{Keine Hose -- keine Probleme} schon manchen zum Lachen gebracht hat.} im Code ausdrücken als:
+\begin{center}
+	\inPy{hakunaMatata = somebodyHelpsMe or notWearingPants}
+\end{center}
+Dabei wird \inPy{hakunaMatata} sowohl \inPy{True}, wenn nur eine der beiden Wahrheitswerte \inPy{somebodyHelpsMe} und \inPy{notWearingPants} gleich \inPy{True} sind, oder auch, wenn \emph{beide} den Wert \inPy{True} haben.
+
+Schließlich existiert noch das logische Nicht (\inPy{not}), das einen Wahrheitswert einfach in sein Gegenteil verkehrt. \inPy{not True} ist \inPy{False}, und \inPy{not False} ist \inPy{True}.
+
+\subsection{\inPy{if}-Blöcke}
+Wir können dafür sorgen, dass ein Teil des Codes nur dann ausgeführt wird, wenn ein Wahrheitswert gleich \inPy{True} ist. Dazu verwenden wir das Schlüsselwort \inPy{if}:
+\begin{codebox}[Syntax: \texttt{if} (1)]
+\begin{minted}{python}
+normaler_Code
+
+if Wahrheitswert :
+    Anweisungen
+
+normaler_Code
+\end{minted}
+\end{codebox}
+
+\inPy{Anweisungen} sind beliebige Python-Befehle, wie Sie schon einige kennen gelernt haben, und wie sie noch weitere dazu lernen werden; dasselbe gilt für \inPy{normaler_Code}. Beides können einzeilige Befehle sein oder auch längere Anweisungsblocks.
+
+Während \inPy{normaler_Code} \emph{immer} ausgeführt wird, beachtet der Python-Interpreter die \inPy{Anweisungen} des \inPy{if}-Blocks nur, wenn \inPy{Wahrheitswert} gleich \inPy{True} ist. Zum Block \inPy{Anweisungen} gehört aller Code, der \emph{eingerückt} ist, der also \enquote{nach rechts} verschoben wurde.
+
+\begin{hintbox}[Wie richtig Einrücken?]
+Python-Code darf \emph{entweder} durch Leerzeichen \emph{oder} durch Tabulatoren eingerückt werden, nicht jedoch durch eine Mischung aus beiden. Leerzeichen werden empfohlen. Die Anzahl der Leerzeichen je Einrückungsebene kann frei gewählt werden, muss aber über das gesamte Code-Dokument einheitlich gehalten werden. Empfohlen werden vier Leerzeichen pro Ebene.
+
+Viele Code-Editoren setzen automatisch Leerzeichen, wenn die Tabulator-Taste gedrückt wird, und erlauben so ein komfortables Arbeiten. Einige erkennen sogar automatisch Block-Strukturen wie \inPy{if}, und machen automatisch eine Einrückung, wenn nach dem Doppelpunkt Enter gedrückt wird.
+\end{hintbox}
+
+Das \inPy{if} kann zu einer \emph{wenn-sonst}-Struktur ausgeweitet werden, indem ein \inPy{else}-Block angefügt wird:
+\begin{codebox}[Syntax: \texttt{if} (2)]
+\begin{minted}{python}
+normaler_Code
+
+if Wahrheitswert :
+    Wenn_Anweisungen
+else :
+    Sonst_Anweisungen
+	
+normaler_Code
+\end{minted}
+\end{codebox}
+
+Wie zu erwarten, wird der Block \inPy{Wenn_Anweisungen} nur ausgeführt, wenn \inPy{Wahrheitswert} gleich \inPy{True} ist. Andernfalls (und nur dann!) befolgt der Python-Interpreter den Block \inPy{Sonst_Anweisungen}.
+
+\begin{codebox}[Beispiel: \texttt{if} und \texttt{and}]
+\begin{minted}[linenos]{python}
+temperature = float(input("Bitte geben Sie die aktuelle Temperatur ein: "))
+
+if (temperature > 20) and (temperature < 25) :
+    print("Es ist angenehm warm.")
+else :
+    print("Es ist entweder zu heiß oder zu kalt.")
+\end{minted}
+\end{codebox}
+
+Schließlich kann diese Struktur nochmals erweitert werden, um mehrere Bedingungen aneinander zu reihen. Dazu verwenden wir das Schlüsselwort \inPy{elif}, was für \inPy{else if} steht:
+
+\begin{codebox}[Syntax: \texttt{if} (3)]
+\begin{minted}{python}
+normaler_Code
+
+if Wahrheitswert_1 :
+    Anweisungen_1
+elif Wahrheitswert_2 :
+    Anweisungen_2
+elif ...
+    ...
+else :
+    Sonst_Anweisungen
+	
+normaler_Code
+\end{minted}
+\end{codebox}
+
+Das \inPy{else} ist hierbei optional. Es dürfen beliebig viele \inPy{elif}-Blöcke aufgereiht werden.
+
+Beachten Sie: von den \inPy{Anweisungen}-Blocks in dieser Struktur wird nur ein einziger ausgeführt! Python prüft zuerst \inPy{Wahrheitswert_1}. Wenn dieser \inPy{True} war, wird \inPy{Anweisungen_1} ausgeführt und danach \emph{sofort} mit \inPy{normaler_Code} fortgesetzt, unabhängig davon, ob \inPy{Wahrheitswert_2} oder andere auch wahr wären. Die Liste der Bedingungen wird von oben nach unten abgearbeitet und nur \emph{der erste erfüllte Bedingungsblock} wird ausgeführt.
+
+Betrachten Sie dazu folgenden Code:
+\begin{codebox}[Beispiel: \texttt{elif}]
+\begin{minted}[linenos]{python}
+temperature = float(input("Bitte geben Sie die aktuelle Temperatur ein: "))
+
+if   temperature < 20 :
+    print("Es ist zu kalt.")
+elif temperature > 25 :
+    print("Es ist zu heiß")
+else :
+    print("Es ist angenehm warm.")
+\end{minted}
+\end{codebox}
+
+Das \inPy{and}, das wir zuvor gebraucht haben, ist nun schon in der Anordnung der Bedingungen absorbiert. Die Prüfung \inPy{temperature > 25} wird nur dann überhaupt ausgeführt, wenn \inPy{temperature < 20} bereits \inPy{False} war.
+
+Durchdenken Sie bitte auch dieses \emph{fehlerhafte} Beispiel:
+\begin{warnbox}[Fehlerhafter Code: \texttt{elif}, leftupper=7mm]
+\begin{minted}[linenos]{python}
+i = 23
+
+if   i < 25 :
+    print("Diese Zahl ist kleiner als 25.")
+elif i > 20 :
+    print("Diese Zahl ist größer als 20.")
+\end{minted}
+\end{warnbox}
+
+Die Zahl \inPy{23} erfüllt zwar beide Bedingungen (\inPy{i < 25} und \inPy{i > 20}). Dennoch wird nur Die Ausgabe \texttt{Diese Zahl ist kleiner als 25.} erfolgen, da die zweite Prüfung (\inPy{i > 20}) nie durchgeführt wird.
+
+\inPy{if}-Blöcke können auch ineinander verschachtelt werden:
+\begin{codebox}[Beispiel: Verschachtelte \texttt{if}-Blöcke]
+\begin{minted}[linenos]{python}
+i = int(input("Bitte geben Sie eine Ganzahl ein: "))
+
+if i % 2 == 0 :
+    if   i > 100 :
+        print(i, "ist eine große gerade Zahl.")
+    elif i <   0 :
+        print(i, "ist eine große gerade Zahl.")
+    else :
+        print(i, "ist eine negative gerade Zahl.")
+else :
+    print(i "ist ungerade.")
+\end{minted}
+\end{codebox}
+
+Zuerst findet also die Prüfung statt, ob \inPy{i} gerade ist 
+(\inPy{i} \texttt{\%} \inPy{2}).		% \inPy seems to be sensitive to the comment character...
+Nur, wenn diese Bedingung erfüllt ist, wird der innere \inPy{if}-Block behandelt. Durch die Einrückungen ist eindeutig festgelegt, zu welcher Bedingung welche Anweisung gehört. Hier beispielsweise ist \emph{der gesamte innere \inPy{if}-Block} der Bedingung 
+\inPy{i} \texttt{\%} \inPy{2}		% \inPy seems to be sensitive to the comment character...
+untergeordnet.
+
+Das oben gezeigte Beispiel Beispiel: \emph{Verschachtelte \inPy{if}-Blöcke} ist im Ergebnis äquivalent zum folgenden Code:
+\begin{warnbox}[Beispiel: Redundanz bei \texttt{if} mit logischen Operatoren, leftupper=7mm]
+\begin{minted}[linenos]{python}
+i = int(input("Bitte geben Sie eine Ganzahl ein: "))
+
+if   i % 2 == 0 and i > 100 :
+    print(i, "ist eine große gerade Zahl.")
+elif i % 2 == 0 and i <   0 :
+    print(i, "ist eine große gerade Zahl.")
+elif i % 2 == 0 :
+    print(i, "ist eine negative gerade Zahl.")
+else :
+    print(i "ist ungerade.")
+\end{minted}
+\end{warnbox}
+
+Möglicherweise finden Sie diese \enquote{flachere} Form mit weniger Hierarchie-Ebenen leichter zu lesen. Beachten Sie aber auch, dass der Ausdruck
+\inPy{i} \texttt{\%} \inPy{2}		% \inPy seems to be sensitive to the comment character...
+jetzt ganze dreimal im Code steht. Nicht nur, dass Programme dieser Form langsamer ablaufen (der Ausdruck
+\inPy{i} \texttt{\%} \inPy{2}		% \inPy seems to be sensitive to the comment character...
+wird tatsächlich bis zu dreimal berechnet!), es ergibt sich hieraus auch eine Fehlerquelle! Stellen Sie sich vor, Sie wollen Ihr Programm zu späterer Zeit anpassen und nun eine andere Bedingung an \inPy{i} stellen. In dieser Form mit redundanten Prüfungen müssen Sie also auch \emph{drei} Codestellen ändern. Häufig aber vergisst man diese Stellen im Falle von redundanten Code.
+
+\begin{warnbox}[Redundanten Code vermeiden]
+Sie mögen sich für sehr gewissenhaft halten, und ich glaube Ihnen das gerne. So sicher Sie sich aber auch sind, dass Sie beim Überarbeiten Ihres Codes alle relevanten Stellen überprüfen werden: vermeiden Sie Redundanz! Produktiver Code erreicht schnell Längen von mehreren Tausend Zeilen und wird über Monate hinweg entwickelt. Sie machen sich -- und Ihren Kollegen, die auf Ihrer Arbeit aufbauen wollen -- das Leben unnötig schwer, wenn Sie Code-Teile wiederholen. Hinterfragen Sie sich jedes Mal, wenn Sie einen Copy\&Paste-Schritt machen wollen, ob eine alternative Struktur nicht geeigneter wäre.
+\end{warnbox}
+
+Durchdenken Sie zur Verdeutlichung nochmal diese beiden Beispiele:
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+	\begin{warnbox}[Gültigkeitsprüfung: Reihe von \texttt{if}s, leftupper=7mm]
+	\begin{minted}[linenos]{python}
+playerCount = int(input(
+    "Bitte Spielerzahl eingeben: "
+))
+      
+if playerCount < 2 :
+    print("Ungeeignet für", 
+          playerCount, 
+          "Spieler."
+    )
+if playerCount > 5) :
+    print("Ungeeignet für", 
+          playerCount,
+          "Spieler."
+    )
+	\end{minted}
+	\end{warnbox}
+%
+	\begin{codebox}[Gültigkeitsprüfung: logisches Oder]
+	\begin{minted}[linenos]{python}
+playerCount = int(input(
+    "Bitte Spielerzahl eingeben: "
+))
+      
+if  playerCount < 2 or
+    playerCount > 5  :
+        print("Ungeeignet für",
+              playerCount,
+              "Spieler."
+        )
+	\end{minted}
+	\end{codebox}
+\end{tcbraster}
+
+\begin{hintbox}[Platzhalter für Anweisungen: \texttt{pass}]
+Es ist schwierig, die vielen Effekte, die beim Programmieren auftreten, gleichzeitig im Kopf zu behalten. Arbeiten Sie daher kleinschrittig und prüfen Sie nach wenigen neu geschriebenen Code-Zeilen durch Ausführen, ob Ihr Code auch tatsächlich das tut, was Sie erwarten.
+
+Wenn Sie diesen Rat beherzigen, werden Sie \newline
+a) schnell funktionierenden Code schreiben, und \newline
+b) in folgende Situation kommen:
+
+Block-Strukturen wie \inPy{if} verlangen, dass in jedem Teil-Block Anweisungen stehen. Wenn Sie \inPy{else} schreiben, so \emph{müssen} Sie hierfür auch Anweisungen bereit stellen. Da Sie aber vielleicht erst einen anderen Abschnitt fertig testen wollen, möchten Sie vielleicht den \inPy{else}-Block vorerst leer lassen. In diesem Fall können Sie den Befehl \inPy{pass} benutzen. Dieser macht buchstäblich \emph{nichts}, und wurde genau zu dem Zweck zum Sprachumfang von Python hinzugefügt, um die Schrittweise Entwicklung von Code zu erlauben.
+\end{hintbox}
+
+\subsection{Der Ternäre Operator}
+Eine häufige Aufgabe beim Programmieren ist die \emph{bedingte Zuweisung} eines Wertes. Abhängig vom Wert eines Ausdrucks soll der Wert einer Variablen gesetzt werden. Sie wissen bereits, dass Sie dies mit einem \inPy{if}-Block erledigen können:
+\begin{codebox}[Bedingte Wertzuweisung mit \texttt{if}-Block]
+\begin{minted}[linenos]{python}
+if Bedingung :
+    variable = Wert1
+else :
+    variable = Wert2
+\end{minted}
+\end{codebox}
+
+Für diese Aufgabe existiert eine Kurzform des \emph{ternären Operators}\footnote{Operatoren brauchen \emph{Argumente}, aus denen Werte berechnet werden können. Man klassifiziert nach der Zahl der notwendigen Argumente. So gibt es das \emph{unäre} \inPy{not}, das \emph{binäre} \inPy{+} und eben den ternären Operator, der \emph{drei} Argumente braucht.}, die sich schon fast wie englischer Prosa-Text liest:
+
+\begin{codebox}[Bedingte Wertzuweisung mit dem Ternären Operator]
+\begin{minted}{python}
+variable = Wert1 if Bedingung else Wert2
+\end{minted}
+\end{codebox}
+
+Sie können diese Ausdrucksform sogar an die Stelle anderer Ausdrücke setzen und beispielsweise an Funktionen als Argument übergeben:
+
+\begin{codebox}[Beispiel: Ternärer Operator als Argument]
+\begin{minted}[linenos]{python}
+x = float(input("Bitte geben Sie eine Zahl ein: "))
+print("Der Betrag von", x, "ist:", x if x > 0 else -x)
+\end{minted}
+\end{codebox}

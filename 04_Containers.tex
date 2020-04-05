@@ -1,0 +1,431 @@
+\chapter{Datenstrukturen}
+\epigraph{
+	Multimedia? As far as I'm concerned, it's reading with the radio on!
+}{Rory Bremmer}
+
+Bis hierhin haben wir sehr kleine Datenmengen behandelt. Unser bisheriges \enquote{Arbeitsmaterial} waren
+Variablen, die je einen einzelnen Wert repräsentieren. Eine Stärke von Computern ist es aber gerade, große
+Datenmengen schnell zu verarbeiten. Hier werden wir Möglichkeiten kenenn lernen, nahezu beliebig
+große Datenmengen im Speicher zu halten und zu manipulieren.
+
+\section{Speichermodell}
+Bevor wir das Verhalten der verschiedenen Speicherstrukturen verstehen können, die Python uns zur Verfügung stellt, müssen wir uns mit der Art und Weise vertraut machen, in der Daten im Speicher abgelegt werden.
+
+Man kann sich den Arbeitsspeicher als langes Band von kleinen, nummerierten Speicherzellen vorstellen. Jede Zelle fässt genau ein Byte. Um einen Wert zu lesen oder zu schreiben muss dem Prozessor die Nummer der Zelle mitgeteilt werden, die verändert wird. Diese Nummer wird \emph{Adresse} oder \emph{Pointer} genannt. Wenn wir im Code Variablen benutzen, übersetzt der Compiler diese in Adressen. 
+
+\begin{tcolorbox}[title=Speicherbild]
+\begin{center}
+\begin{tikzpicture}
+  [ 
+    cell/.style={text width=8mm,
+      text height=4mm, draw=black, inner sep=1mm},
+    ld/.style={draw=blue,shorten >=2pt,->}
+  ]
+  \node (c1) at (0,0) [cell] {\ttfamily 99};
+  \node (c2) at (1,0) [cell] {\ttfamily 1};
+  \node (c3) at (2,0) [cell] {\ttfamily 255};
+  \node (c4) at (3,0) [cell] {\ttfamily 0};
+  \node (c5) at (4,0) [cell] {\ttfamily 80};
+  \node (c6) at (5,0) [cell] {\ttfamily ...};
+
+  \node (labelMem) at (8,  1) {Symbole im Code};
+  \node (labelMem) at (8,  0) {Werte im Speicher};
+  \node (labelMem) at (8, -1) {Adressen};
+  
+  \node (a1) [below=2mm of c1]             {\tiny 0x27ff};
+  \node (a2) [below=2mm of c2, color=teal] {\tiny 0x2800};
+  \node (a3) [below=2mm of c3]             {\tiny 0x2801};
+  \node (a4) [below=2mm of c4]             {\tiny 0x2802};
+  \node (a5) [below=2mm of c5]             {\tiny 0x2803};
+  \node (a6) [below=2mm of c6]             {\tiny 0x2804};
+  
+  \node (ptr) [below=8mm of c1] {\scriptsize Adresse von \texttt{x}};
+  \node (vc2) [above=6mm of c1] {\scriptsize Variable \texttt{x}};
+  \node (vc0) [above=2mm of c1] {\scriptsize Variable \texttt{y}};
+  
+  \draw [ld, teal] (ptr.east) .. controls +(0.3,0) .. (a2.south);
+  \draw [ld]       (vc0.east) .. controls +(0.4,0) .. (c2.north);
+  \draw [ld]       (vc2.east) .. controls +(2.4,0) .. (c4.north);
+\end{tikzpicture}
+\end{center}
+\end{tcolorbox}
+
+Während wir der Einfachheit halber oft sagen, dass eine Variable einen \emph{Wert} speichert, ist tatsächlich die Information hinterlegt, \emph{wo der Wert selbst zu finden ist}, also die Adresse des Wertes. Dies hat den Vorteil, dass Aufgaben sehr effizient erledigt werden können, wenn große Datenmengen bewegt werden müssen: anstatt viele Megabytes zu kopieren, muss nur eine Referenz an die Stelle gesetzt werden, wo die zu kopierenden Daten bereits im Speicher liegen. Für uns als ProgrammiererInnen heißt dies aber auch, dass wir diese Speicherstruktur im Hinterkopf behalten müssen.
+
+Stellen Sie sich vor, Sie verwalten eine Liste. Diese soll über den Variablennamen \inPy{originalList} ansprechbar sein. Nun wollen Sie eine Arbeitskopie dieser Liste anlegen und \emph{in dieser Kopie} Werte verändern. Sie wollen also folgendes Speicherbild erreichen:
+
+\begin{tcolorbox}[title=Speicherbild]
+\begin{center}
+\begin{tikzpicture}
+  [ 
+    cell/.style={text width=8mm,
+      text height=4mm, draw=black, inner sep=1mm},
+    ld/.style={draw=blue,shorten >=2pt,->}
+  ]
+  \node (gap1) at ( 0,0)        {\ttfamily ...};
+  \node (v1)   at ( 1,0) [cell] {\ttfamily 1};
+  \node (v2)   at ( 2,0) [cell] {\ttfamily 2};
+  \node (v3)   at ( 3,0) [cell] {\ttfamily 3};
+  \node (v4)   at ( 4,0) [cell] {\ttfamily 4};
+  \node (gap2) at ( 5,0)        {\ttfamily ...};
+  \node (c1)   at ( 6,0) [cell] {\ttfamily 1};
+  \node (c2)   at ( 7,0) [cell] {\ttfamily 2};
+  \node (c3)   at ( 8,0) [cell] {\ttfamily 3};
+  \node (c4)   at ( 9,0) [cell] {\ttfamily 4};
+  \node (gap3) at (10,0)        {\ttfamily ...};
+  
+  \draw [decorate, decoration={brace,amplitude=7pt}, xshift=-0pt, yshift=0pt]
+  		( 0.75, 0.5) -- ( 4.25, 0.5) node [midway, yshift=+0.5cm] 
+		(braceArrayPreResize) {Originaldaten};
+  \draw [decorate, decoration={brace,amplitude=7pt}, xshift=-0pt, yshift=0pt]
+  		( 5.75, 0.5) -- ( 9.25, 0.5) node [midway, yshift=+0.5cm] 
+		(braceArrayPreResize) {Arbeitskopie};
+
+  \node (a1) [below=2mm of v1, color=teal] {\tiny 0x2800};
+  \node (a2) [below=2mm of v2]             {\tiny 0x2801};
+  \node (a3) [below=2mm of v3]             {\tiny 0x2802};
+  \node (a4) [below=2mm of v4]             {\tiny 0x2803};
+  
+  \node (b1) [below=2mm of c1, color=teal] {\tiny 0x2950};
+  \node (b2) [below=2mm of c2]             {\tiny 0x2951};
+  \node (b3) [below=2mm of c3]             {\tiny 0x2952};
+  \node (b4) [below=2mm of c4]             {\tiny 0x2953};
+  
+  \node (p1) [below=8mm of gap1] {\scriptsize Adresse von \texttt{originalList}};
+  \node (p2) [below=8mm of gap2] {\scriptsize Adresse von \texttt{copyOfList}};
+
+  \draw [ld, teal] (p1.east) .. controls +(0.3,0) .. (a1.south);
+  \draw [ld, teal] (p2.east) .. controls +(0.3,0) .. (b1.south);
+\end{tikzpicture}
+\end{center}
+\end{tcolorbox}
+
+Wenn Sie nun die Codezeile
+\begin{center}
+	\inPy{copyOfList = originalList}
+\end{center}
+tippen, werden Sie aufgrund dieser Arbeitsweise von Python aber folgendes Speicherbild erzeugen:
+
+\begin{tcolorbox}[title=Speicherbild]
+\begin{center}
+\begin{tikzpicture}
+  [ 
+    cell/.style={text width=8mm,
+      text height=4mm, draw=black, inner sep=1mm},
+    ld/.style={draw=blue,shorten >=2pt,->}
+  ]
+  \node (gap1) at ( 0,0)        {\ttfamily ...};
+  \node (v1)   at ( 1,0) [cell] {\ttfamily 1};
+  \node (v2)   at ( 2,0) [cell] {\ttfamily 2};
+  \node (v3)   at ( 3,0) [cell] {\ttfamily 3};
+  \node (v4)   at ( 4,0) [cell] {\ttfamily 4};
+  \node (gap2) at ( 5,0)        {\ttfamily ...};
+  \node (c1)   at ( 6,0) [cell] {\ttfamily 19};
+  \node (c2)   at ( 7,0) [cell] {\ttfamily 89};
+  \node (c3)   at ( 8,0) [cell] {\ttfamily 3};
+  \node (c4)   at ( 9,0) [cell] {\ttfamily 29};
+  \node (gap3) at (10,0)        {\ttfamily ...};
+  
+  \draw [decorate, decoration={brace,amplitude=7pt}, xshift=-0pt, yshift=0pt]
+  		( 0.75, 0.5) -- ( 4.25, 0.5) node [midway, yshift=+0.5cm] 
+		(braceArrayPreResize) {Originaldaten};
+  \draw [decorate, decoration={brace,amplitude=7pt}, xshift=-0pt, yshift=0pt]
+  		( 5.75, 0.5) -- ( 9.25, 0.5) node [midway, yshift=+0.5cm] 
+		(braceArrayPreResize) {andere Daten};
+
+  \node (a1) [below=2mm of v1, color=teal] {\tiny 0x2800};
+  \node (a2) [below=2mm of v2]             {\tiny 0x2801};
+  \node (a3) [below=2mm of v3]             {\tiny 0x2802};
+  \node (a4) [below=2mm of v4]             {\tiny 0x2803};
+  
+  \node (b1) [below=2mm of c1]             {\tiny 0x2950};
+  \node (b2) [below=2mm of c2]             {\tiny 0x2951};
+  \node (b3) [below=2mm of c3]             {\tiny 0x2952};
+  \node (b4) [below=2mm of c4]             {\tiny 0x2953};
+  
+  \node (p1) [below=8mm of gap1] {\scriptsize Adresse von \texttt{originalList}};
+  \node (p2) [below=8mm of gap2] {\scriptsize Adresse von \texttt{copyOfList}};
+
+  \draw [ld, teal] (p1.east) .. controls +( 0.3,0) .. (a1.south);
+  \draw [ld, red ] (p2.west) .. controls +(-0.3,0) .. (a1.south);
+\end{tikzpicture}
+\end{center}
+\end{tcolorbox}
+Anstatt eine Kopie der Liste anzulegen, haben Sie nur eine \emph{Kopie der Referenz} erzeugt. Ein Zugriff über das Symbol \inPy{copyOfList} ändert also immer noch Ihr Original!
+
+Um nun das gewünschte Ziel zu erreichen, müssen Sie stattdessen die Funktion \inPy{copy} aus dem Modul \inPy{copy} benutzen:
+
+\begin{codebox}
+\begin{minted}{python}
+import copy
+
+# Code zum Aufbau der Liste originalList
+
+copyOfList = copy.copy(originalList)
+\end{minted}
+\end{codebox}
+
+\section{mutable und immutable objects}
+Python kennt zwei große Gruppen von Objekten: veränderbare Objekte (\emph{mutable objects}) und unveränderliche Objekte (\emph{immutable objects}).
+
+Die \emph{Werte} von immutable objects dürfen sich nicht mehr ändern, sobald sie einmal im Speicher abgelegt wurden. Wenn eine Variable geändert wird, die ein immutable object speichert, so wird ein neues Objekt im Speicher konstruiert, nicht aber die alte Stelle überschrieben.
+
+Betrachten Sie dazu das folgende Beispiel:
+
+\begin{codebox}[Codebeispiel, width=.495\linewidth, on line, equal height group=immutableEvolutionGroup]
+\begin{minted}[linenos]{python}
+# int-Variablen sind immutable
+
+intVar = 100
+
+intVar = 200
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Speicherbild,
+	width=.495\linewidth,
+	on line,
+	equal height group=immutableEvolutionGroup]
+\begin{tikzpicture}
+  [ 
+    cell/.style={text width=8mm,
+      text height=4mm, draw=black, inner sep=1mm},
+    ld/.style={draw=blue,shorten >=2pt,->}
+  ]
+  \node (gap1) at ( 0,0)        {\ttfamily ...};
+  \node (v1)   at ( 1,0) [cell] {\ttfamily 100};
+  \node (v2)   at ( 2,0) [cell] {\ttfamily 2};
+  \node (v3)   at ( 3,0) [cell] {\ttfamily 3};
+  \node (v4)   at ( 4,0) [cell] {\ttfamily 4};
+  \node (v5)   at ( 5,0) [cell] {\ttfamily 200};
+  \node (gap2) at ( 6,0)        {\ttfamily ...};
+  
+  \node (a1) [below=2mm of v1] {\tiny 0x2800};
+  \node (a2) [below=2mm of v2] {\tiny 0x2801};
+  \node (a3) [below=2mm of v3] {\tiny 0x2802};
+  \node (a4) [below=2mm of v4] {\tiny 0x2803};
+  \node (a5) [below=2mm of v5] {\tiny 0x2804};
+  
+  \node (p1) [below=8mm of v3] {\scriptsize Adresse von \texttt{intVar}};
+
+  \draw [ld, teal, densely dotted] (p1.west) .. controls +(-0.3,0) .. (a1.south)
+  		node (l1) [below=4mm] {\scriptsize bis Zeile 3};
+  \draw [ld, blue                ] (p1.east) .. controls +(+0.3,0) .. (a5.south) 
+  		node (l1) [below=4mm] {\scriptsize ab Zeile 5};
+\end{tikzpicture}
+\end{tcolorbox}
+
+In dem hier gezeigten Code ändern wir augenscheinlich den Wert von \inPy{intVar}. Der Typ \inPy{int} ist jedoch immutable! Daher wird der Python-Interpreter dafür sorgen, dass mit Zeile 5 ein neues \inPy{int}-Objekt im Speicher angelegt wird, das den neuen Wert speichert. Die Referenz von \inPy{intVar} geht nun auf diese neue Speicherstelle. Der Wert 100, der in der alten Speicherstelle lag, wird hingegen nicht angerührt.
+
+Bei mutable objects hingegen wird wirklich der Inhalt der Speicherzellen selbst überschrieben. Sie erkennen, dass hier das Problem der vermeintlichen Arbeitskopie auftritt.
+
+Im Moment haben wir nur immutable objects kennen gelernt. In diesem Kapitel werden die ersten mutable objects eingeführt. Am Ende des Kapitels finden Sie eine Übersichtstabelle zu den Ihnen bis dahin bekannten Speicherstrukturen.
+
+\begin{hintbox}[Speicheradresse ausfindig machen mit \texttt{id}]
+Der Befehl \inPy{id} kann auf alle Datenobjekte angewandt werden, und gibt die Adresse im Speicher aus, also die Nummer der Speicherzelle.
+
+Neben Variablen (\inPy{id(x)} -- Adresse der Variablen \inPy{x}) kann der Befehl auch auf Datentypen (\inPy{id(int)} -- Adresse der \enquote{Beschreibung des Typs}) und auf Konstanten (\inPy{id(1)} -- Adresse des Werts \inPy{1}) angewandt werden.
+
+Wenn Sie hier ein wenig experimentieren, werden Sie feststellen, dass \enquote{kleine} Ganzzahlen in relativer Nähe zueinander liegen, während \enquote{große Zahlen} (> 256) signifikant andere Adressen erhalten. Dies liegt daran, dass die Entwickler von Python erwartet haben, dass diese Zahlen sehr häufig als (Zwischen-)Ergebnisse auftreten. Daher werden diese bereits \enquote{auf Verdacht vorbereitet}. Größere Zahlen werden erst im Speicher angelegt, wenn dies wirklich nötig wird.
+\end{hintbox}
+
+\begin{hintbox}[Vergleichsoperator \texttt{is} vs. \texttt{==}]
+Wir haben bereits den Operator \inPy{==} kennengelernt, der uns mitteilt, ob zwei Objekte gleich sind. Hierbei ist mit \emph{Gleichheit} gemeint, dass sie denselben Wert speichern. Wie Sie gesehen haben, können Kopien voneinander an verschiedenen Speicherorten abgelegt werden.
+
+Der Operator \inPy{is} vergleicht nicht die Werte, sondern die Speicheradressen, und gibt folglich \inPy{True} zurück, wenn zwei Variablen dasselbe Objekt referenzieren. Die folgenden beiden Codezeilen sind also äquivalent:
+\begin{codebox}[Übersetzung von \texttt{is}]
+\begin{minted}{python}
+print( id(a) == id(b) )
+print(    a  is    b  )
+\end{minted}
+\end{codebox}
+
+Beachten Sie, dass diese Bedeutung des Operators \inPy{is} manchmal unintuitives Verhalten erzeugt:
+\begin{warnbox}[Unintuitives Verhalten von \texttt{is}]
+\begin{minted}{python}
+5 == 4 is not True
+\end{minted}
+\end{warnbox}
+dieser Ausdruck wird zu \inPy{True} ausgewertet, obwohl offensichtlich $5 \neq 4$ gilt.
+\end{hintbox}
+%
+\begin{hintbox}[]
+Dies lässt sich folgendermaßen begründen:
+
+Python wertet zunächst den ersten Teil der Aussage (\inPy{5 == 4}) zu \inPy{False} aus. Dieser Wert ist ein häufig gebrauchter, und wurde daher von Python bereits vorbereitet, hatte also schon vor diesem ersten Rechenschritt eine Adresse. Diese Adresse wird dem Ausdruck \inPy{5 == 4} zugeordnet.
+
+Als nächstes wird die zweite Teilaussage (\inPy{not True}) ebenfalls zu \inPy{False} ausgewertet. Wieder erkennt Python den vorbereiteten Wert, und weist \inPy{not True} die Adresse von \inPy{False} zu.
+
+Der Operator \inPy{is} vergleicht nun die Adressen von \inPy{False} und \inPy{False}, und kommt folgerichtig zu dem Ergebnis, dass diese gleich sind. Mit anderen Worten, \inPy{False is False} ist \inPy{True}.
+\end{hintbox}
+
+
+\section{\inPy{list}s}
+Der Datentyp \inPy{list} repräsentiert -- wie der Name vermuten lässt -- Listen. Die aufgelisteten Werte können dabei ganz verschiedener Natur sein: \inPy{list}s können \inPy{int}s, \inPy{float}s, \ldots und sogar andere Listen enthalten. Die Elemente derselben Liste müssen nicht vom selben Typ sein.
+
+\subsection{Anlegen und Auslesen}
+Erstellt werden Listen, indem man in [eckigen Klammern] die Elemente der Liste durch Kommata getrennt aufzählt:
+\begin{codebox}[Syntax: Liste anlegen]
+listVariable = [listItems]
+\end{codebox}
+
+Listen dürfen auch leer sein. Eine leere Liste wird als \inPy{[]} geschrieben.
+
+Auf die Elemente einer Liste wird mittels ihres \emph{Index} zugegriffen, \ie der Nummer innerhalb der Liste. Dabei hat das erste Element der Liste den Index \inPy{0}! Der Index wird in [eckigen Klammern] dem Symbol der Listenvariable nachgestellt, um anzugeben, dass man ein einzelnes Element der Liste ansprechen will:
+
+\begin{codebox}[Syntax: Listenelement ansprechen]
+listVariable[listItems]
+\end{codebox}
+
+Indices können auch negativ sein! In diesem Falle wird \enquote{von hinten herein} gezählt. \inPy{-1} referenziert also das letzte Element der Liste, \inPy{-2} das vorletzte, usw.
+
+Ist das referenzierte Listenelement selbst eine Liste, so kann auf dessen Elemente ebenfalls durch Nennung des Index in einer eigenen Klammer zugegriffen werden.
+
+\subsection{Slicing}
+Aus einer Liste kann auch ein Teil herausgegriffen werden. Man nennt dies \emph{slicing}:
+\begin{codebox}[Syntax: Slicing]
+listVariable[start : end : stride]
+\end{codebox}
+Mit dieser Syntax wird eine \emph{neue Liste} berechnet, die beim Index \inPy{start} beginnt, die Elemente bis \emph{ausschließlich} dem Index \inPy{end} beinhaltet, und deren Elemente in der Quell-Liste einen Abstand von \inPy{stride} haben. Wird \inPy{stride} ausgelassen, werden alle Elemente zwischen \inPy{start} und \inPy{end} in die neue Liste übernommen.
+
+Wird \inPy{start} oder \inPy{end} ausgelassen, so versteht Python dies als: \enquote{vom Anfang} bzw. als \enquote{bis zum Ende}.
+
+\subsection{Addition und Multiplikation bei Listen}
+Die Addition von Listen führt zur Verkettung, wie Sie das schon von Strings kennen. Genauso wie dort führt die Multiplikation mit einer Ganzzahl zu einer \emph{Wiederholung} der Listenelemente:
+\begin{cmdbox}[Multiplikation von Listen]
+\begin{minted}{text}
+>>> [1, 2] + [3]
+[1, 2, 3]
+>>> 3 * [1, 2]
+[1, 2, 1, 2, 1, 2]
+\end{minted}
+\end{cmdbox}
+
+\subsection{Beispiel}
+\begin{codebox}[Beispiel: Listenzugriffe]
+\begin{minted}[linenos]{python}
+myList = [1, 2, -5, 3.14, "some text", [3, 2], (1+1j)]
+
+print(myList[0])        # erstes Element
+print(myList[-1])       # letztes Element
+print(myList[-2][0])    # erstes Element des vorletzten Elements
+print(myList[1:3])      # slicing: Elemente 1 und 2 (ausschließlich 3)
+print(myList[-2:])      # slicing: vorletztes Element bis Ende
+print(myList[:5:2])     # slicing: Elemente mit Indices 0 bis 4 in 2er-Schritten
+print(myList[::2])      # slicing: alle mit geradem Index
+
+myList += [[]]          # an die Liste eine leere Liste anhängen
+print(myList[-1])       # letztes Element
+print(myList)           # gesamte Liste
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+1
+(1+1j)
+3
+[2, -5]
+[[3, 2], (1+1j)]
+[1, -5, 'some text']
+[1, -5, 'some text', (1+1j)]
+[]
+[1, 2, -5, 3.14, "some text", [3, 2], (1+1j), []]
+\end{minted}
+\end{cmdbox}
+Beachten Sie besonders die Klammern in Zeile 11: \inPy{myList += [[]]}. Die äußeren Klammern geben an, dass das Objekt, das addiert wird, eine Liste ist. Dies ist notwendig, da nur die Addition zwischen Listen erklärt ist; \inPy{myList += 3} würde (für den Python-Interpreter) keinen Sinn ergeben. Alles, was \emph{in diesen Klammern steht}, wird an die Liste angehängt. In diesem Fall ist dies \inPy{[]}, also eine leere Liste. Machen Sie sich klar, dass im Gegensatz zu \inPy{myList += [[]]} (anhängen einer leeren Liste) durch den Befehl \inPy{myList += []} \emph{nichts} zu \inPy{myList} hinzugefügt wird.
+
+\inPy{list}s sind mutable. Das heißt, für Kopien muss der \inPy{copy}-Befehl aus dem Modul \inPy{copy} verwendet werden, oder mittels der Slicing-Syntax eine Kopie erstellt werden:
+\begin{codebox}[Beispiel: mutable list]
+\begin{minted}[linenos]{python}
+import copy
+
+originalList = [1, 2, 3]
+refCopy = originalList
+truCopy = copy.copy(originalList)
+altCopy = originalList[:]
+
+refCopy += [4]
+truCopy += [5, 5]
+altCopy += [6, 6]
+
+print(originalList)
+print(truCopy)
+print(altCopy)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+[1, 2, 3, 4]
+[1, 2, 3, 5, 5]
+[1, 2, 3, 6, 6]
+\end{minted}
+\end{cmdbox}
+
+Wie Sie sehen, wird in Zeile 8 ein Element an \inPy{refCopy} angehängt. Da \inPy{refCopy} aber auf die Speicherstelle von \inPy{originalList} verweist, ändert sich also die ursprüngliche Liste damit ebenfalls.
+
+\inPy{truCopy} ist tatsächlich eine neue Liste, die eine \emph{Kopie} der ursprünglichen Liste enthält. Sie wurde an einer von \inPy{originalList} unabhängigen Speicherstelle angelegt, und spürt damit die Änderung durch Zeile 8 nicht. Auf dieselbe Weise bleibt \inPy{originalList} von der Änderung durch Zeile 9 unbeeinflusst.
+
+Dasselbe gilt für \inPy{altCopy}: der Slicing-Operator bewirkt dasselbe wie der Befehl \inPy{copy.copy}.
+
+Achtung: \inPy{list}s werden intern als Abfolge von Adressen der Elemente in der Liste realisiert. Wenn das referenzierte Objekt wiederum eine Liste ist, so kann selbst über eine \enquote{echte} Kopie die Original-Liste geändert werden. Die Funktion \inPy{deepcopy} aus dem Modul \inPy{copy} umgeht dies, indem wirklich \emph{rekursiv} Kopien von allen Ebenen der Liste angelegt werden:
+
+\begin{codebox}[Beispiel: Kopien mit \texttt{deepcopy}]
+\begin{minted}[linenos]{python}
+import copy
+
+originalList = [1, 2, [1, 2]]
+normCopy = copy.copy(originalList)
+deepCopy = copy.deepcopy(originalList)
+normCopy[-1] += [3]
+
+print(originalList)
+print(deepCopy)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+[1, 2, [1, 2, 3]]
+[1, 2, [1, 2]]
+\end{minted}
+\end{cmdbox}
+
+
+\subsection{Methoden}
+copy, append, clear, count(what), insert, pop, remove, reverse, sort
+
+dissect: x, y = tuple(a, b)
+
+\section{\inPy{tuple}s}
+xmp divmod(x, y)
+immutable
+add is concatenate
+
+\section{\inPy{set}s und \inPy{frozenset}s}
+
+
+
+\section{Strings}
+immutable
+recall addition
+
+
+\section{\inPy{range}s}
+
+
+\section{\inPy{dict}ionaries}
+dict([key1, value1], [key2, value2], ...)
+not ordered!
+
+\section{Spezielle Funktionen für Container}
+in, <=> (lexicographical comparison), len, reversed, sorted, 
+zip(l1, l2) returns generator [(l1[i], l2[i]) for i in range(min(len(l1), len(l2))]
+
+
+\section{Überblick}
+table
+
+\url{https://xkcd.com/1537/}
+xkcd-types

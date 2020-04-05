@@ -1,0 +1,264 @@
+\documentclass[
+	ngerman,
+	a4paper,
+	fontsize=10pt,
+	parskip=half,
+	titlepage=true,
+	DIV=12,
+	final
+]{scrreprt}
+
+
+%==============================================================================%
+% PACKAGES
+%
+
+% Standard text formatting
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{ragged2e}
+
+\usepackage{csquotes}
+\usepackage{xspace}
+
+\usepackage[toc,page]{appendix}
+
+\usepackage{afterpage}
+	\newcommand\blankpage{%
+		\null
+		\thispagestyle{empty}%
+		\addtocounter{page}{-1}%
+		\newpage}
+
+\usepackage{epigraph}
+	\setlength{\epigraphwidth}{.9\linewidth}
+
+\usepackage{placeins}	% FloatBarrier.
+
+% gfx
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage[bf]{caption}
+	\captionsetup{format=plain}
+
+\usepackage{placeins}
+\usepackage[table]{xcolor}
+	\definecolor{tabhighlight}{RGB}{230,240,255}
+%	\definecolor{chameleonblue1}{RGB}{25,162,189}
+%	\definecolor{chameleonblue2}{RGB}{141,211,225}
+%	\definecolor{chameleonblue3}{RGB}{48,132,149}
+%	\definecolor{chameleonblue4}{RGB}{0,98,90}
+	\definecolor{grey}{RGB}{128,128,128}
+	
+\usepackage{tikz}
+	\usetikzlibrary{positioning}
+	\usetikzlibrary{matrix}
+	\usetikzlibrary{shapes.geometric}
+	\usetikzlibrary{backgrounds}
+	\usetikzlibrary{calc}
+	\usetikzlibrary{decorations.pathreplacing}
+	\tikzstyle{every picture}+=[remember picture] 
+\usepackage{adjustbox}
+
+% tcolorboxes
+\usepackage[most]{tcolorbox}
+	\newtcolorbox{cmdbox}[1][Kommandozeilen-Befehl]
+		{colback=black,
+		 coltext=white,
+		 fontupper=\ttfamily ,
+		 colframe=blue!40!black,
+		 title=#1,
+		 arc=0pt,
+		 outer arc=0pt
+		}
+	\newtcolorbox{codebox}[1][Code]
+		{colback=white,
+		 fontupper=\ttfamily ,
+		 colframe=blue!40!black,
+		 leftupper=7mm,
+		 title=#1,
+		 arc=0pt,
+		 outer arc=0pt
+		}
+	\newtcolorbox{warnbox}[1][Beachte]
+		{colback=black!5!white,
+		 colframe=red!40!black,
+		 title=#1,
+		 arc=0pt,
+		 outer arc=0pt
+		 }
+	\newtcolorbox{hintbox}[1][Tipp]
+		{colback=black!5!white,
+		 colframe=green!40!black,
+		 title=#1,
+		 arc=0pt,
+		 outer arc=0pt
+		}
+	\newenvironment{itembox}[1][]
+		{
+			\begin{tcolorbox}[title=#1,arc=0pt,outer arc=0pt]
+			\begin{itemize}
+		}{
+			\end{itemize}
+			\end{tcolorbox}
+		}
+	\newtcolorbox{doublebox}[1][.3]{
+		righthand width=#1\linewidth,
+		sidebyside,
+		sidebyside gap=6mm,
+		sidebyside align=center,
+		lower separated=false}
+	\tcbsetforeverylayer{
+		 colback=cyan!10!white,
+		 colframe=cyan!75!black,
+		 arc=0pt,
+		 outer arc=0pt
+		}
+    
+% tables
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{color, colortbl}
+
+% math
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage[arrowdel]{physics}
+\usepackage{mathtools}
+
+% indexes, links, page format
+\usepackage{scrlayer-scrpage}
+\usepackage[toc,page]{appendix}
+\usepackage{setspace}
+\usepackage[
+	citecolor=black,
+	colorlinks=true,
+	linkcolor=black, 
+	anchorcolor=black, 
+	urlcolor=black,
+	breaklinks=true
+]{hyperref}
+%\usepackage[a4paper, total={6in, 10in}]{geometry}
+
+
+% misc
+%\usepackage{color}
+%\usepackage[super]{nth}
+\usepackage[newfloat]{minted}
+%	\usemintedstyle{xcode}
+%	\usemintedstyle{bw}
+	\usemintedstyle{friendly}
+	%\newenvironment{code}{\captionsetup{type=listing}}{}
+	%\SetupFloatingEnvironment{listing}{name=Source Code}
+
+%==============================================================================%
+% GLOBAL MACROS
+%
+\newcommand{\myName}{Stefan Hartinger\xspace}
+\newcommand{\myVersionTime}{März 2020}
+\newcommand{\currentPeriod}{Wintersemester 2020/21\xspace}
+\newcommand{\myTitle}{Programmieren in Python\xspace}
+\newcommand{\mySubtitle}{Begleitscript zur Vorlesung im \currentPeriod\xspace}
+
+\newcommand*{\ie}{d.\,h.\xspace}
+\newcommand*{\eg}{z.\,B.\xspace}
+\newcommand*{\ua}{u.\,a.\xspace}
+\newcommand*{\idR}{i.\,d.\,R. }
+
+\addtokomafont{labelinglabel}{\sffamily}
+
+\newcommand*{\tabcrlf}{\\ \hline}			% actually still allows for optional argument
+
+\newcommand*{\smallfrac}  [2]{\ensuremath{{}^        {#1} \!/_        {#2}}}
+\newcommand*{\smallfracrm}[2]{\ensuremath{{}^{\mathrm{#1}}\!/_{\mathrm{#2}}}}
+
+% local abbreviations for this doc
+
+\newcommand*{\thus}{\ensuremath{\rightarrow}\xspace}
+\newcommand*{\Thus}{\ensuremath{\Rightarrow}\xspace}
+
+\newcommand*{\inPy}[1]{\mintinline{python}{#1}}
+
+%==============================================================================%
+% GLOBAL PARAMTERS
+%
+
+\title{\myTitle}
+\subtitle{\mySubtitle}
+\author{\myName}
+\date{\today}
+
+% header, footer
+\clearpairofpagestyles
+	\cfoot
+		[\pagemark]
+		{\pagemark}
+	\ohead
+		[]
+		{}
+\pagestyle{scrheadings}
+
+%==============================================================================%
+% THE REAL STUFF
+%	
+\begin{document}
+	\begin{titlepage}
+		\centering
+		\makeatletter						
+		% activate some weird special mode that enables the use of \@title and other macros
+		
+		\Huge \textsc{\@title}
+					
+		\vspace{6\tabcolsep}
+		
+		\LARGE \textsc{\@subtitle}
+
+		\vspace{6\tabcolsep}
+			
+		\large
+		Stand \@date\\
+		%			
+		\vspace{7\tabcolsep}
+			
+		\includegraphics[width=.3\paperwidth]{./gfx/urlogo}
+				
+		\vspace{6\tabcolsep}
+			
+		\large
+		Universität Regensburg \\
+		Fakultät Physik
+
+		\makeatother			% deactivate special mode for \@title, etc.
+	\end{titlepage}
+	
+	{
+		\pagestyle{empty}
+		\renewcommand*{\chapterpagestyle}{empty}
+
+		\blankpage
+		\include{00_Abstract}
+		\blankpage
+		\tableofcontents
+
+		\clearpage
+	}
+	
+	\setcounter{page}{1}
+
+	\include{01_HelloWorld}
+	\include{02_Reacting}
+	\include{03_Modules}	
+	\include{04_Containers}
+	\include{05_Loops}
+	
+	\include{99_Appendix}
+	
+	\listoffigures	
+\end{document}

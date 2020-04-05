@@ -1,0 +1,100 @@
+\chapter{Quotes}
+\section{Book}
+Conditions:
+We must believe in free will -- we have no choice. -- Isaac Bashevis Singer
+Constantly choosing the lesser of two evils is still choosing evil. -- Jerry Garcia
+
+Containers, ???:
+Multimedia? As far as I'm concerned, it's reading with the radio on!-- Rory Bremmer
+
+Loops:
+Insanity: doing the same thing over and over again and expecting different results -- Albert Einstein
+
+???:
+The only thing that remains unsolved is the resolution of the problem -- Thomas Wells
+
+Scopes, Functions, ???
+Make somebody happy today. Mind your own business. -- Ann Landers
+
+Classes:
+Insanity is hereditary; you get it from your children -- Sam Levenson
+
+Exceptions
+If things go wrong, don't go with them. -- Roger Babson
+
+???:
+Caution: cape does not enable the user to fly. -- Warning label on a Batman costume.
+
+matplotlib:
+Real life seems to have no plots. -- Ivy Compton-Burnett
+
+???:
+Correct me if I'm wrong, but hasn't the fine line between sanity and madness gotten finer? -- George Price
+
+???:
+The man who smiles when things go wrong has thought of someone to blame it on. -- Robert Bloch
+
+\section{other sources}
+https://www.hongkiat.com/blog/programming-jokes/
+opening quote for conditions from here:
+	0 is false and 1 is true, right?
+	1
+
+\chapter{Py-Ref}
+\section{Styleguide}
+https://www.python.org/dev/peps/
+https://www.python.org/dev/peps/pep-0008/#tabs-or-spaces
+
+\section{NaNs}
+https://riptutorial.com/python/example/3973/infinity-and-nan---not-a-number--
+
+\section{Dunders}
+https://docs.python.org/3/reference/datamodel.html
+https://rszalski.github.io/magicmethods/
+
+\chapter{Blocks from C-Script}
+\subsection{Referenzen und Speicherort}
+Man kann sich den Arbeitsspeicher als langes Band von kleinen, nummerierten Speicherzellen vorstellen. Jede Zelle fässt genau ein Byte. Um einen Wert zu lesen oder zu schreiben muss dem Prozessor die Nummer der Zelle mitgeteilt werden, die verändert wird. Diese Nummer wird \emph{Adresse} oder \emph{Pointer} genannt. Wenn wir im Code Variablen benutzen, übersetzt der Compiler diese in Adressen. 
+
+\begin{tcolorbox}[title=Speicherbild]
+\begin{center}
+\begin{tikzpicture}
+  [ 
+    cell/.style={text width=8mm,
+      text height=4mm, draw=black, inner sep=1mm},
+    ld/.style={draw=blue,shorten >=2pt,->}
+  ]
+  \node (c1) at (0,0) [cell] {\ttfamily 99};
+  \node (c2) at (1,0) [cell] {\ttfamily 1};
+  \node (c3) at (2,0) [cell] {\ttfamily 255};
+  \node (c4) at (3,0) [cell] {\ttfamily 0};
+  \node (c5) at (4,0) [cell] {\ttfamily 80};
+  \node (c6) at (5,0) [cell] {\ttfamily ...};
+
+  \node (labelMem) at (8,  1) {Symbole im Code};
+  \node (labelMem) at (8,  0) {Werte im Speicher};
+  \node (labelMem) at (8, -1) {Adressen};
+  
+  \node (a1) [below=2mm of c1]            {\tiny 0x27ff};
+  \node (a2) [below=2mm of c2, color=red] {\tiny 0x2800};
+  \node (a3) [below=2mm of c3]            {\tiny 0x2801};
+  \node (a4) [below=2mm of c4]            {\tiny 0x2802};
+  \node (a5) [below=2mm of c5]            {\tiny 0x2803};
+  \node (a6) [below=2mm of c6]            {\tiny 0x2804};
+  
+  \node (ptr) [below=8mm of c1] {\scriptsize Adresse von \texttt{x}};
+  \node (vc2) [above=6mm of c1] {\scriptsize Variable \texttt{x}};
+  \node (vc0) [above=2mm of c1] {\scriptsize Variable \texttt{y}};
+  
+  \draw [ld] (ptr.east) .. controls +(0.3,0) .. (a2.south);
+  \draw [ld] (vc0.east) .. controls +(0.4,0) .. (c2.north);
+  \draw [ld] (vc2.east) .. controls +(2.4,0) .. (c4.north);
+\end{tikzpicture}
+\end{center}
+\end{tcolorbox}
+
+Während wir der Einfachheit halber oft sagen, dass eine Variable einen \emph{Wert} speichert, ist tatsächlich die Information hinterlegt, \emph{wo der Wert selbst zu finden ist}, also die Adresse des Wertes. Dies hat den Vorteil, dass Aufgaben sehr effizient erledigt werden können, wenn große Datenmengen bewegt werden müssen: anstatt viele Megabytes zu kopieren, muss nur eine Referenz an die Stelle gesetzt werden, wo die zu kopierenden Daten bereits im Speicher liegen. Für uns als ProgrammiererInnen heißt dies aber auch, dass wir uns diese Speicherstruktur
+
+\chapter{Appendix}
+\section{tables}
+special return values: None, NotImplemented?

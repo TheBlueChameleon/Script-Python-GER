@@ -1,0 +1,86 @@
+\chapter{Module}
+\epigraph{
+	Everything is awesome!
+}{Emmet Brickowski}
+
+Die Sprache Python kennt insgesamt nur 33 Schlüsselworte. Aus diesen wenigen Sprachelementen lassen sich erste Algorithmen bauen, die wiederum in komplexeren Routinen eingebaut werden können. Einer der großen Vorteile von Python ist es, dass für die weit meisten Aufgaben, die im Programmierer-Alltag auftauchen, bereits vorgefertigte Routinen zur Verfügung stehen.
+
+Damit Routinen genutzt werden können, müssen diese zunächst im Arbeitsspeicher vorliegen. Kaum ein Programm wird \emph{alle} Routinen benutzen, die in der \emph{Standardbibliothek} der Sprache Python angeboten werden. Um also nicht eine unsinnig große Menge an Speicherplatz zu belegen, bevor auch nur eine einzige Zeile nützlichen Codes ausgeführt wird, können wir selbst bestimmen, welche \emph{Module} geladen werden sollen. Ein Modul ist eine Sammlung von Routinen, die einem gemeinsamen \enquote{Thema} zugeordnet sind (beispielsweise mathematische Funktionen).
+
+Geladen wird ein Modul mit dem Befehl \inPy{import}:
+\begin{codebox}[Syntax]
+\mint{python}{import module}
+\end{codebox}
+
+Sobald ein Modul geladen ist, können wir die darin zusammen gefassten Funktionen aufrufen. Zwei Module können Funktionen mit gleichem Namen haben. Damit klar ist, welche Funktion wirklich gemeint ist, muss der Modulname beim Funktionsaufruf mit genannt werden:
+
+\begin{codebox}[Syntax]
+\mint{python}{module.function(arguments)}
+\end{codebox}
+
+Beispielsweise existieren die Module \inPy{math} und \inPy{cmath}. Beide stellen mathematische Funktionen zur Verfügung; jedoch ist \inPy{math} auf relle Zahlen ausgelegt, \inPy{cmath} dagegen auf komplexe Zahlen. Wir können die Funktionen aus beiden Modulen so benutzen:
+
+\begin{codebox}[Beispiel: Funktionen aus \texttt{math} und \texttt{cmath}]
+\begin{minted}[linenos]{python}
+import math
+import cmath
+
+print( math. sin( math.pi / 2) )
+print( cmath.sin(cmath.pi / 2) )
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+1.0 \\
+(1+0j)
+\end{cmdbox}
+
+Module können ihrerseits wieder aus Unter-Modulen bestehen, so dass sich ein \enquote{Modul-Pfad} ergibt. Ein Beispiel ist die Komponente \inPy{pyplot} aus dem Modul \inPy{matplotlib}, das zur graphischen Darstellung von Daten genutzt werden kann\footnote{Wir werden die Funktionen dieses Moduls ausführlicher in Kapitel \ref{chp:Matplotlib} besprechen. Für hier soll es Ihnen genügen zu wissen, dass dieses Modul existiert.}. Importiert man die \inPy{matplotlib}, so stehen die Funktionen von \inPy{pyplot} unter dem länglichen Präfix \inPy{matplotlib.pyplot} zur Verfügung.
+
+Es ist lästig, für jeden Funktionsaufruf den vollen Präfix \inPy{matplotlib.pyplot} anzugeben. Stattdessen können für diese Modulpfade neue Symbole vergeben werden:
+
+\begin{codebox}[Syntax]
+\mint{python}{import long.module.path as alias}
+\end{codebox}
+
+Es ist beispielsweise sehr geläufig, das angesprochene Modul \inPy{matplotlib.pyplot} unter dem \emph{Alias} \inPy{plt} zu laden:
+\begin{codebox}[Beispiel: \texttt{import} mit Alias]
+\begin{minted}[linenos]{python}
+import matplotlib.pyplot as plt
+
+plt.figure()    # statt matplotlib.pyplot.figure()
+\end{minted}
+\end{codebox}
+
+Wenn Sie nur einzelne Funktionen eines Moduls benutzen, können Sie auch diese auch alternativ mit \inPy{from} laden:
+\begin{codebox}[Syntax]
+\mint{python}{from module import function}
+\end{codebox}
+
+Um Namenskollisionen zu umgehen, besteht auch hier die Möglichkeit, ein Alias zu vergeben:
+\begin{codebox}[Syntax]
+\mint{python}{from module import function as alias}
+\end{codebox}
+Dieser Alias darf dann aber keinen Punkt (\texttt{.}) enthalten.
+
+Das obige Beispiel: \emph{Funktionen aus \inPy{math} und \inPy{cmath}} kann also auch folgendermaßen geschrieben werden:
+\begin{codebox}[Beispiel: \texttt{from} ... \texttt{import}]
+\begin{minted}[linenos]{python}
+from  math import sin
+from  math import pi
+from cmath import sin as csin
+
+print(  sin(pi / 2) )
+print( csin(pi / 2) )
+\end{minted}
+\end{codebox}
+
+\begin{hintbox}[\texttt{import} oder \texttt{from} ... \texttt{import}?]
+Welche der beiden Methoden -- \inPy{import} oder \inPy{from} ... \inPy{import} -- am besten funktioniert, ist letztlich Frage des Geschmacks. Die \inPy{import}-Methode lädt ein Modul als Gesamtpaket, verlangt aber bei jedem Aufruf ein Präfix. Dagegen sind bei \inPy{from} ... \inPy{import} jeweils eigene Zeilen für jede geladene Funktion und Konstante nötig. In jedem Fall sollten Sie konsistent bleiben, \ie nur entweder \inPy{import} oder \inPy{from} ... \inPy{import} benutzen.
+
+In diesem Kurs verwende ich nur die \inPy{import}-Methode. Durch diese ist es leichter, das Verhalten von Funktionen abzuschätzen, da bereits sofort der Kontext mitgeliefert wird. (Eine Funktion aus \inPy{cmath} wird \idR einen Wert vom Typ \inPy{complex} berechnen, während \inPy{math} \idR Werte vom Typ \inPy{float} berechnet. Solche Details können große Auswirkungen haben, und es ist oft gut, im Code direkt daran erinnert zu werden.)
+\end{hintbox}
+
+\begin{hintbox}[\texttt{import}-Zeilen am Anfang des Codes]
+Funktionen, die mit \inPy{import} (bzw. \inPy{from} ... \inPy{import}) geladen werden, sind \idR für den gesamten Code relevant. Daher sollten die \inPy{import}-Anweisungen auch die ersten Zeilen Ihres Codes darstellen und \emph{nur} dort auftauchen. Auf diese Weise kann ein Leser Ihres Codes sich sofort auf  die verwendeten Methoden einstellen und weiß, wo er oder sie nachlesen kann, für welche Module ihre Aliase stehen.
+\end{hintbox}
