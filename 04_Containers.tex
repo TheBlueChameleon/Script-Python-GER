@@ -915,13 +915,103 @@ print( sorted(houseStark.items()) )
 \end{minted}
 \end{cmdbox}
 
+Wie schon angesprochen ist die Anordnung der Elemente in \inPy{dict}s nicht fest. Daher kann auch die Funktion \inPy{reversed} nicht mit solchen aufgerufen werden.
+
 \subsubsection{\inPy{zip}}
+Mit dem Befehl \inPy{zip} können Listen zu Tabellen zusammengeschlossen werden. Jede einzelne Liste liefert die Daten einer Spalte. Das Ergebnis ist eine Datensammlung, die man zum Beispiel wieder zu einer \emph{Liste von Zeilen} machen kann:
 
-zip(l1, l2) returns generator [(l1[i], l2[i]) for i in range(min(len(l1), len(l2))]
+\begin{codebox}[Beispiel: \texttt{dict}s : und \texttt{sorted}]
+\begin{minted}[linenos]{python}
+categories     = ["House", "Sigil", "Words", "Seat"]
+houseStark     = ["Stark", "A grey direwolf on a white field",
+                  "Winter Is Coming", "Winterfell"]
+houseLannister = ["Lannister", "A gold lion, on a crimson field",
+                  "Hear Me Roar!", "Casterly Rock"]
+houseTyrell    = ["Tyrell", "A golden rose on a green field",
+                  "Growing Strong", "Highgarden"]
 
+zipper = zip(categories, houseStark, houseLannister, houseTyrell)
+houses = list(zipper)
+print( houses )
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+[('House', 'Stark', 'Lannister', 'Tyrell'), 
+ ('Sigil', 'A grey direwolf on a white field', 'A gold lion, 
+   on a crimson field', 'A golden rose on a green field'), 
+ ('Words', 'Winter Is Coming', 'Hear Me Roar!', 'Growing Strong'), 
+ ('Seat', 'Winterfell', 'Casterly Rock', 'Highgarden')]  
+\end{minted}
+\end{cmdbox}
 
 \section{Überblick}
-table
+\begin{table}[h!]
+\newcolumntype{D}{>{\centering\arraybackslash}m{.15 \textwidth}}
+\newcolumntype{K}{>{\centering\arraybackslash}m{.36 \textwidth}}
+\newcolumntype{M}{>{\centering\arraybackslash}m{.12 \textwidth}}
+\newcolumntype{N}{>{\centering\arraybackslash}m{.25 \textwidth}}
 
-\url{https://xkcd.com/1537/}
-xkcd-types
+\rowcolors{1}{white}{tabhighlight}
+
+\begin{tabularx}
+	{\linewidth}
+	{DKMN}
+	\toprule[1.5pt]
+	
+	\textbf{Datenstruktur} &
+	\textbf{Klammern} &
+	\textbf{Mutable} & 
+	\textbf{Besonderer Nutzen} \\
+	
+	\texttt{list} &
+	[eckig] &
+	ja &
+	All-Purpose-Listentyp \\
+	
+	\texttt{tuple} &
+	(rund) &
+	nein &
+	Schreibgeschützte Listen \\
+	
+	\texttt{set} &
+	\{geschweift\} &
+	ja &
+	keine Doubletten \\
+	
+	\texttt{frozenset} &
+	\{geschweift\} mit Präfix\newline
+	erstellt aus Type Conversion &
+	nein &
+	Schreibgeschützte Listen ohne Doubletten \\
+	
+	String &
+	'{}'Doppelte Anführungszeichen'{}' &
+	nein &
+	Texte \\
+	
+	\texttt{range} &
+	-- keine -- &
+	nein &
+	Bereiche von Ganzzahlen \\
+	
+	\texttt{dict} &
+	\{geschweift\}\newline
+	Doppelpunkt trennt Schlüssel : Wert &
+	ja &
+	Zuordnungen \\
+	
+	\bottomrule[1.5pt]
+\end{tabularx}
+\end{table}
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=.4\linewidth]{./gfx/xkcd-types}
+	\caption[Eingabeschemata in anderen Programmiersprachen]{Eingabeschemata in anderen Programmiersprachen\newline Quelle: \url{https://xkcd.com/1537/}}
+	\enquote{\texttt{colors.rgb('{}'blue'{}')} yields \texttt{'{}'\#0000FF'{}'}.
+	 \texttt{colors.rgb('{}'yellowish blue'{}')} yields \texttt{NaN}. 
+	 \texttt{colors.sort()} yields \texttt{'{}'rainbow'{}'}}
+\end{figure}
