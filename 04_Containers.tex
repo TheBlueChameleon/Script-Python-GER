@@ -282,10 +282,10 @@ Indices können auch negativ sein! In diesem Falle wird \enquote{von hinten here
 Ist das referenzierte Listenelement selbst eine Liste, so kann auf dessen Elemente ebenfalls durch Nennung des Index in einer eigenen Klammer zugegriffen werden.
 
 \inPy{list}s können auch in normale Variablen \enquote{entpackt} werden. Dazu verwendet man den Zuweisungsoperator \inPy{=}, gibt aber auf der linken Seite so viele Elemente an, wie sie in der Liste sind:
-\begin{cmdbox}[Multiplikation von Listen]
+\begin{cmdbox}[Entpacken von Listen]
 \begin{minted}{text}
->>> l = [1, 2, 3]
->>> a, b, c = l
+>>> numbers = [1, 2, 3]
+>>> a, b, c = numbers
 >>> b
 2
 \end{minted}
@@ -360,17 +360,17 @@ refCopy += [4]
 truCopy += [5, 5]
 altCopy += [6, 6]
 
-print(originalList)
-print(truCopy)
-print(altCopy)
+print("original    : ", originalList)
+print("copy.copy   : ", truCopy)
+print("slicing copy: ", altCopy)
 \end{minted}
 \end{codebox}
 
 \begin{cmdbox}[Ausgabe]
 \begin{minted}{text}
-[1, 2, 3, 4]
-[1, 2, 3, 5, 5]
-[1, 2, 3, 6, 6]
+original    : [1, 2, 3, 4]
+copy.copy   : [1, 2, 3, 5, 5]
+slicing copy: [1, 2, 3, 6, 6]
 \end{minted}
 \end{cmdbox}
 
@@ -391,15 +391,15 @@ normCopy = copy.copy(originalList)
 deepCopy = copy.deepcopy(originalList)
 normCopy[-1] += [3]
 
-print(originalList)
-print(deepCopy)
+print("copy.copy    : ", originalList)
+print("copy.deepcopy: ", deepCopy)
 \end{minted}
 \end{codebox}
 
 \begin{cmdbox}[Ausgabe]
 \begin{minted}{text}
-[1, 2, [1, 2, 3]]
-[1, 2, [1, 2]]
+copy.copy    : [1, 2, [1, 2, 3]]
+copy.deepcopy: [1, 2, [1, 2]]
 \end{minted}
 \end{cmdbox}
 
@@ -412,17 +412,17 @@ Eine solche Methode ist \inPy{append}. Sie wird verwendet, um Elemente zu einer 
 
 \begin{codebox}[Beispiel: Methode \texttt{append}]
 \begin{minted}[linenos]{python}
-l = [1, 2]
+numbers = [1, 2]
 
-l.append(3)
-l.append([4])
+numbers.append(3)
+numbers.append([4])
 
-print(l)
+print(numbers)
 
-l += [5]
-l += [[6]]
+numbers += [5]
+numbers += [[6]]
 
-print(l)
+print(numbers)
 \end{minted}
 \end{codebox}
 
@@ -440,13 +440,13 @@ Wie Sie sehen, wird in den Zeilen 3 und 4 jeweils ein Element zur Liste hinzgef�
 
 \begin{codebox}[Beispiel: Methode \texttt{insert}]
 \begin{minted}[linenos]{python}
-l = [1, 2]
+numbers = [1, 2]
 
-l.insert(1, 99)
-print(l)
+numbers.insert(1, 99)
+print(numbers)
 
-l = l[:1] + [-99] + l[1:]
-print(l)
+numbers = numbers[:1] + [-99] + l[1:]
+print(numbers)
 \end{minted}
 \end{codebox}
 
@@ -468,12 +468,12 @@ Das Gegenstück zu \inPy{insert} ist \inPy{remove}: Es löscht einen bestimmten 
 
 \begin{codebox}[Beispiel: Methode \texttt{remove}]
 \begin{minted}[linenos]{python}
-l = [1, 2, 3, 4, 4, 4, 5]
+numbers = [1, 2, 4, 3, 4, 4, 5]
 
-l.remove(99)
-print(l)
+numbers.remove(4)
+print(numbers)
 
-# l.remove(8)   -- Fehler: 8 nicht in l
+# numbers.remove(8)   -- Fehler: 8 nicht in numbers
 \end{minted}
 \end{codebox}
 
@@ -490,15 +490,15 @@ Wir werden in Kapitel \ref{chp:Funcs} eine Möglichkeit kennen lernen, diese Fun
 
 \begin{codebox}[Beispiel: Methode \texttt{sort} und \texttt{reverse}]
 \begin{minted}[linenos]{python}
-l = [5, -2, 3, 4, 4, 4, 5]
+numbers = [5, -2, 3, 4, 4, 4, 5]
 
-l.sort()
-print(l)
+numbers.sort()
+print(numbers)
 
-l.reverse()
-print(l)
+numbers.reverse()
+print(numbers)
 
-l = [1, "broccoli"]
+numbers = [1, "broccoli"]
 # l.sort()   -- Kann 1 nicht mit "broccoli" vergleichen
 \end{minted}
 \end{codebox}
@@ -515,12 +515,12 @@ Die Methode \inPy{pop} kombiniert die Aufgaben \enquote{lese das letzte Element 
 
 \begin{codebox}[Beispiel: Methode \texttt{pop}]
 \begin{minted}[linenos]{python}
-l = ["go have a coffee", 
-     "think of some nice examples", 
-     "write the chapter"]
+jobs = ["go have a coffee", 
+        "think of some nice examples", 
+        "write the chapter"]
 
-print( "next job  : ", l.pop() )
-print( "jobs to do: ", l)
+print( "next job  : ", jobs.pop() )
+print( "jobs to do: ", jobs)
 \end{minted}
 \end{codebox}
 
@@ -543,12 +543,12 @@ finden Sie (knappe) Erklärungen zu allen Methoden, die sowohl die \inPy{list} a
 
 \begin{codebox}[Beispiel: \texttt{tuple}s]
 \begin{minted}[linenos]{python}
-t = (1, 2, 3)
-print( t + (4, 5) )
-print( 2 * t)
+tup_numbers = (1, 2, 3)
+print( tup_numbers + (4, 5) )
+print( 2 * tup_numbers)
 print( t[0] )
 
-a, b, c = t
+a, b, c = tup_numbers
 print(b)
 \end{minted}
 \end{codebox}
@@ -582,15 +582,15 @@ Da \inPy{tuple}s \emph{immutable} sind, existieren keine Funktionen, die diese v
 
 \begin{codebox}[Beispiel: Type conversion mit \texttt{list} und \texttt{tuple}]
 \begin{minted}[linenos]{python}
-t = (5, 2, 3)
+tup_numbers = (5, 2, 3)
 
-l = list(t)
-print(l)
+lst_numbers = list(tup_numbers)
+print(lst_numbers)
 
-l.sort()
+lst_numbers.sort()
 
-t = tuple(l)
-print(t)
+tup_numbers = tuple(lst_numbers)
+print(tup_numbers)
 \end{minted}
 \end{codebox}
 
@@ -601,11 +601,13 @@ print(t)
 \end{minted}
 \end{cmdbox}
 
+Sie kennen diese Art der Typumwandlung bereits aus Abschnitt \ref{sub:datatypes}.
+
 \begin{hintbox}[Klammer-Typen]
 Beachten Sie im letzten Beispiel genau die Ausgabe: \inPy{tuple}s werden in (runden Klammern) ausgegeben, \inPy{list}s dagegen in [eckigen Klammern].
 \end{hintbox}
 
-Auch, wenn hier der Eindruck entsteht, der \inPy{tuple l} wäre verändert worden, bleibt die Aussage, dass \inPy{tuple}s \emph{immutable} sind. Das \emph{alte} Objekt \inPy{l} wurde in Zeile 8 verworfen. An einer neuen Stelle im Speicher wird ein \emph{neuer} \inPy{tuple} konstruiert, der mit dem \emph{alten} \inPy{l} nichts zu tun hat.
+Auch, wenn hier der Eindruck entsteht, der \inPy{tuple tup_numbers} wäre verändert worden, bleibt die Aussage, dass \inPy{tuple}s \emph{immutable} sind. Das \emph{alte} Objekt \inPy{tup_numbers} wurde in Zeile 8 verworfen. An einer neuen Stelle im Speicher wird ein \emph{neuer} \inPy{tuple} konstruiert, der mit dem \emph{alten} \inPy{tup_numbers} nichts zu tun hat.
 
 \section{\inPy{set}s und \inPy{frozenset}s}
 \inPy{set}s sind eine Variante von \inPy{list}s. Der Unterschied besteht darin, dass es in \inPy{set}s keine Doubletten gibt. Jedes Element eines \inPy{set}s ist einmalig; versucht man, dasselbe Element ein zweites Mal hinzuzufügen, so passiert einfach gar nichts.
@@ -631,10 +633,10 @@ orange
 
 \begin{codebox}[Beispiel: Type conversion mit \texttt{set}s]
 \begin{minted}[linenos]{python}
-l = [1, 2, 1, 3, 1, 4]
-s = set(l)
-uniqueList = list(s)
-print(s)
+lst_numbers = [1, 2, 1, 3, 1, 4]
+set_numbers = set(lst_numbers)
+uniqueList = list(set_numbers)
+print(set_numbers)
 print(uniqueList)
 \end{minted}
 \end{codebox}
@@ -652,10 +654,11 @@ So, wie es zur \inPy{list} das \emph{immutable} Analogon \inPy{tuple} gibt, hat 
 
 \begin{codebox}[Beispiel: Type conversion mit \texttt{frozenset}s]
 \begin{minted}[linenos]{python}
-l = [1, 2, 1, 3, 1, 4]
-f = frozenset(l)
-uniqueList = list(f)
-print(f)
+lst_numbers = [1, 2, 1, 3, 1, 4]
+fst_numbers = frozenset(lst_numbers)
+uniqueList  = list(fst_numbers)
+
+print(fst_numbers)
 print(uniqueList)
 \end{minted}
 \end{codebox}
@@ -669,19 +672,251 @@ frozenset({1, 2, 3, 4})
 
 
 \section{Strings}
-immutable
-recall addition
+Strings wurden bereits in Abschnitt \ref{sub:datatypes} vorgestellt. Hier möchte ich Sie nur darauf hinweisen, dass Strings eine besondere Art von \inPy{tuple}s sind, nämlich \emph{immutable Listen von einzelnen Buchstaben}.
 
+Mit diesem Wissen ist es für Sie leicht, das folgende Verhalten nachzuvollziehen:
+\begin{codebox}[Beispiel: Strings als \texttt{tuple}s]
+\begin{minted}[linenos]{python}
+powerlevel = "over 9000"
+tup_powerlevel = tuple(powerlevel)
+
+print(tup_powerlevel)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+('o', 'v', 'e', 'r', ' ', '9', '0', '0', '0')
+\end{minted}
+\end{cmdbox}
+
+Strings lassen sich auch \emph{indizieren}. \inPy{stringVariable[i]} gibt das \emph{Zeichen an der Stelle \inPy{i}} zurück. Beachten Sie, dass die Zählung auch hier bein \inPy{0} beginnt.
 
 \section{\inPy{range}s}
+\inPy{range}s werden in Kapitel \ref{chp:loops} von Bedeutung sein. Sie repräsentieren Ganzzahlen zwischen bestimmten Grenzen. Das Schlüsselwort \inPy{range} kann auf drei verschiedene Arten genutzt werden:
+\begin{itemize}
+\item \inPy{range(N)} erzeugt eine Liste der Zahlen von einschließlich \inPy{0} bis ausschließlich
+	\inPy{N}. Beispielsweise steht \inPy{range(5)} für die Zahlen \inPy{0, 1, 2, 3, 4}.
+\item \inPy{range(start, end)} erzeugt eine Liste der Zahlen von einschließlich \inPy{start} bis
+	ausschließlich \inPy{end}. Beispielsweise steht \inPy{range(2, 5)} für die Zahlen \inPy{2, 3, 4}.
+\item \inPy{range(start, end, stride)} erzeugt eine Liste der Zahlen von einschließlich \inPy{start} bis
+	ausschließlich \inPy{end} mit Schritten der Größe \inPy{stride}. Beispielsweise steht 
+	\inPy{range(2, 5, 2)} für die Zahlen \inPy{2, 4}.
+\end{itemize}
+
+Auf die einzelnen Elemente dieser \inPy{range}s kann wieder mit Index in [eckigen Klammern] zugegriffen werden:
+\begin{codebox}[Beispiel: \texttt{range}s]
+\begin{minted}[linenos]{python}
+rng_numbers = range(2, 5, 2)
+print(rng_numbers[0], rng_numbers[1])
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+2 4
+\end{minted}
+\end{cmdbox}
+
+\inPy{range}s speichern nicht die Liste selbst, sondern nur die Daten, aus denen die Elemente generiert werden können. Man nennt sie daher auch \emph{generator objects}. Mehr dazu später. Wo die einzelnen Objekte explizit gebraucht werden, kann wieder eine Type Conversion zu den bekannten Datenstrukturen eingesetzt werden:
+
+\begin{codebox}[Beispiel: Type conversion mit \texttt{range}s]
+\begin{minted}[linenos]{python}
+rng_numbers = range(2, 5, 2)
+lst_numbers = list(rng_numbers)
+
+print(rng_numbers)
+print(lst_numbers)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+range(2, 5, 2)
+[2, 4]
+\end{minted}
+\end{cmdbox}
 
 
 \section{\inPy{dict}ionaries}
-dict([key1, value1], [key2, value2], ...)
-not ordered!
+\inPy{dict}s verhalten sich wie \inPy{list}s, werden aber nicht über Zahlen sondern über beliebige \emph{Schlüssel} indiziert. Beim Erstellen werden in \{geschweiften Klammern\} Schlüssel-Wert-Paare aufgeführt, die über einen Doppelpunkt miteinander verbunden werden:
+
+\begin{codebox}[Beispiel: \texttt{dict}s]
+\begin{minted}[linenos]{python}
+houseStark = {"Sigil" : "A grey direwolf on a white field",
+              "Words" : "Winter Is Coming",
+              "Seat"  : "Winterfell"}
+
+print(houseStark)
+print(houseStark["Words"])
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+{'Sigil': 'A grey direwolf on a white field', 'Words': 'Winter Is Coming', 
+ 'Seat': 'Winterfell'}
+Winter Is Coming
+\end{minted}
+\end{cmdbox}
+
+Wird versucht, den Wert eines Schlüssels zu lesen, der noch nicht angelegt wurde, so bewirkt dies eine Fehlermeldung. Schreibender Zugriff dagegen legt ein neues Schlüssel-Wert-Paar an:
+
+\begin{codebox}[Beispiel: \texttt{dict}s : neue Schlüssel]
+\begin{minted}[linenos]{python}
+houseStark = {"Sigil" : "A grey direwolf on a white field",
+              "Words" : "Winter Is Coming", "Seat"  : "Winterfell"}
+
+# print(houseStark["Founder"]) -- Fehler: Schlüssel 'Founder' existiert nicht
+houseStark["Founder"] = "Bran the Builder"
+print(houseStark["Founder"])    # Kein Fehler: Schlüssel und Wert hinzugefügt
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+Bran the Builder
+\end{minted}
+\end{cmdbox}
+
+Aus \inPy{dict}s lassen sich \inPy{list}s, \inPy{set}s, \ldots generieren. Dabei wird \emph{per default} die Menge der Schlüssel übersetzt. Die Methoden \inPy{values}, \inPy{keys} und \inPy{items} erlauben aber auch, gezielt die Werte, Schlüssel oder Wert-Schlüssel-Paare abzugreifen:
+
+
+\begin{codebox}[Beispiel: \texttt{dict}s : spezielle Methoden]
+\begin{minted}[linenos]{python}
+houseStark = {"Sigil" : "A grey direwolf on a white field",
+              "Words" : "Winter Is Coming", "Seat"  : "Winterfell"}
+
+l_keys1  = list( houseStark          )
+l_keys2  = list( houseStark.keys()   )
+l_values = list( houseStark.values() )
+l_items  = list( houseStark.items()  )
+
+print("direct conversion: ", l_keys1 )
+print("method keys()    : ", l_keys2 )
+print("method values()  : ", l_values)
+print("method items()   : ", l_items )
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+direct conversion:  ['Sigil', 'Words', 'Seat']
+method keys()    :  ['Sigil', 'Words', 'Seat']
+method values()  :  ['A grey direwolf on a white field', 'Winter Is Coming', 
+   'Winterfell']
+method items()   :  [('Sigil', 'A grey direwolf on a white field'), ('Words',
+   'Winter Is Coming'), ('Seat', 'Winterfell')]
+\end{minted}
+\end{cmdbox}
+
+\begin{warnbox}[\texttt{dict}s sind nicht zwingend geordnet]
+Die Zuordnung von Schlüssel zu Wert ist eine nicht-triviale Aufgabe, die im Hintergrund eine aufwändige Maschinerie betreibt. Damit diese schnell und effizient arbeiten kann, erlaubt der Python-Interpreter, dass die Reihenfolge der Schlüssel-Wert-Paare geändert wird. Sie können also leider nicht sicher sein, in welcher Reihenfolge Werte aus einem \inPy{dict} entnommen werden. Wo dies wichtig wird, benutzen Sie \eg die Type-Conversion zu \inPy{list}s und die Methode \inPy{sort}.
+\end{warnbox}
+
 
 \section{Spezielle Funktionen für Container}
-in, <=> (lexicographical comparison), len, reversed, sorted, 
+\subsubsection{\inPy{in}}
+Mit dem Schlüsselwort \inPy{in} kann geprüft werden, ob ein Objekt Teil einer Datenstruktur ist. Zurück gegeben wird ein \inPy{bool}ean:
+
+\begin{codebox}[Beispiel: Operator \texttt{in}]
+\begin{minted}[linenos]{python}
+myList = [1, 2, -5, 3.14, "some text", [3, 2], (1+1j)]
+
+print(3.14 in myList)        # True
+print("meaning" in myList)   # False
+\end{minted}
+\end{codebox}
+
+Insbesondere funktioniert das Schlüsselwort \inPy{in} auch mit \inPy{dict}s. Beachten Sie, auf welche Menge (Schlüssel, Werte, oder Schlüssel-Wert-Paare) Sie sich beziehen:
+
+\begin{codebox}[Beispiel: \texttt{dict}s : Operator \texttt{in}]
+\begin{minted}[linenos]{python}
+houseStark = {"Sigil" : "A grey direwolf on a white field",
+              "Words" : "Winter Is Coming", "Seat"  : "Winterfell"}
+
+print( "Words"      in houseStark )   # True
+print( "words"      in houseStark )   # False -- Groß/Kleinschreibung
+print( "Winterfell" in houseStark )   # False -- nur keys werden herangezogen
+print( ("Seat", "Winterfell") in houseStark.items() )    # True
+\end{minted}
+\end{codebox}
+
+
+\subsubsection{Vergleichsoperatoren}
+Alle Listen können miteinander verglichen werden. Dazu dienen die üblichen Operatoren \inPy{<, ==, >}. Der Gleichheitsoperator \inPy{==} vergleicht alle Elemente der Listen miteinander, und gibt nur dann \inPy{True} zurück, wenn alle Elemente übereinstimmen. Bei \inPy{<} und \inPy{>} wird -- wie schon bei Strings -- die \emph{lexikographische} Vergleichsmethode angelegt, also \enquote{wie im Telefonbuch}.
+Betrachten Sie hierzu folgende Aufstellung:
+\begin{center}
+	\inPy{"Aaron" < "Bart" < "Bartolomäus" < "Cäsar"}
+	\inPy{[1, 5, 2] < [1, 4] < [1, 4, 1] < [2, 1, 1]}
+\end{center}
+
+Denken Sie auch daran, dass ein String wie ein \inPy{tuple} aus Buchstaben behandelt wird; so können Sie sich die Vergleichsregeln leicht ableiten.
+
+
+\subsubsection{\inPy{len}}
+Der Operator \inPy{len} gibt die Zahl der Elemente in einer Liste zurück. Das funktioniert für alle hier besprochenen Listen-Typen, inclusive \inPy{dict}s:
+
+
+\begin{codebox}[Beispiel: \texttt{dict}s : operator \texttt{len}]
+\begin{minted}[linenos]{python}
+myList = [5, 9, 2]
+
+print( len(myList) )    # 3
+print( len([]) )        # 0
+\end{minted}
+\end{codebox}
+
+
+
+\subsubsection{\inPy{reversed} und \inPy{sorted}}
+Wie die Namen schon andeuten, geben diese Funktionen in der Reihenfolge umgedrehte bzw. sortierte Listen zurück. Tatsächlich ist der Rückgabetyp beider Funktionen \inPy{list}. Im Gegensatz zu den \emph{Methoden} \inPy{sort} und \inPy{reverse} wird aber eine Kopie angelegt:
+
+\begin{codebox}[Beispiel: \texttt{sort} vs. \texttt{sorted}]
+\begin{minted}[linenos]{python}
+myList = [5, 9, 2]
+sortedList = sorted(myList)
+
+print("myList after sorted: ", myList)
+print("sortedList         : ", sortedList)
+
+myList.sort()
+print("reversed(myList)   : ", reversed(myList))
+print("myList after sort  : ", myList)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+myList after sorted: [5, 9, 2]
+sortedList         : [2, 5, 9]
+reversed(myList)   : [9, 5, 2]
+myList after sort  : [2, 5, 9]
+\end{minted}
+\end{cmdbox}
+
+Dies lässt sich auch auf \inPy{dict}s anwenden. Achten Sie darauf, dass ohne weitere Angaben nur die Schlüssel des \inPy{dict}s herangezogen werden:
+
+\begin{codebox}[Beispiel: \texttt{dict}s : und \texttt{sorted}]
+\begin{minted}[linenos]{python}
+houseStark = {"Sigil" : "A grey direwolf on a white field",
+              "Words" : "Winter Is Coming", "Seat"  : "Winterfell"}
+
+print( sorted(houseStark) )
+print( sorted(houseStark.items()) )
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+['Seat', 'Sigil', 'Words']
+[('Seat', 'Winterfell'), ('Sigil', 'A grey direwolf on a white field'), 
+  ('Words', 'Winter Is Coming')]
+\end{minted}
+\end{cmdbox}
+
+\subsubsection{\inPy{zip}}
+
 zip(l1, l2) returns generator [(l1[i], l2[i]) for i in range(min(len(l1), len(l2))]
 
 
