@@ -8,7 +8,7 @@
 # behaviour variables
 
 REPOSITORY_NAME="PyScript"
-FILE_PATTERNS="*.tex ./gfx"
+FILE_PATTERNS="*.tex ./gfx Session.tks"
 
 # --------------------------------------------------------------------------- #
 # GIT setup
@@ -62,9 +62,9 @@ fi
 git config credential.helper store
 git config --global credential.helper 'cache --timeout 7200'
 
-for file in $FILE_PATTERNS
+for FILE in $FILE_PATTERNS
 do
-  git add *.sh
+  git add $FILE
 done
 
 git status

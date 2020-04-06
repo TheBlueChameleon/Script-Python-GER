@@ -248,14 +248,20 @@ Variablen können einzelne Buchstaben sein, dürfen aber auch ganze Worte zum Na
 Ihre Programme werden sehr bald einige Komplexität annehmen. Sie sollten daher Variablen so benennen, dass auf den ersten Blick erkennbar wird, welche Art Information gespeichert wird. Der Name \inPy{ListLength} ist in jedem Fall dem Namen \inPy{l} vorzuziehen.
 \end{hintbox}
 %
-\begin{hintbox}[]
+\begin{hintbox}[Schlüsselworte]
 Die Liste oben nennt das Symbol \inPy{print} als erlaubten, aber problematischen Namen. Tatsächlich können Sie in Python die Sprachelemente umdefinieren, und so etwa \inPy{print} als Variable benutzen oder eine andere Routine unter diesem Namen aufrufen. Im Sinne von Lesbarkeit und Kompatiblität mit anderen Programmen sollten Sie hiervon aber Abstand nehmen! Wenn Sie \inPy{print} überschreiben, können Sie zunächst nichts mehr auf dem Bildschirm ausgeben.
 
-Da Sie gerade beginnen, die Sprache Python zu erlernen, können Sie natürlich noch nicht alle Symbole kennen, die bereits vergeben sind. Wenn Sie einen Editor mit Syntax-Highlighting verwenden, können Sie aber \idR diese farblichen Markierungen zur Hilfe nehmen: Wenn der Editor ihr Symbol wie einen Befehl markiert, sollten Sie es umbenennen. Wird keine besondere Farbe zugewiesen, so ist der Name vermutlich noch frei. Einige Schlüsselworte sind besonders geschützt, und können nicht überschrieben werden. Sie erhalten die Fehlermeldung \texttt{SyntaxError: invalid syntax}, falls Sie versuchen, ein solches Schlüsselwort als Variablenname zu verwenden.
+Da Sie gerade erst beginnen, die Sprache Python zu erlernen, können Sie natürlich noch nicht alle Symbole kennen, die bereits vergeben sind. Wenn Sie einen Editor mit Syntax-Highlighting verwenden, können Sie aber \idR diese farblichen Markierungen zur Hilfe nehmen: Wenn der Editor ihr Symbol wie einen Befehl markiert, sollten Sie es umbenennen. Wird keine besondere Farbe zugewiesen, so ist der Name vermutlich noch frei. Einige Schlüsselworte sind besonders geschützt, und können nicht überschrieben werden. Sie erhalten die Fehlermeldung \texttt{SyntaxError: invalid syntax}, falls Sie versuchen, ein solches Schlüsselwort als Variablenname zu verwenden.
 \end{hintbox}
 
 \begin{hintbox}[Unterstriche in Variablennamen]
-Variablennamen dürfen prinzipiell an jeder Stelle Unterstriche enthalten, auch als erstes Zeichen. Es ist aber Konvention, dies nur in bestimmten Situationen zu tun, auf die ich an gegebener Stelle erst eingehen werde. Vermeiden Sie daher vorerst Namen wie \inPy{\_var}.
+Variablennamen dürfen prinzipiell an jeder Stelle Unterstriche enthalten, auch als erstes Zeichen. Es ist aber Konvention, dies nur in bestimmten Situationen zu tun, auf die ich an gegebener Stelle erst eingehen werde. Vermeiden Sie daher vorerst Namen wie \inPy{_var}.
+\end{hintbox}
+
+\begin{hintbox}[Non-ASCII-Variablennamen (Umlaute{,} Sonderzeichen{,} \ldots)]
+Python 3 erlaubt es prinzipiell, Variablennamen aus dem UTF-8-Zeichenvorrat zu wählen. Das bedeutet, dass neben den lateinischen Klein- und Großbuchstaben (a-z, A-Z) auch Umlaute, Zeichen mit Akzenten, griechische, japanische, \ldots Zeichen für Variablennamen erlaubt sind. Dies führt aber schnell zu Kompatibilitätsproblemen. Neben den offensichtlichen Problemen -- Kollegen in anderen Ländern könnten die Schriftzeichen, die zur Bedienung Ihres Codes nötig sind, nicht eingeben können -- ist manchmal schon das Versenden und Ausführen von Code auf einem anderen Rechner in derselben Arbeitsgruppe schwierig.
+
+Während Python also Variablennamen wie \inPy{äußerstWichtig} durchaus erlaubt, sollten Sie also dennoch nur auf den englischen Zeichenvorrat zurückgreifen, und eine Variable beispielsweise \inPy{exceptionallyImportant} benennen.
 \end{hintbox}
 
 Variablen können aktualisiert (\ie überschrieben werden). Dies kann auch mit Bezug auf den alten Wert derselben Variable geschehen:
@@ -423,11 +429,6 @@ Traceback (most recent call last):
 ValueError: invalid literal for int() with base 10: '1.3'
 >>> float("1.3")
 1.3
-\end{minted}
-\end{cmdbox}
-%
-\begin{cmdbox}[]
-\begin{minted}{text}
 >>> float("1,3")
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>

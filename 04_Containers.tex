@@ -281,6 +281,17 @@ Indices können auch negativ sein! In diesem Falle wird \enquote{von hinten here
 
 Ist das referenzierte Listenelement selbst eine Liste, so kann auf dessen Elemente ebenfalls durch Nennung des Index in einer eigenen Klammer zugegriffen werden.
 
+\inPy{list}s können auch in normale Variablen \enquote{entpackt} werden. Dazu verwendet man den Zuweisungsoperator \inPy{=}, gibt aber auf der linken Seite so viele Elemente an, wie sie in der Liste sind:
+\begin{cmdbox}[Multiplikation von Listen]
+\begin{minted}{text}
+>>> l = [1, 2, 3]
+>>> a, b, c = l
+>>> b
+2
+\end{minted}
+\end{cmdbox}
+
+
 \subsection{Slicing}
 Aus einer Liste kann auch ein Teil herausgegriffen werden. Man nennt dies \emph{slicing}:
 \begin{codebox}[Syntax: Slicing]
@@ -394,17 +405,267 @@ print(deepCopy)
 
 
 \subsection{Methoden}
-copy, append, clear, count(what), insert, pop, remove, reverse, sort
+\emph{Methoden} sind Programmroutinen, die ein Datenobjekt verändern, oder auf Basis des Datenobjekts Ergebnisse berechnen. \inPy{list}s sind solche Datenobjekte. Jede Klasse (\ie \enquote{Art} von Objekten) hat seine eigenen Methoden. In Kapitel \ref{chp:Classes} wird dies im Detail behandelt. Hier sei zunächst vorausgeschickt, wie wir mit solchen Methoden umgehen.
 
-dissect: x, y = tuple(a, b)
+\subsubsection{\inPy{append}}
+Eine solche Methode ist \inPy{append}. Sie wird verwendet, um Elemente zu einer Liste hinzuzufügen. Aufgerufen wird eine Methode, indem man das zugrundeliegende Datenobjekt nennt, und, getrennt durch einen Punkt, die Methode anhängt. Methoden sind \emph{Funktionen}, also folgt wie üblich eine Parameterliste in runden Klammern.
+
+\begin{codebox}[Beispiel: Methode \texttt{append}]
+\begin{minted}[linenos]{python}
+l = [1, 2]
+
+l.append(3)
+l.append([4])
+
+print(l)
+
+l += [5]
+l += [[6]]
+
+print(l)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+[1, 2, 3, [4]]
+[1, 2, 3, [4], 5, [6]]
+\end{minted}
+\end{cmdbox}
+
+Wie Sie sehen, wird in den Zeilen 3 und 4 jeweils ein Element zur Liste hinzgefügt (die Zahl \inPy{3} und die Liste \inPy{[4]}). Denselben Effekt hat der \emph{Operator} \inPy{+=}. Während im ersten Fall aber \emph{Elemente} als Argumente übergeben werden, muss beim Operator eine \emph{Liste} genannt werden, mit der die Verknüpfung stattfindet.
+
+\subsubsection{\inPy{insert}}
+Ähnlich funktioniert die Methode \inPy{insert}: Sie fügt einen Wert zur Liste hinzu. Im Gegensatz zu \inPy{append} jedoch kann mit \inPy{insert} auch die Position innerhalb der Liste festgelegt werden: Beim Einfügen muss dazu sowohl der \emph{Index} (die Position in der Liste, an der eingefügt werden soll) als auch das Element selbst genannt werden:
+
+\begin{codebox}[Beispiel: Methode \texttt{insert}]
+\begin{minted}[linenos]{python}
+l = [1, 2]
+
+l.insert(1, 99)
+print(l)
+
+l = l[:1] + [-99] + l[1:]
+print(l)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+[1, 99, 2]
+[1, -99, 99, 2]
+\end{minted}
+\end{cmdbox}
+
+Auch negative Indices können angegeben werden. \inPy{l.append(x)} und \inPy{l.insert(-1, x)} haben also dieselbe Auswirkung.
+
+\begin{warnbox}[Indices beginnen bei 0!]
+Beachten Sie, dass das \emph{erste} Element einer Liste den Index \inPy{0} hat! Der Index \inPy{1} bezeichnet also das \emph{zweite} Element. 
+\end{warnbox}
+
+\subsubsection{\inPy{remove}}
+Das Gegenstück zu \inPy{insert} ist \inPy{remove}: Es löscht einen bestimmten Wert aus der Liste. Als Parameter wird der \emph{Wert} selbst angegeben, nicht der Index. Taucht der Wert in der Liste mehrfach auf, so wird das erste Element gelöscht, das dem Parameter gleicht. Ist der Parameter gar nicht in der Liste, so wird eine Fehlermeldung ausgegeben.
+
+\begin{codebox}[Beispiel: Methode \texttt{remove}]
+\begin{minted}[linenos]{python}
+l = [1, 2, 3, 4, 4, 4, 5]
+
+l.remove(99)
+print(l)
+
+# l.remove(8)   -- Fehler: 8 nicht in l
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+[1, 2, 3, 4, 4, 5]
+\end{minted}
+\end{cmdbox}
+
+\subsubsection{\inPy{sort} und \inPy{reverse}}
+Wie der Name vermuten lässt, dienen diese Methoden dazu, \inPy{list}s zu sortieren bzw. in der Reihenfolge umzudrehen. Es versteht sich von selbst, dass Sortieren nur dann möglich ist, wenn ein sinnvolles Sortierkriterium gegeben ist. Zahlen werden aufsteigend nach Wert sortiert, Strings lexikographisch (also alphabetisch mit bestimmten Regeln für Zahlen und Sonderzeichen). Listen aus gemischten Elementen (also aus Zahlen und Strings) können nicht sortiert werden.
+
+Wir werden in Kapitel \ref{chp:Funcs} eine Möglichkeit kennen lernen, diese Funktionalität zu erweitern.
+
+\begin{codebox}[Beispiel: Methode \texttt{sort} und \texttt{reverse}]
+\begin{minted}[linenos]{python}
+l = [5, -2, 3, 4, 4, 4, 5]
+
+l.sort()
+print(l)
+
+l.reverse()
+print(l)
+
+l = [1, "broccoli"]
+# l.sort()   -- Kann 1 nicht mit "broccoli" vergleichen
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+[-2, 3, 4, 4, 4, 5, 5]
+[5, 5, 4, 4, 4, 3, -2]
+\end{minted}
+\end{cmdbox}
+
+\subsubsection{\inPy{pop}}
+Die Methode \inPy{pop} kombiniert die Aufgaben \enquote{lese das letzte Element der Liste} und \enquote{entferne das letzte Element der Liste}. Dies ist nützlich, um \enquote{Aufgabenstapel abzuarbeiten}.
+
+\begin{codebox}[Beispiel: Methode \texttt{pop}]
+\begin{minted}[linenos]{python}
+l = ["go have a coffee", 
+     "think of some nice examples", 
+     "write the chapter"]
+
+print( "next job  : ", l.pop() )
+print( "jobs to do: ", l)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+next job  : write the chapter
+jobs to do: ['go have a copy', 'think of some nice examples']
+\end{minted}
+\end{cmdbox}
+
+\subsubsection{Weitere Methoden}
+Neben den oben gezeigten Methoden existieren noch weitere, die hier nicht erschöpfend erklärt werden können. Stattdessen möchte ich Sie dazu ermutigen, sich mit der offiziellen Dokumentation der Sprache auseinander zu setzen. 
+
+Unter:\newline
+\url{https://docs.python.org/3/tutorial/datastructures.html}\\
+finden Sie (knappe) Erklärungen zu allen Methoden, die sowohl die \inPy{list} als auch alle weiteren hier besprochenen Speicherstrukturen zur Verfügung stellen.
 
 \section{\inPy{tuple}s}
-xmp divmod(x, y)
-immutable
-add is concatenate
+\inPy{tuple}s sind die immutable Cousins der \inPy{list}: auch sie repräsentieren Listen. Wie bei \inPy{list} spricht man Syntaxelemente über einen Index in [eckigen Klammern] an. Angelegt werden sie ähnlich, jedoch mit runden Klammern. Addition und Multiplikation funktionieren wie bei \inPy{list}s:
+
+\begin{codebox}[Beispiel: \texttt{tuple}s]
+\begin{minted}[linenos]{python}
+t = (1, 2, 3)
+print( t + (4, 5) )
+print( 2 * t)
+print( t[0] )
+
+a, b, c = t
+print(b)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+(1, 2, 3, 4, 5)
+(1, 2, 3, 1, 2, 3)
+1
+2
+\end{minted}
+\end{cmdbox}
+
+Viele Funktionen in Python geben \inPy{tuple}s zurück. Ein Beispiel hierfür ist die Funktion \inPy{divmod}, die sowohl Quotient als auch Rest einer Division in einem Schritt berechnet:
+
+\begin{codebox}[Beispiel: \texttt{divmod}]
+\begin{minted}[linenos]{python}
+dm = divmod(11, 3)
+
+print("11 / 3 = ", dm[0], " Rest ", dm[1])
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+11 / 3 = 3 Rest 2
+\end{minted}
+\end{cmdbox}
+
+Da \inPy{tuple}s \emph{immutable} sind, existieren keine Funktionen, die diese verändern, wie \eg \inPy{sort} oder \inPy{append}. Es ist jedoch möglich, aus einem \inPy{tuple} eine \inPy{list} mit gleichen Inhalten zu generieren, und diese dann -- nach Bearbeitung -- wieder in einen \inPy{tuple} zurückzuverwandeln:
+
+\begin{codebox}[Beispiel: Type conversion mit \texttt{list} und \texttt{tuple}]
+\begin{minted}[linenos]{python}
+t = (5, 2, 3)
+
+l = list(t)
+print(l)
+
+l.sort()
+
+t = tuple(l)
+print(t)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+[5, 2, 3]
+(2, 3, 5)
+\end{minted}
+\end{cmdbox}
+
+\begin{hintbox}[Klammer-Typen]
+Beachten Sie im letzten Beispiel genau die Ausgabe: \inPy{tuple}s werden in (runden Klammern) ausgegeben, \inPy{list}s dagegen in [eckigen Klammern].
+\end{hintbox}
+
+Auch, wenn hier der Eindruck entsteht, der \inPy{tuple l} wäre verändert worden, bleibt die Aussage, dass \inPy{tuple}s \emph{immutable} sind. Das \emph{alte} Objekt \inPy{l} wurde in Zeile 8 verworfen. An einer neuen Stelle im Speicher wird ein \emph{neuer} \inPy{tuple} konstruiert, der mit dem \emph{alten} \inPy{l} nichts zu tun hat.
 
 \section{\inPy{set}s und \inPy{frozenset}s}
+\inPy{set}s sind eine Variante von \inPy{list}s. Der Unterschied besteht darin, dass es in \inPy{set}s keine Doubletten gibt. Jedes Element eines \inPy{set}s ist einmalig; versucht man, dasselbe Element ein zweites Mal hinzuzufügen, so passiert einfach gar nichts.
 
+Man erstellt \inPy{set}s wie \inPy{list}s, jedoch mit \{geschweiften Klammern\}. Das Ansprechen einzelner Elemente geschieht wieder wie bei \inPy{list}s durch Nennung des Index in [eckigen Klammern]. 
+
+\begin{codebox}[Beispiel: \texttt{set}s]
+\begin{minted}[linenos]{python}
+basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
+print(basket)
+print(basket[0])
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+{'orange', 'banana', 'pear', 'apple'}
+orange
+\end{minted}
+\end{cmdbox}
+
+Ähnlich wie \inPy{tuple}s können \inPy{set}s aus \inPy{list}s (oder allen anderen Datenstrukturen) konstruiert werden:
+
+\begin{codebox}[Beispiel: Type conversion mit \texttt{set}s]
+\begin{minted}[linenos]{python}
+l = [1, 2, 1, 3, 1, 4]
+s = set(l)
+uniqueList = list(s)
+print(s)
+print(uniqueList)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+{1, 2, 3, 4}
+[1, 2, 3, 4]
+\end{minted}
+\end{cmdbox}
+
+Wie schon zuvor funktioniert die Addition wie bei \inPy{list}s. Die Multiplikation ist nicht definiert, da ein \inPy{set} nie doppelte Elemente enthalten darf. Auf \inPy{set}s können dieselben Operationen wie auf \inPy{list}s angewandt werden. Hinzu kommen einige s
+
+So, wie es zur \inPy{list} das \emph{immutable} Analogon \inPy{tuple} gibt, hat das \inPy{set} im \inPy{frozenset} sein \emph{immutable} Gegenstück. \inPy{frozenset}s haben keinen eigenen Typ von Klammern, und werden stattdessen über ihren Typnamen aus Listen (beliebigen Typs) generiert:
+
+\begin{codebox}[Beispiel: Type conversion mit \texttt{frozenset}s]
+\begin{minted}[linenos]{python}
+l = [1, 2, 1, 3, 1, 4]
+f = frozenset(l)
+uniqueList = list(f)
+print(f)
+print(uniqueList)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe]
+\begin{minted}{text}
+frozenset({1, 2, 3, 4})
+[1, 2, 3, 4]
+\end{minted}
+\end{cmdbox}
 
 
 \section{Strings}
