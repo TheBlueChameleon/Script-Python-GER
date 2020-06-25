@@ -1,4 +1,5 @@
 \chapter{Datenstrukturen}
+\label{chp:Containers}
 \epigraph{
 	Multimedia? As far as I'm concerned, it's reading with the radio on!
 }{Rory Bremmer}
@@ -847,7 +848,7 @@ print( ("Seat", "Winterfell") in houseStark.items() )    # True
 Alle Listen können miteinander verglichen werden. Dazu dienen die üblichen Operatoren \inPy{<, ==, >}. Der Gleichheitsoperator \inPy{==} vergleicht alle Elemente der Listen miteinander, und gibt nur dann \inPy{True} zurück, wenn alle Elemente übereinstimmen. Bei \inPy{<} und \inPy{>} wird -- wie schon bei Strings -- die \emph{lexikographische} Vergleichsmethode angelegt, also \enquote{wie im Telefonbuch}.
 Betrachten Sie hierzu folgende Aufstellung:
 \begin{center}
-	\inPy{"Aaron" < "Bart" < "Bartolomäus" < "Cäsar"}
+	\inPy{"Aaron" < "Bart" < "Bartolomäus" < "Cäsar"}\\
 	\inPy{[1, 5, 2] < [1, 4] < [1, 4, 1] < [2, 1, 1]}
 \end{center}
 
@@ -1009,9 +1010,9 @@ print( houses )
 
 \begin{figure}
 	\centering
-	\includegraphics[width=.4\linewidth]{./gfx/xkcd-types}
-	\caption[Eingabeschemata in anderen Programmiersprachen]{Eingabeschemata in anderen Programmiersprachen\newline Quelle: \url{https://xkcd.com/1537/}}
+	\includegraphics[width=.4\linewidth]{./gfx/xkcd-types} \\
 	\enquote{\texttt{colors.rgb('{}'blue'{}')} yields \texttt{'{}'\#0000FF'{}'}.
 	 \texttt{colors.rgb('{}'yellowish blue'{}')} yields \texttt{NaN}. 
 	 \texttt{colors.sort()} yields \texttt{'{}'rainbow'{}'}}
+	\caption[Eingabeschemata in anderen Programmiersprachen]{Eingabeschemata in anderen Programmiersprachen\newline Quelle: \url{https://xkcd.com/1537/}}
 \end{figure}
