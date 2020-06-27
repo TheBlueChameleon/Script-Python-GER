@@ -1,7 +1,149 @@
 \chapter{Funktionen}
 \label{chp:Funcs}
-\section{The Thing Itself}
-\section{Scopes}
+\epigraph{
+	Before software can be reusable it first has to be usable.
+}{Ralph Johnson}
+
+Viele Aufgaben wiederholen sich oder lassen sich verallgemeinern. Folgender Code berechnet beispielsweise den Wert von Eulers Zahl, also $\exp(1)$, kann aber auch dazu verwendet werden, andere Potenzen von $e$ zu finden:
+
+\begin{codebox}[Beispiel: Exponentialfunktion]
+\begin{minted}[linenos]{python}
+x0           = 1.0
+x            = 1.0
+denominator  = 1.0
+EulersNumber = 1.0
+iterations   = 10
+
+for k in range(1, iterations) :
+  x            *= x0
+  denominator  *= k
+  EulersNumber += x / denominator
+
+print ("exp(", x0, ") is approximately ", EulersNumber, sep = "")
+\end{minted}
+\end{codebox}
+
+Nun ist es zwar schön, eine solche allgemeine Rechenvorschrift zu haben; wir müssen nur den Wert für \inPy{x0} in der ersten Zeile austauschen, und erhalten ein neues Ergebnis. Wollen wir aber an mehreren Stellen die Exponentialfunktion verwenden, so müssten wir diesen Code jedes Mal kopieren und neu einfügen. Schlimmer noch: sollte uns auffallen, dass wir im obigen Code einen Fehler gemacht haben, so müssen wir diesen \emph{für jede Kopie separat} ausmerzen. Und selbst, wenn wir auf Anhieb perfekt gearbeitet haben, \enquote{belegt} unser Code jetzt \ua die Symbole \inPy{x} und \inPy{x0}. Projekte, die diesen Code verwenden wollen, müssen also andere Namen finden.
+
+Natürlich wissen Sie, dass es im Modul \inPy{math} die \emph{Funktion} \inPy{math.exp} gibt, die ebenfalls die Exponentialfunktion berechnet, aber ohne all diese lästigen Nebeneffekte auskommt. Hier sollen Sie lernen, wie dies möglich ist, und wie Sie solche Funktionen selbst erstellen.
+
+\section{Grundlagen}
+Funktionen sind \enquote{abgetrennte Codebereiche}, die unabhängig vom restlichen Code ausgeführt werden. In eine Funktion können Argumente (oft auch Parameter genannt) eingespeist werden (man spricht von \emph{übergeben}), und ein Ergebnis wird von  \emph{zurückgegeben}. Zur Berechnung dieses Ergebnisses wird normaler Code ausgeführt; dieser verhält sich aber \enquote{wie in einer Box}, \ie verwendet seine eigenen, \emph{lokalen} Variablen. Diese können dieselben Namen tragen wie Variablen an anderen Stellen Ihres Programms; nichts desto trotz sind die Variablen in einer Funktion unabhängig vom restlichen Code. (Ebenso, wie es zwei Menschen mit dem Namen \emph{Theophrastus} geben kann\footnote{citation needed}, die aber dennoch zwei getrennte Personen sind, können also auch zwei Variablen mit demselben Namen vorliegen, ohne \emph{dieselbe} Variable zu sein.)
+
+Ein solcher Codebereich wird eingeleitet durch eine \inPy{def}-Zeile und wird durch Einrückung vom restlichen Code abgetrennt, ähnlich, wie wir das schon von \inPy{if}-Blöcken und \inPy{for}-Schleifen kennen:
+
+\begin{codebox}[Syntax: Funktionen]
+\begin{minted}{python}
+def Funktionsname (Parameterliste) :
+  normaler Code
+  ...
+  return Ergebnis
+\end{minted}
+\end{codebox}
+
+Mit \inPy{Parameterliste} ist eine durch Kommata getrennte Liste von Variablennamen. Über diese Variablennamen werden \enquote{Informationen von außen in die Funktion eingeschleust} (Übergabe von Werten). Verstehen Sie die Parameterliste als einen Punkt, an dem Variablen angelegt werden. Die Werte dieser Variablen werden beim Aufruf der Funktion festgelegt, und können in der Funktion wie normale Variablen verwendet werden. Eine Parameterliste kann auch leer sein. In dem Fall müssen aber immer noch  leere Klammern () gesetzt werden.
+
+Wie besprochen steht innerhalb einer Funktion Code, wie sie ihn schon kennen bzw. noch kennenlernen werden. Alle Mittel, die Sie bisher kennengelernt haben auch auch solche, wie wir sie im Weiteren noch besprechen, können auch innerhalb von Funktionen verwendet werden.
+
+In der Regel soll eine Funktion ein Ergebnis berechnen, \eg den Wert der Exponentialfunktion. Dieses Ergebnis wird mit dem Befehl \inPy{return} zurück an das Hauptprogramm geschickt und zugleich die Funktion verlassen. Aller Code in der Funktion, der hinter \inPy{return} steht, wird also ignoriert. Eine Funktion darf durchaus mehrere \inPy{return}-Anweisungen haben. Sinnvoll kann das sein, wenn eine Fallunterscheidung gemacht wird (\eg mit \inPy{if}). Genauso ist es auch zulässig, überhaupt keine \inPy{return}-Anweisung zu benutzen. Stellen Sie sich zum Beispiel eine Funktion vor, die lediglich eine formatierte Ausgabe auf dem Bildschirm bewirken soll. Hier wird kein Ergebnis berechnet. Entsprechend kann auch die \inPy{return}-Anweisung entfallen.
+
+\emph{Aufgerufen} (\ie ausgeführt) wird die Funktion durch Nennung ihres Namens. In Klammern dahinter werden die Werte aufgeführt, die über die Parameterliste an die Funktion übergeben werden sollen. Für jede Variable der Parameterliste muss auch ein Wert angegeben werden. Ist die Parameterliste leer, so müssen dennoch leere Klammern () beim Funktionsaufruf stehen.
+
+Ein Funktionsaufruf macht also mehrere Dinge:
+\begin{itemize}
+\item Eine \emph{Kopie} der Werte in der Parameterliste wird an die Funktion übergeben
+\item Die Programmausführung springt in die Funktion
+\item Nach Ende der Funktion wird das Programm an der ürsprünglichen Stelle fortgeführt.
+\end{itemize}
+Nach Ende des Funktionsaufrufs wird an der aufrufenden Stelle ein Wert erhalten (eben der Rückgabewert der Funktion). Dieser kann in einer Variablen gespeichert werden, oder an andere Funktionen weitergegeben werden.
+
+\begin{codebox}[Beispiel: Exponentialfunktion als Funktion]
+\begin{minted}[linenos]{python}
+def expFunction(x0) :
+  x           = 1.0
+  denominator = 1.0
+  result      = 1.0
+  iterations  = 10
+  
+  for k in range(1, iterations) :
+    x            *= x0
+    denominator  *= k
+    result += x / denominator
+    
+  return result
+
+EulersNumber = expFunction(1.0)          # Aufruf, Speichern in Variable
+print("Eulers Number is", EulersNumber)
+print("e³ =", expFunction(3.0))          # Weitergabe an andere Funktion
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Exponentialfunktion als Funktion]
+\begin{minted}{text}
+Eulers Number is 2.7182815255731922
+e³ = 20.063392857142855
+\end{minted}
+\end{cmdbox}
+
+Wird kein Rückgabewert genannt, so weist Python automatisch den Pseudo-Rückgabewert \inPy{None} zu. Es handelt sich dabei um eine Konstante, die eben genau für die Abwesenheit eines Wertes steht, und sollte auch nicht mit dem Text \inPy{"None"} verwechselt werden.
+\begin{codebox}[Beispiel: Funktion \enquote{ohne} Rückgabewert]
+\begin{minted}[linenos]{python}
+import math
+
+def printBoxed(text, boxSize) :
+  # Draws text in a box like:
+  #
+  # +-----------+
+  # |   text    |
+  # +-----------+
+  
+  lenText     = len(text)
+  countSpaces = boxSize - lenText - 2        # 2 spaces for |borders|
+  spacesLeft  = math.floor(countSpaces / 2)  # round down
+  spacesRight = math.ceil (countSpaces / 2)  # round up
+  
+  print("+" +               (boxSize - 2) * "-"           + "+")
+  print("|" + spacesLeft * " " + text + spacesRight * " " + "|")
+  print("+" +               (boxSize - 2) * "-"           + "+")
+  
+reVal = printBoxed("Don't forget to be awesome!", 60)
+print("The function returned:" , reVal)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Exponentialfunktion als Funktion]
+\begin{minted}{text}
++----------------------------------------------------------+
+|               Don't forget to be awesome!                |
++----------------------------------------------------------+
+The function returned: None
+\end{minted}
+\end{cmdbox}
+
+Wie erwähnt wird die Ausführung der Funktion sofort beendet, sobald der Interpreter auf eine \inPy{return}-Anweisung stößt. Daher haben die Zeilen 4 und 7 im folgenden Beispiel keinerlei Auswirkung:
+\begin{codebox}[Beispiel: Funktion mit mehreren \texttt{return}-Anweisungen]
+\begin{minted}[linenos]{python}
+def max (a, b) :
+  if a > b :
+    return a
+    print("this line will never be executed")
+  else :
+    return b
+    print("and neither will this one")
+
+print(max(1, 2))
+print(max(2, 1))
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Funktion mit mehreren \texttt{return}-Anweisungen]
+\begin{minted}{text}
+2
+2
+\end{minted}
+\end{cmdbox}
+
+\section{Scopes, By-Value- und By-Reference-Übergabe}
 \section{Default Args}
 \section{Variardic}
 \section{Lambdas}

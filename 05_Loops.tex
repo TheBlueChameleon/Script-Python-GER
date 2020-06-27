@@ -36,7 +36,7 @@ Macht man einen Fehler bei der Formulierung der Bedingung, so kann man unbeabsic
 Mit dem Schlüsselwort \inPy{while} wird ein Codeblock eingeleitet, der so lange wiederholt wird, bis eine Bedingung nicht mehr erfüllt ist, \ie bis ihr Wahrheitswert zu \inPy{False} ausgewertet wird. Die Syntax lautet:
 
 \begin{codebox}[Syntax: \texttt{while} (1)]
-\begin{minted}[linenos]{python}
+\begin{minted}{python}
 while Wahrheitswert :
   Schleifenkoerper
 \end{minted}
@@ -173,7 +173,7 @@ Die Überprüfung auf \inPy{Bedingung} wird so an das Schleifenende geschoben.
 Wie schon angesprochen wird der Schleifenkörper nicht ausgeführt, wenn die Bedingung schon vor der ersten Durchführung nicht erfüllt war. In diesem Fall kann ein optionaler \inPy{else}-Block ausgeführt werden:
 
 \begin{codebox}[Syntax: \texttt{while} (2)]
-\begin{minted}[linenos]{python}
+\begin{minted}{python}
 while Wahrheitswert :
   Schleifenkoerper
 else :
@@ -214,7 +214,7 @@ Dies erfüllt zwar seinen Zweck, ist aber eine Fehlerquelle und sollte vermieden
 Schleifen mit \inPy{for} führen Code für jedes Element aus einer Datenstruktur wie in Kapitel \ref{chp:Containers} beschrieben aus. Nacheinander wird jedes Element des Containers über eine Hilfsvariable ansprechbar gemacht und dann Code ausgeführt, der von dieser Hilfsvariablen abhängig sein kann.
 
 \begin{codebox}[Syntax: \texttt{for}]
-\begin{minted}[linenos]{python}
+\begin{minted}{python}
 for Variable in Container :
   Schleifenkoerper
 \end{minted}
@@ -415,7 +415,7 @@ Seat:   Winterfell
 %normally last result; in code usually obligatory forget.
 %\end{hintbox}
 
-\section{Eingriffe in den Kontrollfluss, \texttt{else}}
+\subsection{Eingriffe in den Kontrollfluss, \texttt{else}}
 Auch bei \inPy{for} können die Befehle \inPy{break} und \inPy{continue} eingesetzt werden, und verhalten sich dort genauso, wie bei \inPy{while}. Außerdem existiert auch bei \inPy{for} eine optionale \inPy{else}-Klausel. Der Code hierin wird ausgeführt, wenn die \inPy{for}-Schleife normal zum Ende kam, also \emph{nicht} durch \inPy{break} abgebrochen wurde.
 
 \begin{codebox}[Beispiel: \texttt{for} mit \texttt{break}{,} \texttt{continue} und \texttt{else}]
@@ -459,8 +459,9 @@ Stellen Sie sich vor, Sie brauchen eine Liste mit den Quadraten aller geraden Ga
 \begin{codebox}[Beispiel: \texttt{for} zum Erstellen einer Liste]
 \begin{minted}[linenos]{python}
 evenSquares = []
+N = 20
 
-for i in range(2, 20, 2) :
+for i in range(2, N, 2) :
   evenSquares.append(i**2)
 
 print(evenSquares)
@@ -474,13 +475,14 @@ print(evenSquares)
 Dieselbe Konstruktion können Sie verkürzt auch schreiben als:
 \begin{codebox}[Beispiel: List Comprehension]
 \begin{minted}[linenos]{python}
-evenSquares = [ i**2 for i in range(2, 20, 2) ]
+N = 20
+evenSquares = [ i**2 for i in range(2, N, 2) ]
 print(evenSquares)
 \end{minted}
 \end{codebox}
 
 Die Abstrakte Syntax lautet also:
-\begin{codebox}[Syntax : List Comprehension]
+\begin{codebox}[Syntax : List Comprehension (1)]
 \begin{minted}[linenos]{python}
 variable = [ expression for element in iterable ]
 print(evenSquares)
@@ -510,6 +512,7 @@ print(telephone)
 \end{minted}
 \end{codebox}
 
+Der Code erzeugt also eine \emph{Liste von Listen}:
 \begin{cmdbox}[Ausgabe: Telefonmatrix]
 \begin{minted}{text}
 [1, 2, 3]
@@ -524,4 +527,64 @@ Im obigen Beispiel \emph{Telefonmatrix} taucht die Variable \inPy{row} zum erste
 
 Solche Überlegungen zur Benennung der Objekte sind extrem wichtig in auch nur mittelgroßen Projekten. Geben Sie nicht der Versuchung nach, Variablen aus Bequemlichkeit einfach \inPy{a, b, c, ...} zu nennen, sondern überlegen Sie, welche Art von Information darin abgelegt werden soll, und schreiben dies dann auch aus! Auch Abkürzungen sollten vermieden werden, da sich hierbei oft Fehler einschleichen. Hieß die Variable nun \inPy{numElmL} oder \inPy{nel} oder \inPy{nElements}? Diese Frage stellt sich nicht, wenn Sie sich die kleine Mühe machen, konsequent \inPy{numberElementsList} zu tippen; Sie sparen sich dadurch die große Mühe, häufig zurück zu scrollen und Fehler auszumerzen, die sich daraus ergeben, dass Sie mal \inPy{numElmL} und mal \inPy{numElml} getippt haben.
 \end{hintbox}
-generator objects
+
+Bei der List Comprehension können Sie auch die Aufnahme eines Wertes in die Ergebnis-Liste an eine Bedingung knüpfen. Sie erreichen dies, indem Sie einfach eine \inPy{if}-Klausel anfügen:
+\begin{codebox}[Syntax : List Comprehension (2)]
+\begin{minted}[linenos]{python}
+variable = [ expression for element in iterable if condition ]
+print(evenSquares)
+\end{minted}
+\end{codebox}
+
+Als Beispiel soll eine Liste aller Primzahlen bis zu einer Obergrenze \inPy{N} berechnet werden. Wir nutzen dazu aus, dass eine Primzahl exakt zwei Ganzzahl-Teiler hat. Wir erstellen also zuerst für jede Zahl zwischen 2 und \inPy{N} alle Ganzzahl-Teiler, und akzeptieren nur solche Zahlen in unserem Ergebnis, bei dem diese Liste der Teiler die Länge \inPy{2} hat\footnote{Der gezeigte Code ist sowohl bezüglich Rechenzeit als auch bezüglich Speicherbedarf schlecht, illustriert aber schön die Technik, um die es uns hier geht.}.
+
+\begin{codebox}[Beispiel: List Comprehension mit Bedingung]
+\begin{minted}[linenos]{python}
+N = 100
+primeNumbers = [
+  i for i in range (2, N)       # übernehme alle Zahlen i zwischen 2 und N ...
+  if len (                      # ... für die die die Anzahl der Teiler ...
+    [j for j in range (1, i+1)  # ... (d.h. die Zahlen zwischen 1 und i ...
+    if i % j == 0]              # ... die i ganzzahlig teilen) ...
+  ) == 2                        # ... gleich 2 ist.
+]
+
+print(primeNumbers)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: List Comprehension mit Bedingung]
+[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+\end{cmdbox}
+
+
+List Comprehension lässt sich auch für \inPy{set}s und \inPy{dict}s umsetzen. Die Synax verlangt dann nur eine minimale Anpassung:
+\begin{codebox}[Syntax : List Comprehension (3)]
+\begin{minted}[linenos]{python}
+setVariable  = {       expression for element in iterable if condition }
+dictVariable = { key : expression for element in iterable if condition }
+\end{minted}
+\end{codebox}
+Natürlich sind die \inPy{if}-Klauseln auch für \inPy{set}s und \inPy{dict}s optional.
+
+\begin{codebox}[Beispiel: List Comprehension für \texttt{set}s und \texttt{dict}s]
+\begin{minted}[linenos]{python}
+# Die ersten 10 Quadratzahlen als set:
+print( {i**2 for i in range (10)} )
+# Die ersten 10 Quadratzahlen als dict
+print( {i : i**2 for i in range (10)} )
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: List Comprehension für \texttt{set}s und \texttt{dict}s]
+\begin{minted}{text}
+{0, 1, 64, 4, 36, 9, 16, 49, 81, 25}
+{0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25, 6: 36, 7: 49, 8: 64, 9: 81}
+\end{minted}
+\end{cmdbox}
+
+\begin{hintbox}[Aufwändige Berechnungen vorbereiten]
+In wissenschaftlichen Simulationen treten manche Ausdrücke wie $e^k$ gehäuft für die immer gleichen Werte von $k$ auf. Anstatt die Exponentialfunktion immer wieder neu auszuwerten lohnt es sich oft, die Werte einmal in einer Liste vorzubereiten und so den Rechenaufwand zu minimieren. List Comprehension bietet sich hierzu perfekt an.
+
+Für besonders gleichmäßige Verteilungen (\ie wenn $k$ alle Ganzzahlen zwischen $0$ und einer Obergrenze sind) sollten \inPy{list}s verwendet werden, da diese leichter ausgelesen werden können. Allgemeinere Lookup-Tables lassen sich gut in \inPy{dict}s abbilden.
+\end{hintbox}

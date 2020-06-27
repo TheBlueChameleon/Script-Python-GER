@@ -13,9 +13,9 @@ In diesem Abschnitt wollen wir unsere Arbeitsumgebung kennen lernen. Zu diesem Z
 
 
 \section{Der Kommandozeilen-Interpreter} \label{sec:Interpreter}
-Wenn Sie eine \emph{Kommandozeilen-Umgebung} starten\footnote{Hier beziehe ich mich auf unixoide Systeme wie GNU/Linux. Zum Umgang mit Windows sprechen Sie bitte die Kursdozenten an}, können Sie Textkommandos an das Betriebssystem senden. Überwiegend handelt es sich dabei um die Anweisung, andere Programme auszuführen. Die Anweisung \texttt{python3}\footnote{Die Programmiersprache Python wurde seit ihrer Veröffentlichung im Jahre 1991 beständig weiterentwickelt. Manche Konzepte mussten komplett überarbeitet werden, so dass die einzelnen Versionen der Sprache nicht zwingend kompatibel miteinander sind. Wir arbeiten in der derzeit aktuellen Version 3.6. Auf einem Rechner können mehrere Python-Interpreter nebeneinander installiert sein. Daher müssen wir beim Aufruf die Versionsnummer 3 mit nennen.} ist ein solcher Befehl. Tippen Sie dies ein und drücken Sie \texttt{[ENTER]} um den Python-Interpreter zu starten.
+Wenn Sie eine \emph{Kommandozeilen-Umgebung} starten, können Sie Textkommandos an das Betriebssystem senden. Überwiegend handelt es sich dabei um die Anweisung, andere Programme auszuführen. Die Anweisung \texttt{python3}\footnote{Die Programmiersprache Python wurde seit ihrer Veröffentlichung im Jahre 1991 beständig weiterentwickelt. Manche Konzepte mussten komplett überarbeitet werden, so dass die einzelnen Versionen der Sprache nicht zwingend kompatibel miteinander sind. Wir arbeiten in der derzeit aktuellen Version 3.8. Auf einem Rechner können mehrere Python-Interpreter nebeneinander installiert sein. Daher müssen wir beim Aufruf die Versionsnummer 3 mit nennen.} ist ein solcher Befehl. Tippen Sie dies ein und drücken Sie \texttt{[ENTER]} um den Python-Interpreter zu starten.
 
-Sie werden nun einen kurzen Versionstext sehen und hinter drei Pfeilen (\texttt{>{}>{}>}) einen blinkenden Cursor\footnote{Während der Aufruf des Interpreters unter Windows anders sein kann als hier gezeigt, gilt der folgende Text wieder für alle Betriebssysteme.}. Obwohl Sie noch immer dasselbe Fenster angezeigt bekommen, sind sie nun in der \emph{Interpreter-Umgebung}. Die Befehle, die Sie hier eingeben können, gehören zum Sprachumfang von Python!
+Sie werden nun einen kurzen Versionstext sehen und hinter drei Pfeilen (\texttt{>{}>{}>}) einen blinkenden Cursor. Obwohl Sie noch immer dasselbe Fenster angezeigt bekommen, sind sie nun in der \emph{Interpreter-Umgebung}. Die Befehle, die Sie hier eingeben können, gehören zum Sprachumfang von Python!
 
 
 \subsection{Hello World}
@@ -31,8 +31,8 @@ Nach den letzten Schritten sollten Sie also folgendes auf dem Bildschirm sehen:
 \begin{cmdbox}[Starten des Python-Interpreters und Hello-World]
 \begin{minted}{text}
 blue-chameleon@blue-chameleon:~$ python3
-Python 3.6.9 (default, Nov  7 2019, 10:44:02)
-[GCC 8.3.0] on linux
+Python 3.8.2 (default, Apr 27 2020, 15:53:34) 
+[GCC 9.3.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> print("hello world!")
 hello world!
@@ -490,7 +490,7 @@ wird Python daher als \emph{duck typed language} bezeichnet.
 \subsection{Ausgabe von Variablen mit \inPy{print}}
 Um den in einer Variablen gespeicherten Wert zu erfahren, haben wir bisher in der Interpreter-Umgebung den Namen der Variable eingegeben. In längeren Codes, wie wir sie im Code-Eingabe-Bereich schreiben, funktioniert dies aus technischen Gründen leider nicht. Stattdessen können wir aber den \inPy{print} benutzen. Betrachten Sie das folgende Beispiel:
 
-\begin{codebox}[Ausgabe von Werten mit \texttt{print}]
+\begin{codebox}[Beispiel: Ausgabe von Werten mit \texttt{print}]
 \begin{minted}[linenos]{python}
 a = 2
 b = a * 7.5 + 2
@@ -498,9 +498,9 @@ print(a, b, "konstanter Text", a * "x")
 \end{minted}
 \end{codebox}
 
-\begin{codebox}[Ausgabe]
+\begin{cmdbox}[Ausgabe]
 2 17.0 konstanter Text xx
-\end{codebox}
+\end{cmdbox}
 
 Sie erkennen hieraus, dass Sie der Befehl \inPy{print} die \emph{Werte der Ausdrücke, die als Argumente übergeben werden}, ausgibt. Das bedeutet, dass \inPy{a} eben durch seinen Wert (hier also durch \inPy{2}) ersetzt wird. Ich erinnere Sie nochmals daran, dass dies der Grund ist, warum Strings in Anführungszeichen eingefasst werden müssen -- sonst könnte der Interpreter die Anweisung \emph{drucke den Buchstaben a} und die Anweisung \emph{drucke den Wert der Variablen }\inPy{a} nicht auseinander halten.
 
