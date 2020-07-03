@@ -111,7 +111,7 @@ print("The function returned:" , reVal)
 \end{minted}
 \end{codebox}
 
-\begin{cmdbox}[Ausgabe: Exponentialfunktion als Funktion]
+\begin{cmdbox}[Ausgabe: Funktion \enquote{ohne} Rückgabewert]
 \begin{minted}{text}
 +----------------------------------------------------------+
 |               Don't forget to be awesome!                |
@@ -143,7 +143,191 @@ print(max(2, 1))
 \end{minted}
 \end{cmdbox}
 
-\section{Scopes, By-Value- und By-Reference-Übergabe}
+Wichtig ist, immer im Kopf zu behalten, dass die Variablen, die in einer Funktion benuzt werden, vom restlichen Programm unabhängig sind. Es darf also sich widersprechende Definitionen geben; die Definitionen gelten nur jeweils innerhalb einer Funktion:
+
+\begin{codebox}[Beispiel: Gleiches Symbol{,} unterschiedliche Inhalte]
+\begin{minted}[linenos]{python}
+def func() :
+  a = 7
+  print("in func: a =", a)
+
+a = 999
+print("on module level: a =", a)
+func()
+print("on module level: a =", a)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Gleiches Symbol{,} unterschiedliche Inhalte]
+\begin{minted}{text}
+on module level: a = 999
+in func: a = 7
+on module level: a = 999
+\end{minted}
+\end{cmdbox}
+
+Das \inPy{a} in \inPy{func} erhält also seine eigene Speicherstelle. Je nach Kontext sucht der Python-Interpreter aus, ob die \inPy{func}-Speicherstelle oder die Modul-Level-Speicherstelle mit dem Symbol \inPy{a} gemeint ist.
+
+\section{By-Value- und By-Reference-Übergabe}
+Wir hatten festgestellt, dass die Variablen, die wir in einer Funktion verwenden, vom restlichen Coee abgetrennt sind. Wie aber verhält es sich mit den Parametern?
+
+Sehen wir uns dazu folgenden Code an:
+\begin{codebox}[Beispiel: Übergabe von Referenz by Value]
+\begin{minted}[linenos]{python}
+def Vercingetorix(data) :
+  data.append(1)
+  data = data + [2]
+  print("in Vercingetorix: data =", data)
+
+data = []
+Vercingetorix(data)
+print("on module level: data =", data)
+\end{minted}
+\end{codebox}
+Oben wurde bereits gesagt, dass bei einem Funktionsaufruf eine \emph{Kopie} des Originalobjekts (hier also \inPy{l}) an die Funktion übergeben wird. Dann würden wir also erwarten, dass in Zeile 8 die Liste \inPy{l} wieder unverändert als leere Liste vorliegt. Kurioserweise lautet die Ausgabe aber:
+
+\begin{cmdbox}[Ausgabe: Übergabe von Referenz by Value]
+\begin{minted}{text}
+in Vercingetorix: data = [1, 2]
+on module level: data = [1]
+\end{minted}
+\end{cmdbox}
+
+Wie lässt sich dies erklären?
+
+In Abschnitt \ref{sec:MemoryModel} hatten wir uns klar gemacht, dass Variablen in Python in Wirklichkeit primär die \emph{Adressen} der eigentlichen Information speichert. Diese Adresse wird auch als Kopie übergeben. In Zeile 2 erteilen wir nun den Befehl, an die Liste an der Stelle \inPy{data} die Zahl 1 anzuhängen. Die Liste wird dadurch im Speicher nicht verschoben; daher sehen wir später in Zeile 8 das Ergebnis dieser Änderung.
+
+In Zeile 3 dagegen wird eine \emph{neue} Liste berechnet (nämlich \inPy{[1, 2]}). Diese neue Liste wird an einer eigenen Speicherstelle angelegt, überschreibt also nicht die alten Daten an der Adresse \inPy{data}. Wir speichern in Zeile 3 die Adresse in der \emph{lokalen} Variablen \inPy{data}. Das bedeutet, die Funtion \inPy{Vercingetorix} weiß nun nicht mehr, wo die Original-Liste sich befindet, sondern kann nur noch die Liste \inPy{[1 ,2]} ausgeben -- und dies geschieht auch in Zeile 4. Die ursprüngliche Liste besteht aber weiterhin. Wo diese sich befindet, ist immer noch in der Variablen \inPy{data} des Modul-Levels gespeichert. Wir sehen daher in Zeile 8 das Ergebnis von \inPy{append} (da dies die Adresse von \inPy{data} nicht verändert hat), nicht aber das Ergebnis von \inPy{data = data + [2]} (da hierfür eine neue Liste angelegt wurde).
+
+\begin{tcolorbox}[title=Speicherbild]
+\begin{center}
+\begin{tikzpicture}
+  [ 
+    cell/.style={text width=8mm,
+      text height=4mm, draw=black, inner sep=1mm},
+    ld/.style={draw=blue,shorten >=2pt,->}
+  ]
+  \node (a1) at (0,4) [cell] {\ttfamily ...};
+  \node (a2) at (1,4) [cell] {\ttfamily  []};
+  \node (a3) at (2,4) [cell] {\ttfamily ...};
+  \node (a4) at (3,4) [cell] {\ttfamily ...};
+  \node (a5) at (4,4) [cell] {\ttfamily ...};
+  \node (a6) at (5,4) [cell] {\ttfamily ...};
+
+  \node (b1) at (0,2) [cell] {\ttfamily ...};
+  \node (b2) at (1,2) [cell] {\ttfamily [1]};
+  \node (b3) at (2,2) [cell] {\ttfamily ...};
+  \node (b4) at (3,2) [cell] {\ttfamily ...};
+  \node (b5) at (4,2) [cell] {\ttfamily ...};
+  \node (b6) at (5,2) [cell] {\ttfamily ...};
+
+  \node (c1) at (0,0) [cell] {\ttfamily ...};
+  \node (c2) at (1,0) [cell] {\ttfamily [1]};
+  \node (c3) at (2,0) [cell] {\ttfamily ...};
+  \node (c4) at (3,0) [cell] {\ttfamily ...};
+  \node (c5) at (4,0) [cell] {\ttfamily ...};
+  \node (c6) at (5,0) [cell] {\ttfamily [1,2]};
+
+%  \node (labelMem) at (8,  1) {Symbole im Code};
+%  \node (labelMem) at (8,  0) {Werte im Speicher};
+%  \node (labelMem) at (8, -1) {Adressen};
+  
+  \node (A1) [below=2mm of a1]             {\tiny 0x27ff};
+  \node (A2) [below=2mm of a2, color=teal] {\tiny 0x2800};
+  \node (A3) [below=2mm of a3]             {\tiny 0x2801};
+  \node (A4) [below=2mm of a4]             {\tiny 0x2802};
+  \node (A5) [below=2mm of a5]             {\tiny 0x2803};
+  \node (A6) [below=2mm of a6]             {\tiny 0x2804};
+  
+  \node (B1) [below=2mm of b1]             {\tiny 0x27ff};
+  \node (B2) [below=2mm of b2, color=teal] {\tiny 0x2800};
+  \node (B3) [below=2mm of b3]             {\tiny 0x2801};
+  \node (B4) [below=2mm of b4]             {\tiny 0x2802};
+  \node (B5) [below=2mm of b5]             {\tiny 0x2803};
+  \node (B6) [below=2mm of b6]             {\tiny 0x2804};
+  
+  \node (C1) [below=2mm of c1]             {\tiny 0x27ff};
+  \node (C2) [below=2mm of c2, color=teal] {\tiny 0x2800};
+  \node (C3) [below=2mm of c3]             {\tiny 0x2801};
+  \node (C4) [below=2mm of c4]             {\tiny 0x2802};
+  \node (C5) [below=2mm of c5]             {\tiny 0x2803};
+  \node (C6) [below=2mm of c6, color=blue] {\tiny 0x2804};
+
+  \node (main1) [below=0mm of A2, color=teal] {\scriptsize Adresse von \texttt{data} in Modul-Level und in \texttt{Vercingetorx}};
+  \node (main2) [below=0mm of B2, color=teal] {\scriptsize Adresse von \texttt{data} in Modul-Level und in \texttt{Vercingetorx}};
+  \node (main3) [below=0mm of C2, color=teal] {\scriptsize Adr. von \texttt{data} in Modul-Level};
+  \node (func)  [below=0mm of C6, color=blue] {\scriptsize Adr. von \texttt{data} in \texttt{Vercingetorix}};
+  
+  \draw [->] (a6.east)arc(120:-115:1.0);		%start angle: stop angle : radius  
+  \node (step1) at (9,3) {\texttt{data.append(1)}};
+  \draw [->] (b6.east)arc(120:-115:1.0);
+  \node (step1) at (9,1) {\texttt{data = data + [2]}};
+\end{tikzpicture}
+\end{center}
+\end{tcolorbox}
+
+
+Durchdenken wir nun auch dieses Beispiel:
+\begin{codebox}[Beispiel: Übergabe von Immutables]
+\begin{minted}[linenos]{python}
+def Vercingetorix(data) :
+  data = 2
+  print("in Vercingetorix: data =", data)
+
+data = 1
+Vercingetorix(data)
+print("on module level: data =", data)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Übergabe von Immutables]
+\begin{minted}{text}
+in Vercingetorix: data = 2
+on module level: data = 1
+\end{minted}
+\end{cmdbox}
+
+Wir erinnern uns, dass \inPy{1} ein Wert vom Typ \inPy{int} und damit \emph{immutable} ist. Der Wert an der Stelle \inPy{data} darf also nicht verändert werden. Wenn nun also Zeile 2 verlangt, den neuen Wert \inPy{2} \enquote{in \inPy{data}} zu speichern, so wird eine neue Speicherstelle angelegt, und deren Adresse in der Instanz von \inPy{data} in \inPy{Vercingetorix} gespeichert.
+
+\begin{hintbox}[Speicherstruktur von \texttt{list}s]
+Die oben gezeigten Speicherbilder sind eine Vereinfachung der Realität. Wie erwähnt kann jede Zelle des Speichers nur ein einziges Byte fassen, also nicht einmal einen ganzen \inPy{int}-Wert. Stattdessen finden Sie dort einen \emph{descriptor}, also ein Datenpaket, das unter anderem aus einer Ganzzahl (Anzahl der Elemente in der Liste) und einem Pointer (tatsächlicher Speicherort des ersten Elements der Liste, also eine Adresse) enthält. Dadurch bleibt die Adresse \inPy{data} konstant, selbst wenn der Listeninhalt \enquote{umziehen} muss.
+
+In systemnahen Sprachen wie C müssen Sie das mit im Auge behalten. Bei der Arbein in Python dagegen können Sie sich weit mehr auf \enquote{das Große und Ganze} konzentrieren.
+\end{hintbox}
+
+\section{Scopes, \inPy{global}}
+Bisher habe ich Ihnen verschwiegen, dass 
+
+\begin{codebox}[Beispiel: lokale und globale Variablen]
+\begin{minted}[linenos]{python}
+foo = "foo"
+bar = "bar"
+
+def Vercingetorix() :
+  foo = "fu"        # local variable
+  
+  global bar        # use the 'bar' from module level
+  bar = "baz"
+
+  print("Vercingetorix: foo =", foo)
+  print("Vercingetorix: bar =", bar)
+
+Vercingetorix()
+
+print("on module level: foo =", foo)
+print("on module level: bar =", bar)
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Übergabe von Immutables]
+\begin{minted}{text}
+Vercingetorix: foo = fu
+Vercingetorix: bar = baz
+on module level: foo = foo
+on module level: bar = baz
+\end{minted}
+\end{cmdbox}
+
+
 \section{Default Args}
 \section{Variardic}
 \section{Lambdas}
