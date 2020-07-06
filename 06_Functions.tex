@@ -143,6 +143,29 @@ print(max(2, 1))
 \end{minted}
 \end{cmdbox}
 
+Funktionen können auch mehrere Rückgabewerte haben. Diese werden dann durch Kommata getrennt bei \inPy{return} aufgeführt und vom Python-Interpreter automatisch zu einem \inPy{tuple} \enquote{gepackt}. An der aufrufenden Stelle kann dieser \inPy{tuple} auch wieder automatisch entpackt werden:
+\begin{codebox}[Beispiel: Rückgabe eines \texttt{tuple}s]
+\begin{minted}[linenos]{python}
+def returnATuple () :
+  return 1, 2, 3
+
+fullTuple       = returnATuple()
+one, two, three = returnATuple()
+
+print(fullTuple)
+print(one, two, three)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Rückgabe eines \texttt{tuple}s]
+\begin{minted}{text}
+(1, 2, 3)
+1 2 3
+\end{minted}
+\end{cmdbox}
+
+In Zeile 2 könnte gleichermaßen auch stehen: \inPy{return (1, 2, 3)}. Der Effekt wäre exakt derselbe.
+
 Wichtig ist, immer im Kopf zu behalten, dass die Variablen, die in einer Funktion benuzt werden, vom restlichen Programm unabhängig sind. Es darf also sich widersprechende Definitionen geben; die Definitionen gelten nur jeweils innerhalb einer Funktion:
 
 \begin{codebox}[Beispiel: Gleiches Symbol{,} unterschiedliche Inhalte]
@@ -168,8 +191,25 @@ on module level: a = 999
 
 Das \inPy{a} in \inPy{func} erhält also seine eigene Speicherstelle. Je nach Kontext sucht der Python-Interpreter aus, ob die \inPy{func}-Speicherstelle oder die Modul-Level-Speicherstelle mit dem Symbol \inPy{a} gemeint ist.
 
+In Python dürfen Funktionen auch ineinander verschachtelt werden. Dies kann zum Beispiel nütlich werden, wenn eine Funktion aus mehreren, sich wiederholenden Teilaufgaben besteht, die sonst nirgendwo gebraucht werden:
+
+\begin{codebox}[Beispiel: Verschachtelte Funktionen]
+\begin{minted}[linenos]{python}
+def veryComplexTask(listOfObjects) :
+  def subTask(element) :
+    # ...
+    
+  for element in listOfObjects :
+    subTask(element)
+  
+  # ...
+\end{minted}
+\end{codebox}
+
+Andere Gründe, Funktionen ineinander zu verschachteln werden in Kapitel \ref{chp:Decorators} gezeigt.
+
 \section{By-Value- und By-Reference-Übergabe}
-Wir hatten festgestellt, dass die Variablen, die wir in einer Funktion verwenden, vom restlichen Coee abgetrennt sind. Wie aber verhält es sich mit den Parametern?
+Wir hatten festgestellt, dass die Variablen, die wir in einer Funktion verwenden, vom restlichen Code abgetrennt sind. Wie aber verhält es sich mit den Parametern?
 
 Sehen wir uns dazu folgenden Code an:
 \begin{codebox}[Beispiel: Übergabe von Referenz by Value]
@@ -184,7 +224,7 @@ Vercingetorix(data)
 print("on module level: data =", data)
 \end{minted}
 \end{codebox}
-Oben wurde bereits gesagt, dass bei einem Funktionsaufruf eine \emph{Kopie} des Originalobjekts (hier also \inPy{l}) an die Funktion übergeben wird. Dann würden wir also erwarten, dass in Zeile 8 die Liste \inPy{l} wieder unverändert als leere Liste vorliegt. Kurioserweise lautet die Ausgabe aber:
+Oben wurde bereits gesagt, dass bei einem Funktionsaufruf eine \emph{Kopie} des Originalobjekts (hier also \inPy{data}) an die Funktion übergeben wird. Dann würden wir also erwarten, dass in Zeile 8 die Liste \inPy{data} wieder unverändert als leere Liste vorliegt. Kurioserweise lautet die Ausgabe aber:
 
 \begin{cmdbox}[Ausgabe: Übergabe von Referenz by Value]
 \begin{minted}{text}
@@ -287,16 +327,64 @@ on module level: data = 1
 \end{minted}
 \end{cmdbox}
 
-Wir erinnern uns, dass \inPy{1} ein Wert vom Typ \inPy{int} und damit \emph{immutable} ist. Der Wert an der Stelle \inPy{data} darf also nicht verändert werden. Wenn nun also Zeile 2 verlangt, den neuen Wert \inPy{2} \enquote{in \inPy{data}} zu speichern, so wird eine neue Speicherstelle angelegt, und deren Adresse in der Instanz von \inPy{data} in \inPy{Vercingetorix} gespeichert.
+Wir erinnern uns, dass \inPy{1} ein Wert vom Typ \inPy{int} und damit \emph{immutable} ist. Der Wert an der Stelle \inPy{data} darf also nicht verändert werden. Wenn nun also Zeile 2 verlangt, den neuen Wert \inPy{2} \enquote{in \inPy{data}} zu speichern, so wird eine neue Speicherstelle angelegt, und deren Adresse in der Instanz \inPy{data} in \inPy{Vercingetorix} gespeichert.
 
 \begin{hintbox}[Speicherstruktur von \texttt{list}s]
 Die oben gezeigten Speicherbilder sind eine Vereinfachung der Realität. Wie erwähnt kann jede Zelle des Speichers nur ein einziges Byte fassen, also nicht einmal einen ganzen \inPy{int}-Wert. Stattdessen finden Sie dort einen \emph{descriptor}, also ein Datenpaket, das unter anderem aus einer Ganzzahl (Anzahl der Elemente in der Liste) und einem Pointer (tatsächlicher Speicherort des ersten Elements der Liste, also eine Adresse) enthält. Dadurch bleibt die Adresse \inPy{data} konstant, selbst wenn der Listeninhalt \enquote{umziehen} muss.
 
-In systemnahen Sprachen wie C müssen Sie das mit im Auge behalten. Bei der Arbein in Python dagegen können Sie sich weit mehr auf \enquote{das Große und Ganze} konzentrieren.
+In systemnahen Sprachen wie C müssen Sie das mit im Auge behalten. Bei der Arbeit in Python dagegen können Sie sich weit mehr auf \enquote{das Große und Ganze} konzentrieren.
 \end{hintbox}
 
-\section{Scopes, \inPy{global}}
-Bisher habe ich Ihnen verschwiegen, dass 
+\section{Scopes, \inPy{global}, \inPy{nonlocal}}
+Bisher habe ich Ihnen verschwiegen, dass es möglich ist, innerhalb von Funktionen auf Variablen des Modullevels zuzugreifen. Dabei dürfen aber nur solche Operationen durchgeführt werden, die den Speicherort der Variablen nicht verändern. Auf Modulebene dagegen sind die Symbole in den Funktionen nie zugänglich.
+Sehen Sie sich hierzu das folgende Beispiel an:
+\begin{codebox}[Beispiel: lokale Variablen]
+\begin{minted}[linenos]{python}
+foo = ["foo"]
+
+def foobar() :
+  cat = "confused"      # lokale Variable
+  print(foo)            # liest die Variable auf Modulebene
+  foo.append("bar")     # schreibender Zugriff, keine Änderung der Adresse
+  #foo = foo + ["baz"]  ! Fehler: Neue Adresse
+
+foobar()
+
+print(foo)
+# print(cat)            ! Fehler: 'cat' ist Variable von foobar.
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: lokale Variablen]
+\begin{minted}{text}
+['foo']
+['foo', 'bar']
+\end{minted}
+\end{cmdbox}
+
+Man spricht hierbei von \emph{Scopes}: Jedes Symbol hat einen zugeordneten Bereich, in dem dieses Symbol gültig ist (in dem es \enquote{existiert}). Dieser Gültigkeitsbereich (Scope) reicht von dem Punkt, an dem das Symbol \emph{definiert} wird (\ie bei der ersten Wertzuweisung) bis zum \emph{Ende der aktuellen Einrückungsebene}. Die Variable \inPy{cat} des obigen Beispiels gehört also zum Scope der Funktion \inPy{foobar}, und darf damit nur in den Zeilen 4-7 benutzt werden. Ein Zugriff wie in Zeile 11 dagegen führt zu einem Fehler.
+
+Die Variable \inPy{foo} dagegen existiert in allen Zeilen des Programms (1-11), da sie auf Modulebene definiert wurde. Der Scope der Funktion \inPy{foobar} ist vom Scope der Modulebene umschlossen, \emph{gehört also dazu}. Sie können auch sagen, \enquote{es ist nicht möglich, in Funktionen hineinzusehen, wohl aber aus ihnen heraus zu schauen}.
+
+\begin{warnbox}[Zugriffe klar halten]
+Sie können sich vermutlich jetzt schon vorstellen, dass es schwierig wird, den Überblick zu behalten, welche Variablen an welcher Stelle sichtbar sind, und wann ein Schreibzugriff zulässig ist. Das hier Gezeigte soll Sie daher auch nur dazu in die Lage versetzen, Codes von anderen Autoren zu lesen und korrekt zu interpretieren. Im Allgemeinen ist davon abzuraten, Konstruktionen zu programmieren, bei denen Variablen über Scope-Grenzen hinweg genutzt werden. Halten Sie sich am besten an den Leitsatz, dass Information nur über die Parameterliste in eine Funktion gelangt, und nur über den Rückgabewert aus dieser heraus kommt.
+\end{warnbox}
+\begin{hintbox}[Konstanten]
+Ein Fall, in dem es sinnvoll sein kann, von diesem Leitsatz abzuweichen sind Naturkonstanten. Wenn Sie den Flug eines Balles durch die Luft modellieren, wollen Sie nicht in jeder Funktion die Graviationskonstante als Parameter mit übergeben. Es ist aber auch im allgemeinen keine gute Idee, den Wert in Ihren Funktionen \enquote{hard zu coden}. (Andernfalls müssten Sie bei einer Änderung Ihr gesamtes Programm durcharbeiten, und würden sehr wahrscheinlich eine oder mehrere Stellen übersehen).
+
+In diesem Fall ist es also durchaus angebracht, Code zu schreiben wie:
+\begin{codebox}[Beispiel: globale Konstante]
+\begin{minted}[linenos]{python}
+gravitationalConstant = 6.674E-11
+
+def forceBetweenBodies(radius, mass1, mass2) :
+  return gravitationalConstant * mass1 * mass2 / (radius**2)
+\end{minted}
+\end{codebox}
+\end{hintbox}
+
+Wenn versucht wird innerhalb einer Funktion ein Symbol des Modullevels umzudefinieren, so legt Python stattdessen eine neue \emph{lokale} Variable an. Das heißt, der Bezug auf die ursprüngliche Variable geht verloren, und in der Funktion ist nur der neue Wert verfügbar. Auf die Modulebene hat dies keinen Einfluss.
+
+Soll tatsächlich von der Funktion aus der Wert der Variablen auf Modulebene geändert werden, so kann dies mit dem Befehl \inPy{global} geschehen. Mit \inPy{global Symbol} wird dem Python-Interpreter mitgeteilt, dass mit \inPy{Symbol} tatsächlich immer das Objekt der Modulebene gemeint ist.
 
 \begin{codebox}[Beispiel: lokale und globale Variablen]
 \begin{minted}[linenos]{python}
@@ -304,9 +392,9 @@ foo = "foo"
 bar = "bar"
 
 def Vercingetorix() :
-  foo = "fu"        # local variable
+  foo = "fu"        # lokale Variable
   
-  global bar        # use the 'bar' from module level
+  global bar        # Variable 'bar' aus dem Modulelevel
   bar = "baz"
 
   print("Vercingetorix: foo =", foo)
@@ -327,7 +415,9 @@ on module level: bar = baz
 \end{minted}
 \end{cmdbox}
 
+Mit \emph{Modulebene} ist dabei immer die \emph{unterste Ebene} in Ihrem Code gemeint. Wenn Sie den Effekt von \inPy{global} nur auf die nächsthöhere Ebene anwenden wollen (\eg bei verschachtelten Funktionen), so erreichen Sie dies durch das Schlüsselwort \inPy{nonlocal}. Die Syntax und Verwendung ist dabei exakt dieselbe. Jedoch kann \inPy{nonlocal} nicht dazu verwendet werden, um auf Objekte der Modulebene zuzugreifen.
 
-\section{Default Args}
-\section{Variardic}
+\section{Default-Werte, Positional Arguments und Keyword Arguments}
+
+
 \section{Lambdas}
