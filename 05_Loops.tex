@@ -38,7 +38,7 @@ Mit dem Schlüsselwort \inPy{while} wird ein Codeblock eingeleitet, der so lange
 \begin{codebox}[Syntax: \texttt{while} (1)]
 \begin{minted}{python}
 while Wahrheitswert :
-  Schleifenkoerper
+    Schleifenkoerper
 \end{minted}
 \end{codebox}
 
@@ -53,8 +53,8 @@ limit    = float(input("Bitte geben Sie Ihr Zielkapital ein :" ))
 years    = 0
 
 while capital < limit :
-  capital *= 1 + interest
-  years   += 1
+    capital *= 1 + interest
+    years   += 1
 
 print("Nach", years, "Jahren ist das Sparziel erreicht.")
 \end{minted}
@@ -94,18 +94,18 @@ count = 0
 value = 0
 
 while count < 12 :
-  newValue = float(input("Bitte geben Sie einen weiteren Wert ein: "))
-  value += newValue
-  count += 1
+    newValue = float(input("Bitte geben Sie einen weiteren Wert ein: "))
+    value += newValue
+    count += 1
   
-  if value > 9000 :
-    value = "over nine thousand!!"
-    break
+    if value > 9000 :
+        value = "over nine thousand!!"
+        break
   
-  print(
-    "Bisheriger Gesamtwert nach Eingabe von", count, 
-    "Werten:", value
-  )
+    print(
+        "Bisheriger Gesamtwert nach Eingabe von", count, 
+        "Werten:", value
+    )
 
 print("Gesamtwert:", value)
 \end{minted}
@@ -131,14 +131,14 @@ Gesamtwert: over nine thousand!!
 container = []
 
 while len(container) < 3 :
-  value = int(input("Bitte geben Sie eine gerade Zahl ein: "))
+    value = int(input("Bitte geben Sie eine gerade Zahl ein: "))
   
-  if value % 2 :
-    print(value, "ist ungerade und daher nicht zulässig.")
-    continue
+    if value % 2 :
+        print(value, "ist ungerade und daher nicht zulässig.")
+        continue
   
-  container.append(value)
-  print("Bisher eingegeben: ", container)
+    container.append(value)
+    print("Bisher eingegeben: ", container)
 \end{minted}
 \end{codebox}
 
@@ -160,9 +160,9 @@ Wir können Endlosschleifen zusammen mit \inPy{break} nutzen, um zu garantieren,
 \begin{codebox}[Beispiel: \texttt{continue}]
 \begin{minted}[linenos]{python}
 while True:
-  Schleifenkoerper
-  if Bedingung :
-    break
+    Schleifenkoerper
+    if Bedingung :
+        break
 \end{minted}
 \end{codebox}
 Die Überprüfung auf \inPy{Bedingung} wird so an das Schleifenende geschoben.
@@ -175,9 +175,9 @@ Wie schon angesprochen wird der Schleifenkörper nicht ausgeführt, wenn die Bed
 \begin{codebox}[Syntax: \texttt{while} (2)]
 \begin{minted}{python}
 while Wahrheitswert :
-  Schleifenkoerper
+    Schleifenkoerper
 else :
-  AlternativCode
+    AlternativCode
 \end{minted}
 \end{codebox}
 
@@ -191,10 +191,10 @@ limit    = float(input("Bitte geben Sie Ihr Zielkapital ein :" ))
 years    = 0
 
 while capital < limit :
-  capital *= 1 + interest
-  years   += 1
+    capital *= 1 + interest
+    years   += 1
 else :
-  print("Das Startkapital ist bereits groß genug.")
+    print("Das Startkapital ist bereits groß genug.")
   
 print("Nach", years, "Jahren ist das Sparziel erreicht.")
 \end{minted}
@@ -216,7 +216,7 @@ Schleifen mit \inPy{for} führen Code für jedes Element aus einer Datenstruktur
 \begin{codebox}[Syntax: \texttt{for}]
 \begin{minted}{python}
 for Variable in Container :
-  Schleifenkoerper
+    Schleifenkoerper
 \end{minted}
 \end{codebox}
 
@@ -228,7 +228,7 @@ tasklist = ["write the script", "drink some coffee", "drink some more coffee"]
 
 print("Your tasks today:")
 for task in tasklist :
-  print("*", task)
+    print("*", task)
 \end{minted}
 \end{codebox}
 
@@ -241,13 +241,13 @@ Your tasks today:
 \end{minted}
 \end{cmdbox}
 
-Als \emph{Container} dienen besonders häufig \inPy{range}-Objekte. Wann immer eine durchzählbare Menge von Zahlen gebraucht wird, kann ein solches \inPy{range}-Objekt genutzt werden:
+Als \emph{Container} dienen besonders häufig \inPy{range}-Objekte. Wann immer eine durchzählbare Menge von Zahlen gebraucht wird, kann ein solches \inPy{range}-Objekt genutzt werden\footnote{Das folgende Beispiel und einige weitere enthalten die Option \inPy{sep=""}. Damit wird der Funktion \inPy{print} mitgeteilt, dass kein Leerzeichen zwischen den einzelnen Werten gedruckt werden soll. Vorerst können Sie diese Option ignorieren. In Kapitel \ref{chp:Funcs} wird diese Technik erklärt.}:
 
 \begin{codebox}[Beispiel: \texttt{for} (2)]
 \begin{minted}[linenos]{python}
 print("the first 10 square numbers are:")
 for i in range(10) :
-  print(i, "² = ", i**2, sep="")
+    print(i, "² = ", i**2, sep="")
 \end{minted}
 \end{codebox}
 
@@ -277,7 +277,7 @@ N = len(tasklist)
 
 print("Your tasks today:")
 for i in range(N) :
-  print("*", tasklist[i])
+    print("*", tasklist[i])
 \end{minted}
 \end{codebox}
 
@@ -290,12 +290,12 @@ In einem \inPy{for}-Befehl können auch Container entpackt werden:
 \begin{codebox}[Beispiel: \texttt{for} (3)]
 \begin{minted}[linenos]{python}
 books = [
-  ("Frank Herbert", "Dune"), 
-  ("Douglas Adams", "The Hitchhikers Guide To The Galaxy"),
-  ("Randall Munroe", "What If"),
-  ("Isaac Asimov", "Foundation"),
-  ("Willy Russell", "Educating Rita"),
-  ("Moving Pictures", "Terry Pratchett")
+    ("Frank Herbert", "Dune"), 
+    ("Douglas Adams", "The Hitchhikers Guide To The Galaxy"),
+    ("Randall Munroe", "What If"),
+    ("Isaac Asimov", "Foundation"),
+    ("Willy Russell", "Educating Rita"),
+    ("Moving Pictures", "Terry Pratchett")
 ]
 
 print("You should definitively read:")
@@ -311,7 +311,7 @@ You should definitively read:
 * The Hitchhikers Guide To The Galaxy by Douglas Adams
 * What If by Randall Munroe
 * Foundation by Isaac Asimov
-* Educating Rity by Willy Russell
+* Educating Rita by Willy Russell
 * Moving Pictures by Terry Pratchett
 \end{minted}
 \end{cmdbox}
@@ -345,7 +345,7 @@ tasklist = ["write the script", "drink some coffee", "drink more coffee"]
 
 print("Your tasks today:")
 for i, task in enumerate(tasklist) :
-  print(i + 1, ". ", task, sep="")
+    print(i + 1, ". ", task, sep="")
 \end{minted}
 \end{codebox}
 
@@ -371,11 +371,11 @@ data2 = [1.8, 2.0, -3.8]
 
 print("Difference in datasets:")
 for i, t in enumerate(zip(data1, data2)) :
-  print(
-    "Datapoint ", i, ": ", t, 
-    " differs by : ", t[0] - t[1], 
-    sep=""
-  )
+    print(
+        "Datapoint ", i, ": ", t, 
+        " differs by : ", t[0] - t[1], 
+        sep=""
+    )
 \end{minted}
 \end{codebox}
 
@@ -397,7 +397,7 @@ houseStark = {"Sigil" : "A grey direwolf on a white field",
 
 print("Summary of House Stark:")
 for key, value in houseStark.items() :
-  print(key, ":\t", value, sep="")
+    print(key, ":\t", value, sep="")
 \end{minted}
 \end{codebox}
 
@@ -421,20 +421,20 @@ Auch bei \inPy{for} können die Befehle \inPy{break} und \inPy{continue} eingese
 \begin{codebox}[Beispiel: \texttt{for} mit \texttt{break}{,} \texttt{continue} und \texttt{else}]
 \begin{minted}[linenos]{python}
 tasks = [
-  ("hidden", "watch Fullmetal Alchemist"),
-  ("open", "work very hard on Python"),
-  ("open", "drink all the coffee")
+    ("hidden", "watch Fullmetal Alchemist"),
+    ("open", "work very hard on Python"),
+    ("open", "drink all the coffee")
 ]
 search = ["watch", "work"]
 
 for keyword in search :
-  for ID, (state, task) in enumerate(tasks) :
-    if state == "hidden" : continue
-    if keyword in task :
-      print(keyword, "was found in task ID", ID)
-      break
-  else :
-    print(keyword, "was not found in the tasks.")
+    for ID, (state, task) in enumerate(tasks) :
+        if state == "hidden" : continue
+        if keyword in task :
+            print(keyword, "was found in task ID", ID)
+            break
+    else :
+        print(keyword, "was not found in the tasks.")
 \end{minted}
 \end{codebox}
 
@@ -462,7 +462,7 @@ evenSquares = []
 N = 20
 
 for i in range(2, N, 2) :
-  evenSquares.append(i**2)
+    evenSquares.append(i**2)
 
 print(evenSquares)
 \end{minted}
@@ -501,12 +501,12 @@ List Comprehension kann auch ineinander verschachtelt werden (wird dann aber sch
 \begin{codebox}[Beispiel: Telefonmatrix]
 \begin{minted}[linenos]{python}
 telephone = [
-  [3 * row + column + 1 for column in range(3)]
-  for row in range(3)
+    [3 * row + column + 1 for column in range(3)]
+    for row in range(3)
 ]
 
 for line in telephone :
-  print(line)
+    print(line)
 
 print(telephone)
 \end{minted}

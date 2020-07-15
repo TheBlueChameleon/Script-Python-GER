@@ -240,7 +240,7 @@ elif i > 20 :
 \end{minted}
 \end{warnbox}
 
-Die Zahl \inPy{23} erfüllt zwar beide Bedingungen (\inPy{i < 25} und \inPy{i > 20}). Dennoch wird nur Die Ausgabe \texttt{Diese Zahl ist kleiner als 25.} erfolgen, da die zweite Prüfung (\inPy{i > 20}) nie durchgeführt wird.
+Die Zahl \inPy{23} erfüllt zwar beide Bedingungen (\inPy{i < 25} und \inPy{i > 20}). Dennoch wird nur die Ausgabe \texttt{Diese Zahl ist kleiner als 25.} erfolgen, da die zweite Prüfung (\inPy{i > 20}) nie durchgeführt wird.
 
 \inPy{if}-Blöcke können auch ineinander verschachtelt werden:
 \begin{codebox}[Beispiel: Verschachtelte \texttt{if}-Blöcke]
@@ -250,8 +250,8 @@ i = int(input("Bitte geben Sie eine Ganzahl ein: "))
 if i % 2 == 0 :
     if   i > 100 :
         print(i, "ist eine große gerade Zahl.")
-    elif i <   0 :
-        print(i, "ist eine große gerade Zahl.")
+    elif i >   0 :
+        print(i, "ist eine kleine gerade Zahl.")
     else :
         print(i, "ist eine negative gerade Zahl.")
 else :
