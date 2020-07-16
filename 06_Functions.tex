@@ -4,7 +4,7 @@
 	Before software can be reusable it first has to be usable.
 }{Ralph Johnson}
 
-Viele Aufgaben wiederholen sich oder lassen sich verallgemeinern. Folgender Code berechnet beispielsweise den Wert von Eulers Zahl, also $\exp(1)$, kann aber auch dazu verwendet werden, andere Potenzen von $e$ zu finden:
+Viele Aufgaben wiederholen sich, oder lassen sich verallgemeinern. Folgender Code berechnet beispielsweise den Wert von Eulers Zahl, also $\exp(1)$, kann aber auch dazu verwendet werden, andere Potenzen von $e$ zu finden:
 
 \begin{codebox}[Beispiel: Exponentialfunktion]
 \begin{minted}[linenos]{python}
@@ -19,7 +19,7 @@ for k in range(1, iterations) :
     denominator  *= k
     EulersNumber += x / denominator
 
-print ("exp(", x0, ") is approximately ", EulersNumber, sep = "")
+print ("exp(", x0, ") is approximately", EulersNumber)
 \end{minted}
 \end{codebox}
 
@@ -28,7 +28,7 @@ Nun ist es zwar schön, eine solche allgemeine Rechenvorschrift zu haben; wir m�
 Natürlich wissen Sie, dass es im Modul \inPy{math} die \emph{Funktion} \inPy{math.exp} gibt, die ebenfalls die Exponentialfunktion berechnet, aber ohne all diese lästigen Nebeneffekte auskommt. Hier sollen Sie lernen, wie dies möglich ist, und wie Sie solche Funktionen selbst erstellen.
 
 \section{Grundlagen}
-Funktionen sind \enquote{abgetrennte Codebereiche}, die unabhängig vom restlichen Code ausgeführt werden. In eine Funktion können Argumente (oft auch Parameter genannt) eingespeist werden (man spricht von \emph{übergeben}), und ein Ergebnis wird von  \emph{zurückgegeben}. Zur Berechnung dieses Ergebnisses wird normaler Code ausgeführt; dieser verhält sich aber \enquote{wie in einer Box}, \ie verwendet seine eigenen, \emph{lokalen} Variablen. Diese können dieselben Namen tragen wie Variablen an anderen Stellen Ihres Programms; nichts desto trotz sind die Variablen in einer Funktion unabhängig vom restlichen Code. (Ebenso, wie es zwei Menschen mit dem Namen \emph{Theophrastus} geben kann\footnote{citation needed}, die aber dennoch zwei getrennte Personen sind, können also auch zwei Variablen mit demselben Namen vorliegen, ohne \emph{dieselbe} Variable zu sein.)
+Funktionen sind \enquote{abgetrennte Codebereiche}, die unabhängig vom restlichen Code ausgeführt werden. In eine Funktion können Parameter (oft auch Argumente genannt) eingespeist werden (man spricht von \emph{übergeben}), und ein Ergebnis wird von Funktionen \emph{zurückgegeben}. Zur Berechnung dieses Ergebnisses wird normaler Code ausgeführt; dieser verhält sich aber \enquote{wie in einer Box}, \ie verwendet seine eigenen, \emph{lokalen} Variablen. Diese können dieselben Namen tragen wie Variablen an anderen Stellen Ihres Programms; nichts desto trotz sind die Variablen in einer Funktion unabhängig vom restlichen Code. (Ebenso, wie es zwei Menschen mit dem Namen \emph{Theophrastus} geben kann\footnote{citation needed}, die aber dennoch zwei getrennte Personen sind, können also auch zwei Variablen mit demselben Namen vorliegen, ohne \emph{dieselbe} Variable zu sein. Stellen Sie sich vor, eine Variable hat einen \enquote{Vor- und Nachnamen}. Der Vorname ist dabei das Symbol, das Sie benutzen, um die Variable zu benennen. Der Nachname ist dann der Kontext, also die Funktion, in der dieses Symbol gerade verwendet wird.)
 
 Ein solcher Codebereich wird eingeleitet durch eine \inPy{def}-Zeile und wird durch Einrückung vom restlichen Code abgetrennt, ähnlich, wie wir das schon von \inPy{if}-Blöcken und \inPy{for}-Schleifen kennen:
 
@@ -41,11 +41,11 @@ def Funktionsname (Parameterliste) :
 \end{minted}
 \end{codebox}
 
-Mit \inPy{Parameterliste} ist eine durch Kommata getrennte Liste von Variablennamen. Über diese Variablennamen werden \enquote{Informationen von außen in die Funktion eingeschleust} (Übergabe von Werten). Verstehen Sie die Parameterliste als einen Punkt, an dem Variablen angelegt werden. Die Werte dieser Variablen werden beim Aufruf der Funktion festgelegt, und können in der Funktion wie normale Variablen verwendet werden. Eine Parameterliste kann auch leer sein. In dem Fall müssen aber immer noch  leere Klammern () gesetzt werden.
+\inPy{Parameterliste} ist eine durch Kommata getrennte Liste von Variablennamen. Über diese Variablennamen werden \enquote{Informationen von außen in die Funktion eingeschleust} (Übergabe von Werten). Verstehen Sie die Parameterliste als einen Punkt, an dem Variablen angelegt werden. Die Werte dieser Variablen werden beim Aufruf der Funktion festgelegt, und können in der Funktion (und nur dort) wie normale Variablen verwendet werden. Eine Parameterliste kann auch leer sein. In dem Fall müssen aber immer noch  leere Klammern () gesetzt werden.
 
-Wie besprochen steht innerhalb einer Funktion Code, wie sie ihn schon kennen bzw. noch kennenlernen werden. Alle Mittel, die Sie bisher kennengelernt haben auch auch solche, wie wir sie im Weiteren noch besprechen, können auch innerhalb von Funktionen verwendet werden.
+Wie besprochen steht innerhalb einer Funktion Code, wie Sie ihn schon kennen bzw. noch kennenlernen werden. Alle Mittel, die Sie bisher gesehen haben auch auch solche, wie wir sie im Weiteren noch besprechen, können auch innerhalb von Funktionen verwendet werden.
 
-In der Regel soll eine Funktion ein Ergebnis berechnen, \eg den Wert der Exponentialfunktion. Dieses Ergebnis wird mit dem Befehl \inPy{return} zurück an das Hauptprogramm geschickt und zugleich die Funktion verlassen. Aller Code in der Funktion, der hinter \inPy{return} steht, wird also ignoriert. Eine Funktion darf durchaus mehrere \inPy{return}-Anweisungen haben. Sinnvoll kann das sein, wenn eine Fallunterscheidung gemacht wird (\eg mit \inPy{if}). Genauso ist es auch zulässig, überhaupt keine \inPy{return}-Anweisung zu benutzen. Stellen Sie sich zum Beispiel eine Funktion vor, die lediglich eine formatierte Ausgabe auf dem Bildschirm bewirken soll. Hier wird kein Ergebnis berechnet. Entsprechend kann auch die \inPy{return}-Anweisung entfallen.
+In der Regel soll eine Funktion ein Ergebnis berechnen, \eg den Wert der Exponentialfunktion. Dieses Ergebnis wird mit dem Befehl \inPy{return} zurück an das Hauptprogramm\footnote{bzw. an die aufrufende Stelle -- aus Funktionen heraus können auch Funktionen aufgerufen werden.} geschickt und zugleich die Funktion verlassen. Aller Code in der Funktion, der hinter \inPy{return} steht, wird also ignoriert. Eine Funktion darf durchaus mehrere \inPy{return}-Anweisungen haben. Sinnvoll kann das sein, wenn eine Fallunterscheidung gemacht wird (\eg mit \inPy{if}). Genauso ist es auch zulässig, überhaupt keine \inPy{return}-Anweisung zu benutzen. Stellen Sie sich zum Beispiel eine Funktion vor, die lediglich eine formatierte Ausgabe auf dem Bildschirm bewirken soll. Hier wird kein Ergebnis berechnet. Entsprechend kann auch die \inPy{return}-Anweisung entfallen.
 
 \emph{Aufgerufen} (\ie ausgeführt) wird die Funktion durch Nennung ihres Namens. In Klammern dahinter werden die Werte aufgeführt, die über die Parameterliste an die Funktion übergeben werden sollen. Für jede Variable der Parameterliste muss auch ein Wert angegeben werden. Ist die Parameterliste leer, so müssen dennoch leere Klammern () beim Funktionsaufruf stehen.
 
@@ -170,9 +170,9 @@ Wichtig ist, immer im Kopf zu behalten, dass die Variablen, die in einer Funktio
 
 \begin{codebox}[Beispiel: Gleiches Symbol{,} unterschiedliche Inhalte]
 \begin{minted}[linenos]{python}
-def func() :
+def foobar() :
     a = 7
-    print("in func: a =", a)
+    print("in foobar: a =", a)
 
 a = 999
 print("on module level: a =", a)
@@ -184,12 +184,12 @@ print("on module level: a =", a)
 \begin{cmdbox}[Ausgabe: Gleiches Symbol{,} unterschiedliche Inhalte]
 \begin{minted}{text}
 on module level: a = 999
-in func: a = 7
+in foobar: a = 7
 on module level: a = 999
 \end{minted}
 \end{cmdbox}
 
-Das \inPy{a} in \inPy{func} erhält also seine eigene Speicherstelle. Je nach Kontext sucht der Python-Interpreter aus, ob die \inPy{func}-Speicherstelle oder die Modul-Level-Speicherstelle mit dem Symbol \inPy{a} gemeint ist.
+Das \inPy{a} in \inPy{foobar} erhält also seine eigene Speicherstelle. Je nach Kontext sucht der Python-Interpreter aus, ob die \inPy{foobar}-Speicherstelle oder die Modul-Level-Speicherstelle mit dem Symbol \inPy{a} gemeint ist. In der Vorstellung von Vor- und Nachnamen: In diesem Beispiel gibt es zwei Menschen (Speicherstellen) mit dem Vornamen \inPy{a}. Diese sind jedoch zwei unterschiedliche Menschen; sie haben die Nachnamen \inPy{foobar} und \inPy{module level}.
 
 In Python dürfen Funktionen auch ineinander verschachtelt werden. Dies kann zum Beispiel nütlich werden, wenn eine Funktion aus mehreren, sich wiederholenden Teilaufgaben besteht, die sonst nirgendwo gebraucht werden:
 
@@ -207,7 +207,7 @@ def veryComplexTask(listOfObjects) :
 \end{minted}
 \end{codebox}
 
-Andere Gründe, Funktionen ineinander zu verschachteln werden in Kapitel \ref{chp:Decorators} gezeigt.
+Ein weiterer Grund, Funktionen ineinander zu verschachteln wird in Abschnitt \ref{sec:FuncsAsObjects} gezeigt.
 
 \section{By-Value- und By-Reference-Übergabe}
 Wir hatten festgestellt, dass die Variablen, die wir in einer Funktion verwenden, vom restlichen Code abgetrennt sind. Wie aber verhält es sich mit den Parametern?
@@ -215,13 +215,13 @@ Wir hatten festgestellt, dass die Variablen, die wir in einer Funktion verwenden
 Sehen wir uns dazu folgenden Code an:
 \begin{codebox}[Beispiel: Übergabe von Referenz by Value]
 \begin{minted}[linenos]{python}
-def Vercingetorix(data) :
+def foobar(data) :
     data.append(1)
     data = data + [2]
-    print("in Vercingetorix: data =", data)
+    print("in foobar: data =", data)
 
 data = []
-Vercingetorix(data)
+foobar(data)
 print("on module level: data =", data)
 \end{minted}
 \end{codebox}
@@ -229,7 +229,7 @@ Oben wurde bereits gesagt, dass bei einem Funktionsaufruf eine \emph{Kopie} des 
 
 \begin{cmdbox}[Ausgabe: Übergabe von Referenz by Value]
 \begin{minted}{text}
-in Vercingetorix: data = [1, 2]
+in foobar: data = [1, 2]
 on module level: data = [1]
 \end{minted}
 \end{cmdbox}
@@ -238,7 +238,7 @@ Wie lässt sich dies erklären?
 
 In Abschnitt \ref{sec:MemoryModel} hatten wir uns klar gemacht, dass Variablen in Python in Wirklichkeit primär die \emph{Adressen} der eigentlichen Information speichert. Diese Adresse wird auch als Kopie übergeben. In Zeile 2 erteilen wir nun den Befehl, an die Liste an der Stelle \inPy{data} die Zahl 1 anzuhängen. Die Liste wird dadurch im Speicher nicht verschoben; daher sehen wir später in Zeile 8 das Ergebnis dieser Änderung.
 
-In Zeile 3 dagegen wird eine \emph{neue} Liste berechnet (nämlich \inPy{[1, 2]}). Diese neue Liste wird an einer eigenen Speicherstelle angelegt, überschreibt also nicht die alten Daten an der Adresse \inPy{data}. Wir speichern in Zeile 3 die Adresse in der \emph{lokalen} Variablen \inPy{data}. Das bedeutet, die Funtion \inPy{Vercingetorix} weiß nun nicht mehr, wo die Original-Liste sich befindet, sondern kann nur noch die Liste \inPy{[1 ,2]} ausgeben -- und dies geschieht auch in Zeile 4. Die ursprüngliche Liste besteht aber weiterhin. Wo diese sich befindet, ist immer noch in der Variablen \inPy{data} des Modul-Levels gespeichert. Wir sehen daher in Zeile 8 das Ergebnis von \inPy{append} (da dies die Adresse von \inPy{data} nicht verändert hat), nicht aber das Ergebnis von \inPy{data = data + [2]} (da hierfür eine neue Liste angelegt wurde).
+In Zeile 3 dagegen wird eine \emph{neue} Liste berechnet (nämlich \inPy{[1, 2]}). Diese neue Liste wird an einer eigenen Speicherstelle angelegt, überschreibt also nicht die alten Daten an der Adresse \inPy{data}. Wir speichern in Zeile 3 die Adresse in der \emph{lokalen} Variablen \inPy{data}. Das bedeutet, die Funtion \inPy{foobar} weiß nun nicht mehr, wo die Original-Liste sich befindet, sondern kann nur noch die Liste \inPy{[1 ,2]} ausgeben -- und dies geschieht auch in Zeile 4. Die ursprüngliche Liste besteht aber weiterhin. Wo diese sich befindet, ist immer noch in der Variablen \inPy{data} des Modul-Levels gespeichert. Wir sehen daher in Zeile 8 das Ergebnis von \inPy{append} (da dies die Adresse von \inPy{data} nicht verändert hat), nicht aber das Ergebnis von \inPy{data = data + [2]} (da hierfür eine neue Liste angelegt wurde).
 
 \begin{tcolorbox}[title=Speicherbild]
 \begin{center}
@@ -294,10 +294,12 @@ In Zeile 3 dagegen wird eine \emph{neue} Liste berechnet (nämlich \inPy{[1, 2]}
   \node (C5) [below=2mm of c5]             {\tiny 0x2803};
   \node (C6) [below=2mm of c6, color=blue] {\tiny 0x2804};
 
-  \node (main1) [below=0mm of A2, color=teal] {\scriptsize Adresse von \texttt{data} in Modul-Level und in \texttt{Vercingetorx}};
-  \node (main2) [below=0mm of B2, color=teal] {\scriptsize Adresse von \texttt{data} in Modul-Level und in \texttt{Vercingetorx}};
-  \node (main3) [below=0mm of C2, color=teal] {\scriptsize Adr. von \texttt{data} in Modul-Level};
-  \node (func)  [below=0mm of C6, color=blue] {\scriptsize Adr. von \texttt{data} in \texttt{Vercingetorix}};
+
+
+  \node (main1) [below=0mm of A2, color=teal] {\scriptsize Adresse von \texttt{data} in Modul-Level und in \texttt{foobar}};
+  \node (main2) [below=0mm of B2, color=teal] {\scriptsize Adresse von \texttt{data} in Modul-Level und in \texttt{foobar}};
+  \node (main3) [below=0mm of C2, color=teal] {\scriptsize Adresse von \texttt{data} in Modul-Level};
+  \node (func)  [below=0mm of C6, color=blue] {\scriptsize Adresse von \texttt{data} in \texttt{foobar}};
   
   \draw [->] (a6.east)arc(120:-115:1.0);		%start angle: stop angle : radius  
   \node (step1) at (9,3) {\texttt{data.append(1)}};
@@ -311,24 +313,24 @@ In Zeile 3 dagegen wird eine \emph{neue} Liste berechnet (nämlich \inPy{[1, 2]}
 Durchdenken wir nun auch dieses Beispiel:
 \begin{codebox}[Beispiel: Übergabe von Immutables]
 \begin{minted}[linenos]{python}
-def Vercingetorix(data) :
+def foobar(data) :
     data = 2
-    print("in Vercingetorix: data =", data)
+    print("in foobar: data =", data)
 
 data = 1
-Vercingetorix(data)
+foobar(data)
 print("on module level: data =", data)
 \end{minted}
 \end{codebox}
 
 \begin{cmdbox}[Ausgabe: Übergabe von Immutables]
 \begin{minted}{text}
-in Vercingetorix: data = 2
+in foobar: data = 2
 on module level: data = 1
 \end{minted}
 \end{cmdbox}
 
-Wir erinnern uns, dass \inPy{1} ein Wert vom Typ \inPy{int} und damit \emph{immutable} ist. Der Wert an der Stelle \inPy{data} darf also nicht verändert werden. Wenn nun also Zeile 2 verlangt, den neuen Wert \inPy{2} \enquote{in \inPy{data}} zu speichern, so wird eine neue Speicherstelle angelegt, und deren Adresse in der Instanz \inPy{data} in \inPy{Vercingetorix} gespeichert.
+Wir erinnern uns, dass \inPy{1} ein Wert vom Typ \inPy{int} und damit \emph{immutable} ist. Der Wert an der Stelle \inPy{data} darf also nicht verändert werden. Wenn nun also Zeile 2 verlangt, den neuen Wert \inPy{2} \enquote{in \inPy{data}} zu speichern, so wird eine neue Speicherstelle angelegt, und deren Adresse in der Instanz \inPy{data} in \inPy{foobar} gespeichert.
 
 \begin{hintbox}[Speicherstruktur von \texttt{list}s]
 Die oben gezeigten Speicherbilder sind eine Vereinfachung der Realität. Wie erwähnt kann jede Zelle des Speichers nur ein einziges Byte fassen, also nicht einmal einen ganzen \inPy{int}-Wert. Stattdessen finden Sie dort einen \emph{descriptor}, also ein Datenpaket, das unter anderem aus einer Ganzzahl (Anzahl der Elemente in der Liste) und einem Pointer (tatsächlicher Speicherort des ersten Elements der Liste, also eine Adresse) enthält. Dadurch bleibt die Adresse \inPy{data} konstant, selbst wenn der Listeninhalt \enquote{umziehen} muss.
@@ -369,9 +371,11 @@ Die Variable \inPy{foo} dagegen existiert in allen Zeilen des Programms (1-11), 
 \begin{warnbox}[Zugriffe klar halten]
 Sie können sich vermutlich jetzt schon vorstellen, dass es schwierig wird, den Überblick zu behalten, welche Variablen an welcher Stelle sichtbar sind, und wann ein Schreibzugriff zulässig ist. Das hier Gezeigte soll Sie daher auch nur dazu in die Lage versetzen, Codes von anderen Autoren zu lesen und korrekt zu interpretieren. Im Allgemeinen ist davon abzuraten, Konstruktionen zu programmieren, bei denen Variablen über Scope-Grenzen hinweg genutzt werden. Halten Sie sich am besten an den Leitsatz, dass Information nur über die Parameterliste in eine Funktion gelangt, und nur über den Rückgabewert aus dieser heraus kommt.
 \end{warnbox}
-\begin{hintbox}[Konstanten]
-Ein Fall, in dem es sinnvoll sein kann, von diesem Leitsatz abzuweichen sind Naturkonstanten. Wenn Sie den Flug eines Balles durch die Luft modellieren, wollen Sie nicht in jeder Funktion die Graviationskonstante als Parameter mit übergeben. Es ist aber auch im allgemeinen keine gute Idee, den Wert in Ihren Funktionen \enquote{hard zu coden}. (Andernfalls müssten Sie bei einer Änderung Ihr gesamtes Programm durcharbeiten, und würden sehr wahrscheinlich eine oder mehrere Stellen übersehen).
 
+\begin{hintbox}[Konstanten]
+Ein Fall, in dem es sinnvoll sein kann, von diesem Leitsatz abzuweichen, sind Naturkonstanten. Wenn Sie den Flug eines Balles durch die Luft modellieren, wollen Sie nicht in jeder Funktion die Graviationskonstante als Parameter mit übergeben. Es ist aber auch im Allgemeinen keine gute Idee, den Wert in Ihren Funktionen \enquote{hard zu coden}. (Andernfalls müssten Sie bei einer Änderung Ihr gesamtes Programm durcharbeiten, und würden sehr wahrscheinlich eine oder mehrere Stellen übersehen).
+\end{hintbox}
+\begin{hintbox}[]
 In diesem Fall ist es also durchaus angebracht, Code zu schreiben wie:
 \begin{codebox}[Beispiel: globale Konstante]
 \begin{minted}[linenos]{python}
@@ -383,7 +387,7 @@ def forceBetweenBodies(radius, mass1, mass2) :
 \end{codebox}
 \end{hintbox}
 
-Wenn versucht wird innerhalb einer Funktion ein Symbol des Modullevels umzudefinieren, so legt Python stattdessen eine neue \emph{lokale} Variable an. Das heißt, der Bezug auf die ursprüngliche Variable geht verloren, und in der Funktion ist nur der neue Wert verfügbar. Auf die Modulebene hat dies keinen Einfluss.
+Wenn versucht wird, innerhalb einer Funktion ein Symbol des Modul-Levels umzudefinieren, so legt Python stattdessen eine neue \emph{lokale} Variable an. Das heißt, der Bezug auf die ursprüngliche Variable geht verloren, und in der Funktion ist nur der neue Wert verfügbar. Auf die Modulebene hat dies keinen Einfluss.
 
 Soll tatsächlich von der Funktion aus der Wert der Variablen auf Modulebene geändert werden, so kann dies mit dem Befehl \inPy{global} geschehen. Mit \inPy{global Symbol} wird dem Python-Interpreter mitgeteilt, dass mit \inPy{Symbol} tatsächlich immer das Objekt der Modulebene gemeint ist.
 
@@ -392,47 +396,47 @@ Soll tatsächlich von der Funktion aus der Wert der Variablen auf Modulebene ge�
 foo = "foo"
 bar = "bar"
 
-def Vercingetorix() :
+def foobar() :
     foo = "fu"        # lokale Variable
   
     global bar        # Variable 'bar' aus dem Modulelevel
     bar = "baz"
 
-    print("Vercingetorix: foo =", foo)
-    print("Vercingetorix: bar =", bar)
+    print("foobar: foo =", foo)
+    print("foobar: bar =", bar)
 
-Vercingetorix()
+foobar()
 
 print("on module level: foo =", foo)
 print("on module level: bar =", bar)
 \end{minted}
 \end{codebox}
-\begin{cmdbox}[Ausgabe: Übergabe von Immutables]
+\begin{cmdbox}[Ausgabe: lokale und globale Variablen]
 \begin{minted}{text}
-Vercingetorix: foo = fu
-Vercingetorix: bar = baz
+foobar: foo = fu
+foobar: bar = baz
 on module level: foo = foo
 on module level: bar = baz
 \end{minted}
 \end{cmdbox}
 
-Mit \emph{Modulebene} ist dabei immer die \emph{unterste Ebene} in Ihrem Code gemeint. Wenn Sie den Effekt von \inPy{global} nur auf die nächsthöhere Ebene anwenden wollen (\eg bei verschachtelten Funktionen), so erreichen Sie dies durch das Schlüsselwort \inPy{nonlocal}. Die Syntax und Verwendung ist dabei exakt dieselbe. Jedoch kann \inPy{nonlocal} nicht dazu verwendet werden, um auf Objekte der Modulebene zuzugreifen.
+Mit \emph{Modulebene} ist dabei immer die \emph{unterste Ebene} in Ihrem Code gemeint. Wenn Sie den Effekt von \inPy{global} nur auf die nächsthöhere Ebene anwenden wollen (\eg bei verschachtelten Funktionen), so erreichen Sie dies durch das Schlüsselwort \inPy{nonlocal}. Die Syntax und Verwendung ist dabei exakt dieselbe. Jedoch kann \inPy{nonlocal} nicht dazu verwendet werden, um auf Objekte der Modulebene zuzugreifen. Grund für diese Unterscheidung sind technische Details im Unterbau von Python, auf die wir hier leider nicht eingehen können.
 
-\section{Default-Parameter, Positional Arguments und Keyword Arguments}
-Oft schreiben wir Funktionen, die fast jedes Mal mit denselben Parametern aufgerufen werden. Es kann lästig werden, diese immer wieder und wieder einzugeben. Denken Sie dazu an das Beispiel Funktion \enquote{ohne} Rückgabewert zurück: die Funktion \inPy{printBoxed} braucht einen Wert \texttt{boxSize} für die Breite der Box. Meistens werden wir aber immer dieselbe Breite erzeugen wollen, um dem User unseres Programms ein einheitliches Interface zu bieten. Das bedeutet leider zunächst, dass wir bei jedem Aufruf unserer Funktion \inPy{printBoxed} diesen Standard-Wert immer wieder mit übergeben müssen.
+\section{Optionale Parameter, Positionale Parameter und Keyword-Parameter}
+Oft schreiben wir Funktionen, die fast jedes Mal mit denselben Parametern aufgerufen werden. Es kann lästig werden, diese immer wieder und wieder einzugeben. Denken Sie dazu an das Beispiel \emph{Funktion \enquote{ohne} Rückgabewert} zurück: die Funktion \inPy{printBoxed} braucht einen Wert \texttt{boxSize} für die Breite der Box. Meistens werden wir aber immer dieselbe Breite erzeugen wollen, um dem User unseres Programms ein einheitliches Interface zu bieten. Das bedeutet leider zunächst, dass wir bei jedem Aufruf unserer Funktion \inPy{printBoxed} diesen Standard-Wert immer wieder mit übergeben müssen.
 
-In Python ist es jedoch möglich, solche Standardwerte zu definieren. Beim Aufruf dürfen diese dann einfach weggelassen werden, können jedoch auch explizit durch einen anderen Wert ersetzt werden. Sie erreichen dies, indem sie in der ersten Zeile der Funktion (in der Funktionssignatur) hinter einen Parameter ein \inPy{= defaultWert}  setzen.
+In Python ist es jedoch möglich, solche Standardwerte zu definieren. Beim Aufruf dürfen diese dann einfach weggelassen werden, können jedoch auch explizit durch einen anderen Wert ersetzt werden. Sie erreichen solche \emph{optionalen Parameter}, indem sie in der ersten Zeile der Funktion (in der Funktionssignatur) hinter einen Parameter ein \inPy{= defaultWert}  setzen.
 
-\begin{codebox}[Syntax: Funktionen mit default-Parameter]
+\begin{codebox}[Syntax: Funktionen mit optinalem Parameter]
 \begin{minted}{python}
-def Funktionsname (Parameter1, ..., ParameterDefault = Defaultwert) :
+def Funktionsname (Parameter1, ..., OptionalerParameter = Defaultwert) :
     normaler Code
 \end{minted}
 \end{codebox}
 
 Im Beispiel unserer Box kann das so aussehen:
 
-\begin{codebox}[Beispiel: Funktion mit default-Parameter]
+\begin{codebox}[Beispiel: Funktion mit optionalem Parameter]
 \begin{minted}[linenos]{python}
 import math
 
@@ -456,7 +460,7 @@ printBoxed("Don't forget to be awesome!")
 printBoxed("This is a small box", 25)
 \end{minted}
 \end{codebox}
-\begin{cmdbox}[Ausgabe: Übergabe von Immutables]
+\begin{cmdbox}[Ausgabe: Funktion mit optionalem Parameter]
 \begin{minted}{text}
 +----------------------------------------------------------+
 |               Don't forget to be awesome!                |
@@ -467,14 +471,16 @@ printBoxed("This is a small box", 25)
 \end{minted}
 \end{cmdbox}
 
-Wird also nur ein Parameter angegeben, so wird für den zweiten automatisch der default-Wert \inPy{60} eingesetzt.
+Wird also nur ein Parameter angegeben, so setzt der Interpreter für den Zweiten automatisch der default-Wert \inPy{60} ein.
 
-Funktionen dürfen beliebig viele default-Parameter haben. Diese Parameter mit Vorgabewert müssen aber \emph{hinter} den normalen Parametern stehen. Im Aufruf dürfen Parameter auch nur \enquote{von hinten weg} weggelassen werden:
-\begin{codebox}[Beispiel: Funktion mit mehreren default-Parametern (1)]
+Funktionen dürfen beliebig viele optionale Parameter haben. Diese Parameter mit Vorgabewert müssen aber \emph{hinter} den normalen Parametern stehen. Im Aufruf dürfen Parameter auch nur \enquote{von hinten weg} weggelassen werden:
+\begin{codebox}[Beispiel: Funktion mit mehreren optionalen Parametern (1)]
 \begin{minted}[linenos]{python}
 def defaults(a, b, c=0, d=0) :
   print(a, b, c, d)
   
+#def defaults(a, b=0, c)    ! Fehler: c müsste auch einen default-Wert haben
+
 defaults(1, 2)              # ok, Ausgabe: 1 2 0 0 
 defaults(1, 2, 3, 4)        # ok, Ausgabe: 1 2 3 4
 defaults(1, 2, 3)           # ok, Ausgabe: 1 2 3 0
@@ -482,9 +488,9 @@ defaults(1, 2, 3)           # ok, Ausgabe: 1 2 3 0
 \end{minted}
 \end{codebox}
 
-Um das Verhalten zu erreichen, das in der letzten (fehlerhaften) Zeile des obigen Beispiels angedeutet wird, kann \emph{im Funktionsaufruf} durch ein Gleichheitszeichen erklärt werden, welcher Parameter denn gemeint ist. Die Reihenfolge muss dann nicht eingehalten werden! Allerdings müssen diejenigen Parameter, die rein über ihre Position in der Liste identifiziert werden sollen, zuerst genannt werden. Man nennt solche Parameter, die über ein Schlüsselwort zugewiesen werden \emph{Keyword Arguments}, da sie eben über einen Schlüssel identifiziert werden. Im Gegensatz dazu nennt man Parameter, die nur über ihre Position in der Liste zuordbar sind \emph{Positional Arguments}.
+Um das Verhalten zu erreichen, das in der (fehlerhaften) Zeile 9 des obigen Beispiels angedeutet wird, kann \emph{im Funktionsaufruf} durch ein Gleichheitszeichen erklärt werden, welcher Parameter denn gemeint ist. Die Reihenfolge muss dann nicht eingehalten werden! Allerdings müssen diejenigen Parameter, die rein über ihre Position in der Liste identifiziert werden sollen, zuerst genannt werden. Man nennt solche Parameter, die über ein Schlüsselwort zugewiesen werden \emph{Keyword-Parameter}, da sie eben über einen Schlüssel identifiziert werden. Im Gegensatz dazu nennt man Parameter, die nur über ihre Position in der Liste zuordbar sind \emph{Positionale Parameter}.
 
-\begin{codebox}[Beispiel: Funktion mit mehreren default-Parametern (2)]
+\begin{codebox}[Beispiel: Funktion mit mehreren optionalen Parametern (2)]
 \begin{minted}[linenos]{python}
 def defaults(a, b, c=0, d=0) :
   print(a, b, c, d)
@@ -494,24 +500,56 @@ defaults(a=9, b=8)          # ok, Ausgabe 9 8 0 0
 defaults(9, c=7, b=8)       # ok, Ausgabe 9 8 7 0
 # defaults(1, 2, c=1, c=2)  ! Fehler: Doppelte Zuweisung von c
 # defaults(9, a=7, b=0)     ! Fehler: Doppelte Zuweisung von a
-# defaults(a=9, 3)          ! Fehler: positional Argument nach keyword argument
+# defaults(a=9, 3)          ! Fehler: Positionaler Parameter nach Keyword-P.
 \end{minted}
 \end{codebox}
 
+Die Funktion \inPy{print}\footnote{Tatsächlich ist \inPy{print} genau eine solche Funktion, wie Sie sie in diesem Kapitel kennen lernen. Die meisten Befehle in Python sind tatsächlich solche Funktionen und aus \enquote{kleineren} Befehlen zusammengesetzt} erlaubt es, das \enquote{Trennzeichen} zwischen den einzelnen Informationsblöcken frei zu wählen. Dazu dient der \emph{Keyword-Parameter} \inPy{sep}. Standardmäßig ist dieser als Leerzeichen (\inPy{" "}) festgelegt.
+
+\begin{codebox}[Beispiel: Optionaler Paramter \texttt{sep} in der Funktion \texttt{print} (1)]
+\begin{minted}[linenos]{python}
+print(1, 2)
+print(1, 2, sep=",")        # Ausgabe: 1,2
+print(1, 2, sep="---")      # Ausgabe: 1---2
+print(1, 2, sep="")         # Ausgabe: 12
+\end{minted}
+\end{codebox}
+
+Daneben gibt es auch den Keyword-Parameter \inPy{end}. Dieser enthält Zeichen, die am Ende jedes Aufrufs von \inPy{print} gedruckt werden sollen. Üblicherweise ist das ein Zeilenumbruch.
+
+\begin{codebox}[Beispiel: Optionaler Paramter \texttt{sep} in der Funktion \texttt{print} (2)]
+\begin{minted}[linenos]{python}
+print("The Planet Arrakis")
+print("The Planet Arrakis", end="")
+print("The Planet Arrakis", end="---\n")
+print("The Planet Arrakis")
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Optionaler Paramter \texttt{sep} in der Funktion \texttt{print} (2)]
+\begin{minted}{text}
+The Planet Arrakis
+The Planet ArrakisThe Planet Arrakis---
+The Planet Arrakis
+\end{minted}
+\end{cmdbox}
 
 \section{Variadische Funktionen}
-Sie können Funktionen auch so schreiben, dass eine beliebige Zahl von Werten übergeben werden kann. Dazu müssen Sie nicht etwa eine endlos lange Signatur tippen, sondern können ein neues Syntax-Konstrukt nutzen:
+Sie können Funktionen auch so schreiben, dass eine beliebige Zahl von Werten angenommen wird. Denken Sie hierzu zum Beispiel an den Befehl \inPy{print}: Sie können hier eine beliebig lange Liste von Werten und Ausdrücken angeben, die von derselben Funktion verarbeitet werden. Man sagt also, der Befehl \inPy{print} ist eine \emph{variadische Funktion}, da die Zahl der Parameter nicht festgelegt ist.
+
+Um dieses Verhalten zu erreichen müssen Sie nicht etwa eine endlos lange Signatur tippen, sondern können ein neues Syntax-Konstrukt nutzen:
 
 \begin{codebox}[Syntax: Variadische Funktionen (1)]
 \begin{minted}{python}
-def Funktionsname (positionalArguments, keywordArguments, *variadicArguments) :
+def Funktionsname (Parameterliste, ...,
+                   *variadischerParameter,
+                   optionaleParameter = default, ...) :
     normaler Code
 \end{minted}
 \end{codebox}
 
-Noch \emph{hinter} den Keyword-Arguments können Sie also durch einen Stern (\inPy{*}) vor dem Parameternamen andeuten, dass hier eine beliebig lange Kette von Werten akzeptiert werden soll. Diese Werte werden automatisch zu einem \inPy{tuple} zusammengepackt, die im Code den Namen trägt, den Sie für \inPy{variadicArguments} angegeben haben.
+\emph{Zwischen} normalen und den optionalen Parametern oder \emph{hinter} den optionalen Parametern können Sie also durch einen Stern (\inPy{*}) vor dem Parameternamen andeuten, dass hier eine beliebig lange Kette von Werten akzeptiert werden soll. Diese Werte werden automatisch zu einem \inPy{tuple} zusammengepackt, die im Code den Namen trägt, den Sie für \inPy{variadischerParameter} angegeben haben.
 
-\begin{codebox}[Beispiel: Durchschnitt vieler Werte mit variadic arguments]
+\begin{codebox}[Beispiel: Durchschnitt vieler Werte mit variadischem Parameter]
 \begin{minted}[linenos]{python}
 def average(*args) :
   total = sum(args)
@@ -521,21 +559,25 @@ print(average(1, 2, 3, 4, 5))    # Ausgabe: 3.0
 \end{minted}
 \end{codebox}
 
-Aus naheliegenden Gründen darf es nur ein variadic Argument pro Funktion geben -- andernfalls könnte der Python-Interpreter nicht zuordnen, welcher Wert zu welcher Liste gehören sollte.
+Die \emph{fünf einzelnen Werte \inPy{1, 2, 3, 4, 5}} werden also zu \emph{einem einziglen \inPy{tuple args = (1, 2, 3, 4, 5)}} zusammengefasst.
 
-Analog zu den variadic Arguments gibt es auch variadic \emph{keyword} Arguments, also eine beliebig lange Folge von Schlüsseln und zugehörigen Werten. Diese werden mit einer ähnlichen Syntax erklärt:
+Aus naheliegenden Gründen darf es nur einen variadischen Parameter pro Funktion geben -- andernfalls könnte der Python-Interpreter nicht zuordnen, welcher Wert zu welcher Liste gehören sollte.
+
+Analog zu den variadischen Parameter gibt es auch variadische \emph{Keyword}-Parameter, also eine beliebig lange Folge von Schlüsseln und zugehörigen Werten. Diese werden mit einer ähnlichen Syntax erklärt:
 
 \begin{codebox}[Syntax: Variadische Funktionen (2)]
 \begin{minted}{python}
-def Funktionsname (positionalArguments, keywordArguments,
-                   *variadicArguments, **variadicKeywordArguments) :
+def Funktionsname (Parameterliste, ...
+                   *variadischerParameter, 
+                   optionaleParameter = default, ...
+                   **variadischerKeywordParameter) :
     normaler Code
 \end{minted}
 \end{codebox}
 
 Python packt diese variadischen Keyword-Argumente automatisch zu einem \inPy{dict} zusammen.
 
-\begin{codebox}[Beispiel: variadic keyword arguments]
+\begin{codebox}[Beispiel: Variadische Keyword-Parameter]
 \begin{minted}[linenos]{python}
 def presentMe(**kwargs) :
   print("Here are a few details about me:")
@@ -549,7 +591,7 @@ presentMe(
 )
 \end{minted}
 \end{codebox}
-\begin{cmdbox}[Ausgabe: variadic keyword arguments]
+\begin{cmdbox}[Ausgabe: Variadische Keyword-Parameter]
 \begin{minted}{text}
 Here are a few details about me:
 nickname :  The Blue Chameleon
@@ -558,7 +600,7 @@ cellphoneNumber :  ask nicely
 \end{minted}
 \end{cmdbox}
 
-Wie angedeutet können Sie positional Arguments, keyowrd Arguments, variadic Arguments und variadic keyword Arguments in beliebiger Kombination verwenden. Jedoch muss die Reihenfolge dieser Gruppen sowohl bei der Deklaration als auch beim Aufruf eingehalten werden.
+Wie angedeutet können Sie positionale Parameter, Keyowrd-Parameter, variadische Parameter und variadische Keyword-Parameter in beliebiger Kombination verwenden. Jedoch muss die Reihenfolge dieser Gruppen sowohl bei der Deklaration als auch beim Aufruf eingehalten werden.
 
 \begin{codebox}[Beispiel: Verschiedene Arten von Parametern im Zusammenspiel]
 \begin{minted}[linenos]{python}
@@ -611,8 +653,192 @@ kwargs: {'key': 'value'}
 \end{minted}
 \end{cmdbox}
 
-unpacking
 
-some of the params for print
+Dieses automatische Verpacken kann auch Rückgängig gemacht werden: Wenn Sie im Funktionsaufruf vor einen Container (\inPy{list}s, \inPy{tuple}s, ...) ein Sternchen (\texttt{*}) setzen, so werden die Elemente des Containers nacheinander den Parametern der Funktion zugeordnet
+
+\begin{codebox}[Beispiel: Entpacken von Listen in Funktionsaufrufen]
+\begin{minted}[linenos]{python}
+import math
+
+def vectorLength(x, y = 0, z = 0) :
+    return math.sqrt(x*x + y*y + z*z)
+
+vector2D = [3, 4]
+
+print(vectorLength(*vector2D))         # x = 3, y = 4, z = 0
+#print(vectorLength(vector2D))         ! kein Entpacken sondern x = [3, 4]
+\end{minted}
+\end{codebox}
+
+\inPy{dict}s können auf zweierlei Weise entpackt werden: Mit einem einfachen Sternchen \texttt{*}, ebenso wie auch normale Listen entpackt werden, oder mit einem doppelten Sternchen \texttt{**}, um so den Keyword-Parametern zugewiesen zu werden:
+
+\begin{codebox}[Beispiel: Entpacken von \texttt{dict}s in Funktionsaufrufen]
+\begin{minted}[linenos]{python}
+params = {"sep" : ", ", "end" : "#\n"}
+
+print("The Planet Caladan", "Home of House Atreides",  params)
+print("The Planet Caladan", "Home of House Atreides",  *params)
+print("The Planet Caladan", "Home of House Atreides", **params)
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Entpacken von \texttt{dict}s in Funktionsaufrufen]
+\begin{minted}{text}
+The Planet Caladan Home of House Atreides {'sep': ', ', 'end': '#\n'}
+The Planet Caladan Home of House Atreides sep end
+The Planet Caladan, Home of House Atreides#
+\end{minted}
+\end{cmdbox}
+
+In Zeile 3 wird also \inPy{params} einfach als dritter Parameter gedruckt: Wir erhalten die Darstellung des gesamten \inPy{dict}s.
+
+Zeile 4 wird umgesetzt zu 
+\mint{python}{print("The Planet Caladan", "Home of House Atreides", "sep", "end")} 
+und entsprechend sieht auch die Ausgabe auf dem Bildschrim aus.
+
+Zeile 5 schließlich interpretiert Python als
+\mint{python}{print("The Planet Caladan", "Home of House Atreides", sep=', ', end='#\n')}
+weswegen das Komma zwischen \texttt{The Planet Caladan} und \texttt{Home of House Atreides} eingeschoben wird.
+
+\section{Funktionen und Module als Parameter und Rückgabewerte}
+\label{sec:FuncsAsObjects}
+Python folgt der Philosophie: \emph{Alles ist ein Objekt}. Ein Objekt ist eine Sammlung von Daten, die ein beliebig abstraktes Konstrukt beschreibt. Die Zahl \inPy{5} ist ebenso ein Objekt wie eine \inPy{list}, ein \inPy{dict}, eine Funktion wie \inPy{printBoxed} oder \inPy{print} oder sogar ein ganzes Modul wie \inPy{math}. Jedes Objekt kann auch als Parameter an eine Funktion übergeben werden.
+
+Im Folgenden Beispiel werden wir diese Möglichkeit nutzen, um mit Python die Ableitung von beliebigen Funktionen anzunähern\footnote{Der gezeigte Code hat zahlreiche Schwächen, und soll nur das Konzept von Funktionen als Parameter und Rückgabewert illustrieren. Besuchen Sie Vorlesungen wie \emph{Numerik} oder \emph{Numerical Recipies}, um über optimierte Methoden zu lernen.}.
+
+Falls Ihr mathematisches Wissen aus der Schule schon etwas verblichen ist: Die Ableitung einer Funktion $f$ als:
+\begin{equation*}
+	\dv{x}f(x) \coloneqq \lim_{\varepsilon \to 0} \frac{f(x + \varepsilon) - f(x)}{\varepsilon}
+\end{equation*}
+Dieses \emph{mathematische Rezept} gibt uns eine Anleitung, wie wir eine neue Funktion $f'$ erhalten. Wir wollen nun in ähnlicher Manier neue Funktionen $f'$ aus bekannten Funktionen $f$ bauen.
+
+Während den Grenzübergang $\varepsilon \to 0$ nur in der Mathematik möglich ist, können wir eine sinnvolle Abschätzung (Annäherung) dieser Ableitung erhalten, indem wir den Limes einfach ignorieren und für $\varepsilon$ einen beliebigen, sehr kleinen Wert einsetzen. Mit dieser Idee schreiben wir den folgenden Code:
+
+\begin{codebox}[Beispiel: numerisches Ableiten]
+\begin{minted}[linenos]{python}
+import math
+
+def derivative (f, epsilon = 1e-7) :
+    def result(x) :
+        return (f(x + epsilon) - f(x)) / epsilon
+    return result
+
+dsin = derivative(math.sin)
+
+for x in range(20) :
+    print(int(20 + 10 * dsin(x / 3)) * " ", "*")
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: numerisches Ableiten]
+\begin{minted}{text}
+                              *
+                              *
+                            *
+                          *
+                       *
+                    *
+                *
+              *
+            *
+           *
+           *
+            *
+              *
+                 *
+                    *
+                       *
+                          *
+                             *
+                              *
+                              *
+\end{minted}
+\end{cmdbox}
+
+Sehen wir uns im Detail an, was hier geschieht:
+
+Die Funktion \inPy{derivative} erhält zwei Parameter, wovon der Parameter \inPy{epsilon} optional ist und per default auf \inPy{1e-7} gesetzt wird. Für das Objekt \inPy{f} nehmen wir hier an, dass es sich wie eine Funktion verhält, die genau einen Parameter verarbeitet.
+
+\emph{In der Funktion} \inPy{derivative} wird nun eine neue Funktion \inPy{result} definiert. Diese Funktion verarbeitet auch einen einzigen Parameter. Sie berechnet einen einzigen Wert nach der Definition des Differentialquotienten (also die Ableitung, die wir oben gesehen haben). Zur Berechnung dieses Wertes benutzt die Funktion \inPy{result} das Symbol \inPy{f}, also eine beliebige Funktion, die zuerst an \inPy{derivative} übergeben wurde. Da \inPy{result} im Scope von \inPy{derivative} steht, und da das Symbol \inPy{f} nicht überschrieben wird, darf \inPy{result} dieses Symbol quasi mitnutzen: \inPy{result} \enquote{sieht}, welche Funktion an \inPy{derivative} übergeben wurde, und kann somit den Differentialquotienten berechnen.
+
+Von \inPy{derivative} wird nun aber nicht nur ein einzelner Wert $f'(x)$ zurückgegeben, sondern \emph{die gesamte Funktion} $f'$: Die \enquote{Vorschrift}, wie für eine jetzt fest gegebene Funktion \inPy{f} die Ableitung angenähert wird, ist das Ergebnis/der Rückgabewert von \inPy{derivative}. Wir haben also eine \emph{Funktion, die eine Funktion berechnet}!
+
+In Zeile 8 kommt die Funktion \inPy{derivative} auch zum Einsatz: Gegeben die Funktion \inPy{math.sin} berechnen wir nun die Vorschrift, nach der die Ableitung des Sinus berechnet werden kann, und speichern diese \emph{Vorschrift} im Symbol \inPy{dsin}.
+
+Die Zeilen 10 und 11 dienen dazu, einen rudimentären Plot unserer Funktion zu erstellen. In Kapitel \ref{chp:Matplotlib} werden wir Mittel kennen lernen, ansprechendere Grafiken zu erzeugen. Für den Moment soll Sie nur interessieren, dass das soeben erstellte Objekt \inPy{dsin} genauso aufgerufen werden kann, als hätten Sie es mit den folgenden Zeilen explizit programmiert:
+
+\begin{codebox}[Beispiel: expliziter Differentialquotient]
+\begin{minted}[linenos]{python}
+import math
+
+def dsin (x) :
+    return (f(x + epsilon) - f(x)) / epsilon
+\end{minted}
+\end{codebox}
 
 \section{Lambdas}
+\emph{Lambdas} sind \enquote{Funktionen in anderem Gewand}. Zunächst können Sie sich Lambdas als Kurzform für besonders einfache Funktionen vorstellen, denn sie können und müssen mit einer einzigen Zeile geschrieben werden. Sie werden erstellt mit der Syntax:
+
+\begin{codebox}[Syntax: Lambdas]
+\begin{minted}{python}
+Symbol = lambda Parameterliste : Rückgabewert
+\end{minted}
+\end{codebox}
+
+Dies ist äquivalent zu folgendem Code-Template:
+\begin{codebox}[Syntax: Äquivalent von Lambdas]
+\begin{minted}{python}
+def Symbol (Parameterliste) :
+    return Rückgabewert
+\end{minted}
+\end{codebox}
+
+Für die Parameterliste gilt dasselbe wie oben gesagt: Positionale, Optioale, Keyword- und variadische Parameter sind allesamt erlaubt und verhalten sich ebenso, wie Sie das jetzt von normalen Funktionen kennen. Auch aufgerufen werden Lambdas auf dieselbe Art wie normale Funktionen.
+
+\begin{codebox}[Beispiel: Durchschnitt vieler Werte Lambda-Funktion]
+\begin{minted}[linenos]{python}
+average = lambda *args : return sum(args) / len(args)
+print(average(1, 2, 3, 4, 5))    # Ausgabe: 3.0
+\end{minted}
+\end{codebox}
+
+Lamdas werden vor allem dann genutzt, wenn eine Funktion nur genau an einer Stelle gebraucht wird. Ein Beispiel hierfür gibt die Funktion \inPy{sorted}:
+
+\inPy{sorted} gibt eine sortierte Kopie eines Containers (\inPy{list}, \inPy{tuple}, ...) zurück. Wenn ein Container die Elemente $e_i$ hat, dann werden diese so angeordnet, dass gilt:
+\begin{equation*}
+	e_1 \leq e_2 \leq \ldots
+\end{equation*}
+Es ist dabei aber auch möglich, das Sortierkriterium selbst zu spezifizieren. Wenn eine Funktion $f$ aus den Werten $e_i$ vergleichbare Werte berechnet (\eg Zahlen), so kann \inPy{sorted} dazu verwendet werden, die Elemente so anzuordnen, so dass gilt:
+\begin{equation*}
+	f(e_1) \leq f(e_2) \leq \ldots
+\end{equation*}
+
+Wir erreichen dies, indem wir \inPy{sorted} den optionalen Keyword-Parameter \inPy{key} mitgeben. Hier nennen wir genau die Funktion $f$, die unser Sortierkriterium beschreibt.
+
+\begin{codebox}[Beispiel: Sortieren mit Lambda]
+\begin{minted}[linenos]{python}
+data = [5, 1, 4, 7]
+
+print( sorted(data) )                        # default: Aufsteigende Sortierung
+print( sorted(data, key = lambda x : -x) )   # Absteigende Sortierung
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Sortieren mit Lambda]
+\begin{minted}{text}
+[1, 4, 5, 7]
+[7, 5, 4, 1]
+\end{minted}
+\end{cmdbox}
+
+Es gilt also in diesem Beispiel: $f(x) = -x$. Wenn die Werte $-x$ aufsteigend sortiert werden, ist dies gleichwertig zum absteigenden Sortieren der Werte $x$.
+
+Beachten Sie, dass die Lambda-Funktion \emph{direkt an dem Ort} definiert wird, wo sie auch gebraucht wird, und den restlichen Code nicht \enquote{verstopft}. Natürlich müssen Sie diese Aufgabe nicht über ein vor Ort definiertes Lambda lösen; folgende beiden Versionen sind auch möglich (aber etwas unhandlicher):
+
+\begin{codebox}[Beispiel: Sortieren -- Alternativen]
+\begin{minted}[linenos]{python}
+def funcSorter(x) :
+    return -x
+lambdaSorter = lambda x : -x
+
+data = [5, 1, 4, 7]
+print( sorted(data, key = funcSorter), sorted(data, key = lambdaSorter) )
+\end{minted}
+\end{codebox}
