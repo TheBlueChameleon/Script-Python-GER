@@ -1,0 +1,412 @@
+\chapter{Klassen}
+\label{chp:Classes}
+\epigraph{
+	What's the object-oriented way to wealth? -- Inheritance
+}{Anonymous}
+
+In ihrem Grundaufbau sind Computer Maschinen, die mit \emph{einzelnen Zahlen} umgehen. \emph{Gruppen} von Zahlen sind alles, was wir brauchen, um unsere Welt zu beschreiben\footnote{Ich bin gerne zu einer philosophischen Diskussion über diese Aussage bereit. Für diesen Kurs wollen wir aber zumindest annähern, dass Zahlen zur Beschreibung von Dingen genügen, die wir mit einem Computer bearbeiten wollen}. Dazu müssen diese Zahlen aber eine gewisse Ordnung und Beziehung zueinander haben und wir brauchen eine geeignete Methode zur Interpretation dieser Zahlen. Die Zahlen 98, 108, 117, 101 können zum Beispiel \emph{in dieser Reiheinfolge} als ASCII-Codes der Buchstaben des Wortes \emph{blue} interpretiert werden; es könnten aber auch die Hausnummern der Adressen meiner ersten vier Lebensgefährtinnen sein\footnote{Sind sie nicht. Ich kann mich nur an die Hausnummer meiner vierten Freundin erinnern (es war die 12), und meine erste Freundin hat so weit von der nächsten Stadt gelebt, dass ich mir nicht sicher bin, ob das Haus überhaupt eine Hausnummer hatte.}.
+
+Für Texte haben wir den Datentyp \inPy{string} kennengelernt. Hinter dem Datentypen steht eine aufwändige Maschinerie, die eben genau diese Ordnung und Interpretation von Zahlengruppen bietet. In diesem Kapitel wollen wir uns damit beschäftigen, eigene solche Konstrukte zu erschaffen: Wir erstellen hier \emph{Klassen}.
+
+\section{Klassen als Container}
+Zunächst sollten Sie sich eine Klasse als Datencontainer vorstellen, wie wir sie schon in Kapitel \ref{chp:Containers} kennengelernt haben\footnote{Tatsächlich sind die dort gezeigten Datentypen Beispiele für Klassen}. Dort wurden mehrere \eg Werte zu einem kompakten \inPy{dict} zusammengefasst. Um einen dieser zusammen gepackten Werte zu greifen, brauchten wir einen \emph{Schlüssel}.
+
+Klassen haben in dieser Hinsicht eine ähnliche Struktur: Sie sind eine Sammlung von Attributen, zu denen man Werte speichern kann. Die Attribute einer Klasse richten sich natürlich danach, was modelliert werden soll. Beispielsweise könnten wir uns die Aufgabe stellen, meine Exfreundinnen mit Python zu analysieren. Attribute können dann so etwas sein wie \emph{Name}, \emph{Körpergröße}, \emph{positive Eigenschaften} oder \emph{negative Eigenschaften}.
+
+Wir können uns in dem Kontext eine Tabelle vorstellen, in der ich meine Verflossenen auflisten könnte. Die Spaltenüberschriften dieser Tabelle wären dann die Attribute. Jede Zeile dieser Tabelle nennen wir eine \emph{Instanz} der Klasse. Eine Instanz beschreibt in diesem Fall also einen konkreten Menschen, der (unter anderem) durch die Attribute \emph{name}, \emph{height}, \emph{upsides} und \emph{downsides} beschrieben werden kann. Eine Instanz braucht außerdem noch ein \emph{Symbol}, über den klar wird, welche Zeile der Tabelle gemeint ist (schließlich ist es zumindest denkbar, dass zwei gleich große Menschen mit demselben Namen existieren, an denen ich dieselben Vorzüge und Nachteile sehe).
+
+\begin{tcolorbox}[title=Eine Liste von Liebschaften]
+\begin{center}
+\begin{tabular}{c|ccp{.3\linewidth}p{.3\linewidth}}
+	\textbf{Symbol} & \textbf{Name} & \textbf{Height} & \textbf{Upsides}                                 & \textbf{Downsides} \tabcrlf
+	\texttt{gf1}    & Steffie       & 1.65 m          & intelligent, beautiful, has a dog                & too attached to her mother, 
+																																																				doesn't like meeting people \tabcrlf
+	\texttt{gf2}    & Arista        & 1.60 m          & very intelligent, beautiful, good taste in music & doesn't like coffee, doesn't like coding \tabcrlf
+	\texttt{gf3}    & Katja         & 1.81 m          & intelligent, very beautiful, musician            & moody, cheated on me
+\end{tabular}
+\end{center}
+Ich sollte anmerken, dass diese Tabelle keine echten Menschen beschreibt. Weder die Namen noch die Eigenschaften stimmen mit tatsächlichen Exfreundinnen überein. Die genannten Eigenschaften sollen Anschauliche Beispiele geben, sind aber nicht als Wertung von Eigenschaften im echten Leben zu verstehen.
+\end{tcolorbox}
+
+Dies wollen wir nun in Code abbilden. Wir beschreiben also die \emph{Klasse Exfreundin}. Dazu brauchen wir ein neues Syntaxelement:
+\begin{codebox}[Syntax: Klassen]
+\begin{minted}{python}
+class Klassenname  :
+    Attribut1 = Standardwert
+    Attribut2 = Standardwert
+    ...
+\end{minted}
+\end{codebox}
+
+Wie also schon bei Funktionen gibt die Einrückungsebene an, was zur Klasse gehört, und was dem restlichen Code zugeordnet wird. Der \emph{Standardwert} wird beim Erstellen der Instanzen zugewiesen, steht also \enquote{in unserer Tabelle}, wenn eine neue Zeile erstellt wird.
+
+Wir legen eine Instanz mit der folgenden Syntax an:
+\begin{codebox}[Syntax: Instanzen anlegen]
+\begin{minted}{python}
+Instanz = Klassenname()
+\end{minted}
+\end{codebox}
+
+Beachten Sie die leeren Klammern! Diese sind nötig, um Python mitzuteilen, dass wirklich eine \emph{Instanz} angelegt werden soll. Ohne die Klammern erstellen Sie eine Kopie der Klasse, also eine neue Tabelle.
+
+Sie können nun sowohl lesend als auch schreibend auf die Tabelle zugreifen, indem Sie Klasse und Attribut mit einem Punkt verbinden:
+\begin{codebox}[Syntax: Zugriff auf Klassenelemente]
+\begin{minted}{python}
+Instanz.Attribut = Wert
+print(Instanz.Attribut)
+\end{minted}
+\end{codebox}
+
+Damit können wir die obige Tabelle so in Code übersetzen:
+\begin{codebox}[Beispiel: Klassen als reine Container]
+\begin{minted}[linenos]{python}
+class Exgirlfriend :
+    name      =  None
+    height    =  None
+    upsides   = {None}
+    downsides = {None}
+
+gf1.name      = "Steffie"
+gf1.height    = 1.65
+gf1.upsides   = {"intelligent", "beautiful", "has a dog"}
+gf1.downsides = {"too attached to her mother", "doesn't like meeting people"}
+
+...
+
+print(gf1.name)    # Ausgabe: Steffie
+\end{minted}
+\end{codebox}
+
+Wir wählen hier \{\inPy{set}s\} für die Attribute \inPy{upsides} und \inPy{downsides}, da eine Eigenschaft für jede Exfreundin nur einmal vergeben werden darf. Es soll also keine Instanz von \inPy{Exgirlfriend} geben, die \inPy{{"funny", "funny"}} ist.
+
+\begin{hintbox}[Klassennamen mit Großbuchstaben]
+Es ist Konvention, Klasennamen mit einem Großbuchstaben beginnen zu lassen, während die Instanzen -- wie alle Variablen -- mit einem Kleinbuchstaben beginnen sollten. Die Attribute verhalten sich auf eine gewisse Weise wie Variablen und werden daher auch mit Kleinbuchstaben beschrieben.
+\end{hintbox}
+
+Wir haben oben die Instanzen der Klasse \inPy{Exgirlfriend} als Tabelle dargestellt. Dies soll nicht den Eindruck vermitteln, als würden diese nur als Einheit existieren. Jede Instanz existiert komplett unabhängig von den anderen. Das bedeutet, dass auch die Gedanken zu lokalen und globalen Variablen auf Klassen anwendbar sind. Instanzen einer Klasse können in Funktionen angelegt werden, und existieren dann nur dort. Sie können auch als Parameter an Funktionen übergeben werden, und von diesen verändert werden. Änderungen an den Attributen sind auch an der aufrufenden Stelle zu sehen solange der Speicherort der Instanz selbst sich nicht ändert:
+
+\begin{codebox}[Beispiel: Instanzen als Funktionsparameter]
+\begin{minted}[linenos]{python}
+# Klasse Exgirlfriend und Instanz gf1 wie oben
+
+def makeNameUppercase(ex) :
+    ex.name = ex.name.upper()
+
+def showEx(ex) :
+    print(ex.name)
+    print("  Height      : " + str(ex.height))
+    print("  Upsides     : " + str(ex.upsides)  [1:-1])
+    print("  Downsides   : " + str(ex.downsides)[1:-1])
+
+makeNameUppercase(gf1)
+showEx(gf1)
+\end{minted}
+\end{codebox}
+(Das Slicing (\inPy{[1:-1]}) soll hierbei nur die \inPy{set}-Klammern \{\} verbergen.)
+\begin{cmdbox}[Ausgabe: Instanzen als Funktionsparameter]
+\begin{minted}{text}
+STEFFIE
+  Height      : 1.65
+  Upsides     : 'beautiful', 'has a dog', 'intelligent'
+  Downsides   : "doesn't like meeting people", 'too attached to her mother'
+\end{minted}
+\end{cmdbox}
+
+Um zu verstehen, warum diese Änderung durch \inPy{makeNameUppercase} auch weitergegeben wird, sollten wir uns nochmal ein Bild des Arbeitsspeichers zeichnen:
+
+\begin{tcolorbox}[title=Speicherbild]
+\begin{center}
+\begin{tikzpicture}
+  [ 
+    cell/.style={text width=13mm,
+      text height=4mm, draw=black, inner sep=1mm},
+    ld/.style={draw=blue,shorten >=2pt,->}
+  ]
+  
+  \node (a1) at ( 0.0,4) [cell] {\ttfamily ...};
+  \node (a2) at ( 1.5,4) [cell] {\ttfamily Ref};
+  \node (a3) at ( 3.0,4) [cell] {\ttfamily Ref};
+  \node (a4) at ( 4.5,4) [cell] {\ttfamily Ref};
+  \node (a5) at ( 6.0,4) [cell] {\ttfamily Ref};
+  \node (a6) at ( 7.5,4) [cell] {\ttfamily ...};
+  \node (a7) at ( 9.0,4) [cell] {\ttfamily Steffie};
+  \node (a8) at (10.5,4) [cell] {\ttfamily ...};
+  \node (a9) at (12.0,4) [cell] {\ttfamily ...};
+  \node (a0) at (13.5,4) [cell] {\ttfamily ...};
+
+  \node (A2) [below=2mm of a2, color=teal] {\tiny 0x2800};
+  \node (A3) [below=2mm of a3]             {\tiny 0x2801};
+  \node (A4) [below=2mm of a4]             {\tiny 0x2802};
+  \node (A5) [below=2mm of a5]             {\tiny 0x2803};
+  \node (A7) [below=2mm of a7]             {\tiny 0x64F4};
+  \node (A9) [below=2mm of a9]             {\tiny 0xB100};
+  
+  \node (gfpre) [below=0mm of A2, color=teal] {\scriptsize Adresse von \texttt{gf1}};
+  
+  \draw [->] (a2.north) arc [x radius = 3.75, y radius = 0.5, start angle = 180, end angle = 10];
+  
+  \draw [double,->] (7, 3) to (7, 2);
+  \node (call) at (9, 2.5) {\texttt{makeNameUppercase}};
+	
+  \node (b1) at ( 0.0,1) [cell] {\ttfamily ...};
+  \node (b2) at ( 1.5,1) [cell] {\ttfamily Ref};
+  \node (b3) at ( 3.0,1) [cell] {\ttfamily Ref};
+  \node (b4) at ( 4.5,1) [cell] {\ttfamily Ref};
+  \node (b5) at ( 6.0,1) [cell] {\ttfamily Ref};
+  \node (b6) at ( 7.5,1) [cell] {\ttfamily ...};
+  \node (b7) at ( 9.0,1) [cell] {\ttfamily Steffie};
+  \node (b8) at (10.5,1) [cell] {\ttfamily ...};
+  \node (b9) at (12.0,1) [cell] {\ttfamily STEFFIE};
+  \node (b0) at (13.5,1) [cell] {\ttfamily ...};
+
+  \node (B2) [below=2mm of b2, color=teal] {\tiny 0x2800};
+  \node (B3) [below=2mm of b3]             {\tiny 0x2801};
+  \node (B4) [below=2mm of b4]             {\tiny 0x2802};
+  \node (B5) [below=2mm of b5]             {\tiny 0x2803};
+  \node (B7) [below=2mm of b7]             {\tiny 0x64F4};
+  \node (B9) [below=2mm of b9]             {\tiny 0xB100};
+  
+  \node (gfpost) [below=0mm of B2, color=teal] {\scriptsize Adresse von \texttt{gf1}};
+  
+  \draw [->] (b2.north) arc [x radius = 5.25, y radius = 0.5, start angle = 180, end angle = 10];
+  
+%  \draw [->] (a6.east)arc(120:-115:1.0);		%start angle: stop angle : radius  
+%  \node (step1) at (9,3) {\texttt{data.append(1)}};
+%  \draw [->] (b6.east)arc(120:-115:1.0);
+%  \node (step1) at (9,1) {\texttt{data = data + [2]}};
+\end{tikzpicture}
+\end{center}
+\end{tcolorbox}
+
+Das Symbol \inPy{gf1} ist eine Referenz auf eine Speicherstelle, die selbst wiederum vier Referenzen enthält: Auf \inPy{name}, \inPy{height}, \inPy{upsides} und \inPy{downsides}. Wenn wir nun eine Änderung des Namens programmieren, so wird die Referenz \inPy{name} eben auf eine neue Speicherstelle geschickt. Der Ort, an dem diese Referenz zu finden ist, ändert sich aber nicht; \inPy{gf1} muss nicht \enquote{umziehen}\footnote{Genau wie alle Exfreundinnen, mit denen ich bisher zusammen gewohnt habe.}.
+
+Im folgenden Beispiel dagegen wird in der Funktion eine neue Speicherstelle angelegt; damit sind die Änderungen nach Funktionsaufruf auch nicht mehr sichtbar:
+\begin{codebox}[Beispiel: Lokale Instanz]
+\begin{minted}[linenos]{python}
+# Klasse Exgirlfriend, Instanz gf1 und showEx wie oben
+
+def makePerfect(ex) :
+    ex = Exgirlfriend()
+    ex.name = "The perfect one"
+    ex.height = 1.70
+    ex.upsides = {"very intelligent", "very beautiful", "good taste in music",
+                  "has a dog", "musician", "likes coffee"}
+    print("in makePefect:")
+    showEx(ex)
+    
+makePerfect(gf1)
+print("in module level:")
+showEx(gf1)
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Lokale Instanz]
+\begin{minted}{text}
+in makePefect:
+The perfect one
+  Height      : 1.7
+  Upsides     : 'good taste in music', 'has a dog', 'musician', 'likes coffee',
+                'very intelligent', 'very beautiful'
+  Downsides   : 
+in module level:
+STEFFIE
+  Height      : 1.65
+  Upsides     : 'has a dog', 'beautiful', 'intelligent'
+  Downsides   : 'too attached to her mother', "doesn't like meeting people"
+\end{minted}
+\end{cmdbox}
+
+Der bedeutende Unterschied liegt also in Zeile 4: Hier wird dem lokalen Symbol \inPy{ex} eine Referenz auf eine neue Speicherstelle gegeben (\inPy{Exgirlfriend()} erzeugt quasi eine neue Speicherstelle). In der Funktion \inPy{makePerfect} kann dann wie üblich auf diese Speicherstelle zugegriffen werden; dies ändert aber nichts daran, dass \inPy{gf1} in der Modulebene immer noch auf den ursprünglichen Datensatz zeigt; an \enquote{STEFFIE} ändert sich nichts\footnote{Vielleicht auch besser so -- sonst müsste ich mich fragen, warum wir nicht mehr zusammen sind.}.
+
+Auch ohne, dass dies in der Definition der Klasse angegeben wurde, können einzelnen Instanzen neue Attribute hinzugefügt werden. Dies betrifft dann aber nur \emph{eine spezielle Instanz}, ohne an der Definition der Klasse etwas zu ändern:
+\begin{codebox}[Beispiel: Dynamische Erweiterung]
+\begin{minted}[linenos]{python}
+# Klasse Exgirlfriend wie oben
+
+gf1 = Exgirlfriend()
+gf2 = Exgirlfriend()
+
+gf2.eyeColor = "blue"    # neues Attribut nur für gf2 angelegt
+
+print(gf2.eyeColor)      # Ausgabe: blue
+#print(gf1.eyeColor)     ! Fehler: Attribut "eyeColor" existiert in gf1 nicht.
+\end{minted}
+\end{codebox}
+
+Ebenso kann auch die \emph{Klasse als Ganzes} dynamisch verändert werden. Das bedeutet, wir können neue Attribute erstellen, die jede Instanz der Klasse \enquote{nachträglich} hinzugefügt wird. Dies geschieht einfach über
+\begin{codebox}[Syntax: Klassen dynamisch erweitern]
+\begin{minted}{python}
+Klasse.Attribut = Wert
+\end{minted}
+\end{codebox}
+
+Hier wird also wirklich die \emph{Klasse} genannt, nicht nur eine einzige Instanz. Entsprechend wirkt sich diese Änderung auch auf alle Instanzen (\eg \inPy{gf1, gf2, ...} aus).
+
+\section{Methods}
+Bis hierhin haben wir Klassen nur als etwas aufwändigere Variante eines \inPy{dict}s benutzt: Wir haben Schlüssel-Wertpaare (\eg \inPy{name: "Arista"}) gebildet, und diese mit einem gemeinsamen Symbol ansprechbar gemacht. Jetzt aber erweitern wir Klassen um \emph{Methoden}, \ie Funktionen, die einen speziellen Bezug auf die Instanzen der Klasse haben.
+
+Wir erreichen dies, indem wir die Funktion \emph{in der Klasse} definieren, und als ersten Parameter \inPy{self} verlangen:
+\begin{codebox}[Syntax: Klassen mit Methoden]
+\begin{minted}{python}
+class Klassenname  :
+    def Methode(self, weitereParameter ...) :
+       normaler Code
+\end{minted}
+\end{codebox}
+
+Dieser verpflichtende Parameter \inPy{self} wird automatisch beim Aufruf übergeben, und enthält eine Referenz auf die Instanz, auf die die Methode angewandt werden soll. Aufgerufen werden Methoden ähnlich dem Zugriff auf die Attribute:
+\begin{codebox}[Syntax: Aufruf von Methoden]
+\begin{minted}{python}
+Instanz.Methode(weitereParameter)
+\end{minted}
+\end{codebox}
+
+Dabei müssen wirklich nur \inPy{weitereParameter} übergeben werden; der Wert für \inPy{self} wird durch die Angabe der Instanz ganz zu Beginn dieses Konstrukts schon ermittelt.
+
+Das folgende Beispiel illustriert Klassen mit Methoden sowie ihre Verwendung:
+\begin{codebox}[Beispiel: Klasse mit Methoden]
+\begin{minted}[linenos]{python}
+class Exgirlfriend :
+    name      =  None
+    height    =  None
+    upsides   = {None}
+    downsides = {None}
+    
+    def isShe(self, trait) :
+        return (trait in self.upsides) or (trait in self.downsides)
+
+gf1.name      = "Steffie"
+gf1.height    = 1.65
+gf1.upsides   = {"intelligent", "beautiful", "has a dog"}
+gf1.downsides = {"too attached to her mother", "doesn't like meeting people"}
+
+print("Steffie is intelligent:", gf1.isShe("intelligent"))  # Ausgabe: True
+\end{minted}
+\end{codebox}
+
+Natürlich hätten wir zu diesem Zweck auch eine Funktion \inPy{isExgirlfriend(ex, trait)} schreiben können. Der Vorteil von Methoden liegt darin, dass sie fest einer Klasse zugewiesen sind, und somit nur in einem \enquote{sinnvollen Kontext} verwendet werden können. Der normalen Funktion \inPy{isExgirlfriend(ex, trait)} können wir als ersten Parameter auch eine Instanz der Klasse \inPy{Girlfriend} übergeben. Natürlich hat die Klasse \inPy{Girlfriend} kein Attribut \inPy{downsides}; daher wird unser Programm abstürzen, wenn wir dies versuchen. Bei Methoden hingegen kommen wir gar nicht erst in die Gelegenheit, diesen Fehler zu machen. (Leider gilt diese Typensicherheit nicht für die weiteren Parameter. Methoden nehmen also eine Fehlerquelle ab, nicht aber alle).
+
+Daneben gewinnen wir Freiraum bei der Namensgebung: Die Klasse \inPy{Girlfriend} kann ihre eigene Methode \inPy{isShe(self, trait)} haben. Diese Methode kann auf eine beliebige Art implementiert werden und so der Tatsache Rechnung tragen, dass die Klasse \inPy{Girlfriend} eben kein Attribut \inPy{downsides} hat. Obwohl die Implementierung sich unterscheidet, sind beide Methoden in der Anwendung gleich. Wir können sowohl \inPy{oneOfMyExGirlfriends.isShe("beautiful")} als auch \inPy{myGirlfriend.isShe("beautiful")} setzen, und erhalten ein sinnvolles Ergebnis. Dies ist wichtig, sobald Ihre Codes länger als ein paar Zeilen werden. Sie müssen dann nicht mehr so viele Details über Ihr Programm im Kopf behalten (hieß das Programm jetzt \inPy{isExGirlfriend} oder \inPy{isExgirlfriend}?), sondern können darauf vertrauen, dass ähnliche Klassen auch ein ähnliches \emph{Interface} bieten (\ie dass die Methoden gleich heißen und gleiche Parameter verlangt werden).
+
+Methoden dürfen auch ohne Parameter definiert werden, müssen aber immer noch das obligatorische \inPy{self} entgegen nehmen. Damit können wir folgenden Code schreiben, und damit die vergangenen Beziehungen miteinander vergleichen:
+\begin{codebox}[Beispiel: Klasse mit Methode ohne Parameter]
+\begin{minted}[linenos]{python}
+class Exgirlfriend :
+    traits = {
+        "intelligent"                 :   5,
+        "very intelligent"            :  10,
+        "beautiful"                   :   3,
+        "very beautiful"              :   5,
+        "good taste in music"         :   2,
+        "doesn't like coding"         : - 4,
+        "doesn't like meeting people" : - 4,
+        "cheated on me"               : -20
+    }
+    name      =  None
+    height    =  None
+    upsides   = {None}
+    downsides = {None}
+    
+    def quality(self) :
+        reVal = 0
+        for trait in self.upsides :
+            if trait in self.traits : reVal += self.traits[trait]
+            else                    : reVal += +1
+        for trait in self.downsides :
+            if trait in self.traits : reVal += self.traits[trait]
+            else                    : reVal += -1
+        return reVal
+
+
+gf1.name      = "Steffie"
+gf1.height    = 1.65
+gf1.upsides   = {"intelligent", "beautiful", "has a dog"}
+gf1.downsides = {"too attached to her mother", "doesn't like meeting people"}
+
+print("Rating of time with ", gf1.name, ": ", gf1.quality(), sep = "")
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Klasse mit Methode ohne Parameter]
+\begin{minted}{text}
+Rating of time with Steffie: 4
+\end{minted}
+\end{cmdbox}
+
+Das Attribut \inPy{traits} ist Teil der Klasse \inPy{Exgirlfriends}. Damit hat also auch jede Instanz ein eigenes Feld, in dem Bewertungskriterien eingetragen werden können. Wir haben also die Möglichkeit, \enquote{nochmal nachzujustieren}. Vielleicht war Arista zwar \enquote{nur} \inPy{"beautiful"}, aber doch um ein bisschen hübscher als Steffie. Wir könnten also folgenden -- fehlerhaften! -- Code schreiben (in den wir aus didaktischen Gründen auch Zeile 23 einfügen und im Anschluss erklären):
+\begin{warnbox}[Beispiel: Versehentliches Ändern von Referenzen, leftupper=7mm]
+\begin{minted}[linenos]{python}
+# Klasse Exgirlfriend wie oben
+
+gfs = [Exgirlfriend(), Exgirlfriend(), Exgirlfriend()]
+
+gfs[0].name      = "Steffie"
+gfs[0].height    = 1.65
+gfs[0].upsides   = {"intelligent", "beautiful", "has a dog"}
+gfs[0].downsides = {"too attached to her mother", "doesn't like meeting people"}
+gfs[1].name      = "Arista"
+gfs[1].height    = 1.60
+gfs[1].upsides   = {"very intelligent", "beautiful", "good taste in music"}
+gfs[1].downsides = {"doesn't like coding", "doesn't like coffee"}
+gfs[2].name      = "Katja"
+gfs[2].height    = 1.81
+gfs[2].upsides   = {"intelligent", "very beautiful", "musician"}
+gfs[2].downsides = {"moody", "cheated on me"}
+
+print("Evaluation 1:")
+for gf in gfs :
+  print(gf.name, ": ", gf.quality(), sep="")
+
+gfs[1].traits["beautiful"] = 3.5
+gfs[2].traits = dict()
+
+print("\nEvaluation 2:")
+for gf in gfs :
+  print(gf.name, ": ", gf.quality(), sep="")
+\end{minted}
+
+\end{warnbox}
+\begin{cmdbox}[Ausgabe: Versehentliches Ändern von Referenzen]
+\begin{minted}{text}
+Evaluation 1:
+Steffie: 4
+Arista: 10
+Katja: -10
+
+Evaluation 2:
+Steffie: 4.5
+Arista: 10.5
+Katja: 1
+\end{minted}
+\end{cmdbox}
+
+Obwohl wir scheinbar nur die \inPy{traits} von \inPy{gfs[1]} (also Arista) ändern, sehen wir in der Evaluation 2, dass sich auch die Bewertung von Steffie geändert hat! Dagegen hatte Zeile 23 -- das völlige Löschen der Bewertungskriterien -- nur Einfluss auf Katja.
+
+Grund ist wie schon öfter, dass Python mit Referenzen arbeitet. Jede Instanz von \inPy{Exgirlfriend} hat zwar seine eigene \emph{Referenz} \inPy{traits}; diese können jedoch auf dieselbe Speicherstelle zeigen. In Zeile 22 wird damit das \emph{gemeinsame} \inPy{dict} der Bewertungskriterien von allen drei \inPy{Exgirlfriend}s geändert. Zeile 24 dagegen legt ein komplett neues (leeres) \inPy{dict} an und gibt eine Referenz auf dieses neue \inPy{dict} an Katja.
+
+\section{Magic Methods (Dunders)}
+Einige Namen für Methoden werden automatisch an bestimmten Stellen aufgerufen. 
+
+\subsection{Initializer: \inPy{__init__}}
+\subsection{Rechenoperatoren: \inPy{__add__}, \inPy{__sub__}, \inPy{__mul__}, \inPy{__truediv__}, \inPy{__floordiv__}}
+\subsection{Rechtsseitige Rechenoperatoren: \inPy{__radd__}, \inPy{__rsub__}, \inPy{__rmul__}, \inPy{__rtruediv__}, \inPy{__rfloordiv__}}
+\subsection{Vergleich: \inPy{__eq__}, \inPy{__gt__}, \inPy{__ge__}, \inPy{__lt__}, \inPy{__le__}}
+\subsection{Darstellung: \inPy{__str__} und \inPy{__repr__}}
+\subsection{Zahl der Elemente: \inPy{__len__}}
+\subsection{Absolutbetrag: \inPy{__abs__}}
+\subsection{Gebrauch als Funktion: \inPy{__call__}}
+\begin{codebox}[Beispiel: Aufrufbare Instanzen]
+\begin{minted}[linenos]{python}
+class Exgirlfriend :
+    # wie oben
+    
+    def __call__(self) :
+        print("You shouldn't call your Ex'es. Leave the past behind")
+
+ex = Exgirlfriend("Sandra", 1.70)
+ex()
+\end{minted}
+\end{codebox}
+
+\section{Inheritance}
+\section{Iterables}
+\section{Functors}
+\section{Decorators}
