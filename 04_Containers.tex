@@ -51,6 +51,7 @@ Man kann sich den Arbeitsspeicher als langes Band von kleinen, nummerierten Spei
 \end{tikzpicture}
 \end{center}
 \end{tcolorbox}
+{\captionof{figure}{Speicherbild: nummerierte Zellen}}
 
 Während wir der Einfachheit halber oft sagen, dass eine Variable einen \emph{Wert} speichert, ist tatsächlich die Information hinterlegt, \emph{wo der Wert selbst zu finden ist}, also die Adresse des Wertes. Dies hat den Vorteil, dass Aufgaben sehr effizient erledigt werden können, wenn große Datenmengen bewegt werden müssen: anstatt viele Megabytes zu kopieren, muss nur eine Referenz an die Stelle gesetzt werden, wo die zu kopierenden Daten bereits im Speicher liegen. Für uns als ProgrammiererInnen heißt dies aber auch, dass wir diese Speicherstruktur im Hinterkopf behalten müssen.
 
@@ -101,6 +102,7 @@ Stellen Sie sich vor, Sie verwalten eine Liste. Diese soll über den Variablenna
 \end{tikzpicture}
 \end{center}
 \end{tcolorbox}
+{\captionof{figure}{Speicherbild: Arbeitskopie}}
 
 Wenn Sie nun die Codezeile
 \begin{center}
@@ -153,6 +155,8 @@ tippen, werden Sie aufgrund dieser Arbeitsweise von Python aber folgendes Speich
 \end{tikzpicture}
 \end{center}
 \end{tcolorbox}
+{\captionof{figure}{Speicherbild: Zwei Referenzen auf dieselben Daten}}
+
 Anstatt eine Kopie der Liste anzulegen, haben Sie nur eine \emph{Kopie der Referenz} erzeugt. Ein Zugriff über das Symbol \inPy{copyOfList} ändert also immer noch Ihr Original!
 
 Um nun das gewünschte Ziel zu erreichen, müssen Sie stattdessen die Funktion \inPy{copy} aus dem Modul \inPy{copy} benutzen:
@@ -241,7 +245,9 @@ print( id(a) == id(b) )
 print(    a  is    b  )
 \end{minted}
 \end{codebox}
-
+\end{hintbox}
+%
+\begin{hintbox}[]
 Beachten Sie, dass diese Bedeutung des Operators \inPy{is} manchmal unintuitives Verhalten erzeugt:
 \begin{warnbox}[Unintuitives Verhalten von \texttt{is}]
 \begin{minted}{python}
@@ -249,9 +255,7 @@ Beachten Sie, dass diese Bedeutung des Operators \inPy{is} manchmal unintuitives
 \end{minted}
 \end{warnbox}
 dieser Ausdruck wird zu \inPy{True} ausgewertet, obwohl offensichtlich $5 \neq 4$ gilt.
-\end{hintbox}
-%
-\begin{hintbox}[]
+
 Dies lässt sich folgendermaßen begründen:
 
 Python wertet zunächst den ersten Teil der Aussage (\inPy{5 == 4}) zu \inPy{False} aus. Dieser Wert ist ein häufig gebrauchter, und wurde daher von Python bereits vorbereitet, hatte also schon vor diesem ersten Rechenschritt eine Adresse. Diese Adresse wird dem Ausdruck \inPy{5 == 4} zugeordnet.
@@ -268,7 +272,7 @@ Der Datentyp \inPy{list} repräsentiert -- wie der Name vermuten lässt -- Liste
 \subsection{Anlegen und Auslesen}
 Erstellt werden Listen, indem man in [eckigen Klammern] die Elemente der Liste durch Kommata getrennt aufzählt:
 \begin{codebox}[Syntax: Liste anlegen]
-listVariable = [listItems]
+listVariable = [listItem1, listItem2, ...]
 \end{codebox}
 
 Listen dürfen auch leer sein. Eine leere Liste wird als \inPy{[]} geschrieben.
@@ -529,7 +533,7 @@ print( "jobs to do: ", jobs)
 \begin{cmdbox}[Ausgabe]
 \begin{minted}{text}
 next job  : write the chapter
-jobs to do: ['go have a copy', 'think of some nice examples']
+jobs to do: ['go have a coffee', 'think of some nice examples']
 \end{minted}
 \end{cmdbox}
 
@@ -949,8 +953,7 @@ print( houses )
 \end{cmdbox}
 
 \section{Überblick}
-\begin{table}[h!]
-\newcolumntype{D}{>{\centering\arraybackslash}m{.15 \textwidth}}
+{\newcolumntype{D}{>{\centering\arraybackslash}m{.15 \textwidth}}
 \newcolumntype{K}{>{\centering\arraybackslash}m{.36 \textwidth}}
 \newcolumntype{M}{>{\centering\arraybackslash}m{.12 \textwidth}}
 \newcolumntype{N}{>{\centering\arraybackslash}m{.25 \textwidth}}
@@ -1006,8 +1009,7 @@ print( houses )
 	
 	\bottomrule[1.5pt]
 \end{tabularx}
-\end{table}
-
+\captionof{table}{Überblick über die verschiedenen Container-Datentypen in Python}}
 
 \begin{figure}
 	\centering

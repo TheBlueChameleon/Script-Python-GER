@@ -17,15 +17,16 @@ Wir können uns in dem Kontext eine Tabelle vorstellen, in der ich meine Verflos
 
 \begin{tcolorbox}[title=Eine Liste von Liebschaften]
 \begin{center}
+\rowcolors{1}{tabhighlight}{tabcontrast}
 \begin{tabular}{c|ccp{.3\linewidth}p{.3\linewidth}}
 	\textbf{Symbol} & \textbf{Name} & \textbf{Height} & \textbf{Upsides}                                 & \textbf{Downsides} \tabcrlf
 	\texttt{gf1}    & Steffie       & 1.65 m          & intelligent, beautiful, has a dog                & too attached to her mother, 
-																																																				doesn't like meeting people \tabcrlf
-	\texttt{gf2}    & Arista        & 1.60 m          & very intelligent, beautiful, good taste in music & doesn't like coffee, doesn't like coding \tabcrlf
+																																																				doesn't like meeting people \\
+	\texttt{gf2}    & Arista        & 1.60 m          & very intelligent, beautiful, good taste in music & doesn't like coffee, doesn't like coding \\
 	\texttt{gf3}    & Katja         & 1.81 m          & intelligent, very beautiful, musician            & moody, cheated on me
 \end{tabular}
 \end{center}
-Ich sollte anmerken, dass diese Tabelle keine echten Menschen beschreibt. Weder die Namen noch die Eigenschaften stimmen mit tatsächlichen Exfreundinnen überein. Die genannten Eigenschaften sollen Anschauliche Beispiele geben, sind aber nicht als Wertung von Eigenschaften im echten Leben zu verstehen.
+Ich sollte anmerken, dass diese Tabelle keine echten Menschen beschreibt. Weder die Namen noch die Eigenschaften stimmen mit tatsächlichen Exfreundinnen überein. Die genannten Eigenschaften sollen anschauliche Beispiele geben, sind aber nicht als Wertung von Eigenschaften im echten Leben zu verstehen.
 \end{tcolorbox}
 
 Dies wollen wir nun in Code abbilden. Wir beschreiben also die \emph{Klasse Exfreundin}. Dazu brauchen wir ein neues Syntaxelement:
@@ -114,6 +115,7 @@ STEFFIE
 
 Um zu verstehen, warum diese Änderung durch \inPy{makeNameUppercase} auch weitergegeben wird, sollten wir uns nochmal ein Bild des Arbeitsspeichers zeichnen:
 
+\parbox{\linewidth}{
 \begin{tcolorbox}[title=Speicherbild]
 \begin{center}
 \begin{tikzpicture}
@@ -177,6 +179,7 @@ Um zu verstehen, warum diese Änderung durch \inPy{makeNameUppercase} auch weite
 \end{tikzpicture}
 \end{center}
 \end{tcolorbox}
+\captionof{figure}{Speicherbild: Klasse als Sammlung von Referenzen}}
 
 Das Symbol \inPy{gf1} ist eine Referenz auf eine Speicherstelle, die selbst wiederum vier Referenzen enthält: Auf \inPy{name}, \inPy{height}, \inPy{upsides} und \inPy{downsides}. Wenn wir nun eine Änderung des Namens programmieren, so wird die Referenz \inPy{name} eben auf eine neue Speicherstelle geschickt. Der Ort, an dem diese Referenz zu finden ist, ändert sich aber nicht; \inPy{gf1} muss nicht \enquote{umziehen}\footnote{Genau wie alle Exfreundinnen, mit denen ich bisher zusammen gewohnt habe.}.
 
@@ -407,6 +410,8 @@ ex()
 \end{codebox}
 
 \section{Inheritance}
+%ExGfWithEyes erbt von ExGf; benutzt super() um eyeColor an __str__ anzuhängen.
+
 \section{Iterables}
 \section{Functors}
 \section{Decorators}

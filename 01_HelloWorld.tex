@@ -498,7 +498,7 @@ print(a, b, "konstanter Text", a * "x")
 \end{minted}
 \end{codebox}
 
-\begin{cmdbox}[Ausgabe]
+\begin{cmdbox}[Ausgabe: Ausgabe von Werten mit \texttt{print}]
 2 17.0 konstanter Text xx
 \end{cmdbox}
 
@@ -531,6 +531,187 @@ a = 2 + \
 \end{codebox}
 
 
+\section{Formatierte Strings}
+Wir können Strings erzeugen, in denen die Werte von Variablen als Text dargestellt werden. Zu diesem Zweck haben wir bereits die Funktion \inPy{str} kennengelernt. Wir wissen auch, dass wir Strings durch die Addition verketten können. Ein bequemerer Weg kann über \emph{Format-Strings} erreicht werden:
+\begin{codebox}[Syntax: Format-String]
+\begin{minted}{python}
+f"normaler Text {Ausdruck} mehr normaler Text {weiterer Ausdruck:Format} ..."
+\end{minted}
+\end{codebox}
+
+Ein Format-String beginnt also mit einem vorangestellten \inPy{f}, und wird ebenso von doppelten Anführungszeichen \inPy{""} eingeschlossen, wie ein normaler String. Er kann -- muss aber nicht -- beliebig lange Blocks von Text enthalten, die 1:1 in das Endergebnis übernommen werden. Neu gegenüber normalen Strings sind Blöcke der Form \inPy{{Ausdruck}} und \inPy{{Ausdruck : Format}}.
+
+Wie schon zuvor auch steht \inPy{Ausdruck} für eine Variable, eine Zahl oder eine komplette Rechnung. Der Ausdruck wird zuerst \emph{evaluiert} (\enquote{ausgerechnet}), und dann in den String eingebaut. Die \{geschweiften Klammern\} sind nicht Teil des Endprodukts, sondern zeigen dem Interpreter an, dass hier eine Ersetzung gemacht werden muss.
+
+\begin{codebox}[Beispiel: Formatstrings]
+\begin{minted}[linenos]{python}
+a = 1
+b = 2
+s = f"a + b = {a + b}"
+print(s)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Formatstrings]
+a + b = 3
+\end{cmdbox}
+
+Dieser Code ist im Ergebnis gleichwertig zu 
+\begin{codebox}[Beispiel: Gleichwertiger Code ohne Formatstrings]
+\begin{minted}[linenos]{python}
+a = 1
+b = 2
+s = "a + b = " + str(a + b)
+print(s)
+\end{minted}
+\end{codebox}
+
+Wenn Sie tatsächlich \{geschweifte Klammern\} im Ergebnis brauchen, so erreichen sie dies, indem Sie im Formatstring ein doppeltes Klammerpaar setzen:
+\begin{codebox}[Beispiel: Formatstrings mit Escape-Sequenz]
+\begin{minted}[linenos]{python}
+a = 1
+b = 2
+s = f"{{a + b}} = {{{a + b}}}"
+print(s)
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Formatstrings mit Escape-Sequenz]
+\begin{minted}{text}
+{a + b} = {3}
+\end{minted}
+\end{cmdbox}
+
+Im Syntax-Kasten wurde bereits angedeutet, dass abgetrennt durch einen Doppelpunkt noch weitere Angaben zur Formatierung folgen dürfen. In Abschnitt \ref{sec:FormatStringsTable} finden Sie eine Übersicht der unterstützten Formatzeichen. Hier seien nur einige besonders nützliche Beispiele gezeigt:
+
+Die einfachste Formatvorgabe, die sie setzen können, ist eine Zahl. Diese Zahl gibt dann an, wie viele Zeichen zur Darstellung des Ausdrucks verwendet werden sollen. Auf diese Weise können Sie bequem tabellarische Ansichten erstellen:
+
+\begin{codebox}[Beispiel: Formatstrings mit Vorgabe der Zeichenlänge]
+\begin{minted}[linenos]{python}
+name1 = "Dusky"
+score1 = 9001
+name2 = "Joe"
+score2 = 666
+
+print(f"{name1:20}: {score1:5}")
+print(f"{name2:20}: {score2:5}")
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Formatstrings mit Vorgabe der Zeichenlänge]
+\begin{minted}{text}
+Dusky               :  9001
+Joe                 :   666
+\end{minted}
+\end{cmdbox}
+
+Beachten Sie, dass zwischen dem Doppelpunkt und dem Format \emph{kein} Leerzeichen stehen darf (bzw. dass ein solches eine besondere Funktion hat -- siehe weiter unten)
+
+Wie Sie sehen, werden Strings linksbündig ausgegeben, während Zahlen rechtsbündig formatiert werden. Diese Standard-Einstellung kann durch ein vorangestelltes \inPy{<}, \inPy{>} oder \inPy{^} überschrieben werden:
+\begin{codebox}[Beispiel: Formatstrings und Alignment]
+\begin{minted}[linenos]{python}
+text  = "sample"
+value = 123
+print( f"|{text:15}| |{value:15}|" )
+print(f"|{text:<15}| |{value:<15}|")
+print(f"|{text:>15}| |{value:>15}|")
+print(f"|{text:^15}| |{value:^15}|")
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Formatstrings mit Vorgabe der Zeichenlänge]
+\begin{minted}{text}
+|sample         | |            123|
+|sample         | |123            |
+|         sample| |            123|
+|    sample     | |      123      |
+\end{minted}
+\end{cmdbox}
+
+Ist der Ausdruck zu lang, um mit der vorgegebenen Zeichenzahl gedruckt zu werden, so ignoriert Python die Zeichenzahl und druckt den vollen Text. Durch einen Punkt vor der Zahl bringen Sie Python dazu, stattdesen die Ausgabe abzuschneiden. Dies funktioniert jedoch nur bei Strings, und kann nicht mit den Zeichen \inPy{<}, \inPy{>} oder \inPy{^} kombiniert werden:
+\begin{codebox}[Beispiel: Formatstrings und String-Truncation]
+\begin{minted}[linenos]{python}
+text = "very long sample text"
+print( f"|{text:.4}|" )
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Formatstrings und String-Truncation]
+\begin{minted}{text}
+|very|
+\end{minted}
+\end{cmdbox}
+
+Natürlich können die Effekte durch Hilfsvariablen dennoch kombiniert werden:
+\begin{codebox}[Beispiel: Kombination von Formatierungen über Hilfsvariablen]
+\begin{minted}[linenos]{python}
+value = 1234567890
+step1 = f"{value}"         # zu String
+step2 = f"{step1:.5}"      # Länge beschränken
+final = f"|{step2:^10}|"   # zentrieren
+print(final)
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Formatstrings und String-Truncation]
+\begin{minted}{text}
+|  12345   |
+\end{minted}
+\end{cmdbox}
+
+Bei \emph{Zahlen} dient ein vorangestelltes Leerzeichen im Formatstring als Platzhalter für ein eventuelles Vorzeichen. Alternativ kann auch ein Pluszeichen (\inPy{+}) gesetzt werden, um anzudeuten, dass das Vorzeichen \emph{immer} Teil des Ergebnisses sein soll, selbst wenn die Zahl positiv ist:
+\begin{codebox}[Beispiel: Formatstrings und Vorzeichen]
+\begin{minted}[linenos]{python}
+pos =  10
+neg = -10
+print(f"|{pos: 15}| |{neg: 15}|")
+print(f"|{pos:+15}| |{neg:+15}|")
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Formatstrings und Vorzeichen]
+\begin{minted}{text}
+|             10| |            -10|
+|            +10| |            -10|
+\end{minted}
+\end{cmdbox}
+
+Eine vorangestellte \inPy{0} füllt den zur Verfügung gestellten Platz mit Nullen auf. Dies ist mit Leerzeichen und Pluszeichen kombinierbar: 
+\begin{codebox}[Beispiel: Formatstrings und führende Nullen]
+\begin{minted}[linenos]{python}
+pos =  10
+neg = -10
+print(f"|{pos: 015}| |{neg: 015}|")
+print(f"|{pos:+015}| |{neg:+015}|")
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Formatstrings und führende Nullen]
+\begin{minted}{text}
+| 00000000000010| |-00000000000010|
+|+00000000000010| |-00000000000010|
+\end{minted}
+\end{cmdbox}
+
+Speziell für Fließkommazahlen gibt es das Zeichen \inPy{f}, das eine Steuerung der Anzeige von Nachkommastellen ermöglicht:
+\begin{codebox}[Beispiel: Formatstrings und Fließkommazahlen]
+\begin{minted}[linenos]{python}
+num = 1.2
+print(f"|{num}|")
+print(f"|{num:f}|")
+print(f"|{num:6.2f}|")
+print(f"|{num:<6.1f}|")
+print(f"|{num:06.2f}|")
+print(f"|{num:+06.2f}|")
+print(f"|{num: 06.2f}|")
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Formatstrings und Fließkommazahlen]
+\begin{minted}{text}
+|1.2|
+|1.200000|
+|  1.20|
+|1.2   |
+|001.20|
+|+01.20|
+| 01.20|
+\end{minted}
+\end{cmdbox}
+
+Ein einzelnes \inPy{f} stellt die Zahl mit 6 Nachkommastellen dar, und füllt gegebenenfalls mit Nullen auf, falls weniger Dezimalstellen zur Zahl gehören. In der Form \inPy{x.yf} werden insgesamt \inPy{x} Zeichen zur Darstellung der Zahl bereitgestellt (Komma und Vorzeichen mitgezählt). Die Zahl wird mit \inPy{y} Nachkommastellen ausgegeben und gegebenenfalls mit Nullen aufgefüllt. Dies ist kombinierbar mit den Alignment-Zeichen \inPy{<}, \inPy{>} und \inPy{^}. Auch führende Nullen, Leerzeichen oder erzwungenes Vorzeichen funktionieren wie oben beschrieben.
 
 \section{Obfuscated Code}
 Sie werden feststellen, dass es zu einer Aufgabe sehr viele \emph{funktionierende} Lösungen gibt. Dass Code funktioniert, reicht uns aber nicht. Code soll auch leicht lesbar und verständlich sein. Bedenken Sie: die Aufgaben, die Sie hier lösen, sind in der Regel kein Selbstzweck, sondern Bausteine für größere Projekte. Wenn die einzelnen Teillösungen schwer zu verstehen sind, werden sie auch umso beschwerlicher als Lösung in andere Probleme einbaubar sein.

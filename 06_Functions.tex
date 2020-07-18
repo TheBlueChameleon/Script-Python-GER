@@ -19,7 +19,7 @@ for k in range(1, iterations) :
     denominator  *= k
     EulersNumber += x / denominator
 
-print ("exp(", x0, ") is approximately", EulersNumber)
+print(f"exp({x0}) is approximately {EulersNumber}")
 \end{minted}
 \end{codebox}
 
@@ -72,9 +72,9 @@ def expFunction(x0) :
     
     return result
 
-EulersNumber = expFunction(1.0)          # Aufruf, Speichern in Variable
-print("Eulers Number is", EulersNumber)
-print("e³ =", expFunction(3.0))          # Weitergabe an andere Funktion
+EulersNumber = expFunction(1.0)             # Aufruf, Speichern in Variable
+print(f"Eulers Number is {EulersNumber}")
+print(f"e³ = {expFunction(3.0)}")           # Weitergabe an andere Funktion
 \end{minted}
 \end{codebox}
 
@@ -219,7 +219,6 @@ def foobar(data) :
     data.append(1)
     data = data + [2]
     print("in foobar: data =", data)
-
 data = []
 foobar(data)
 print("on module level: data =", data)
@@ -240,6 +239,7 @@ In Abschnitt \ref{sec:MemoryModel} hatten wir uns klar gemacht, dass Variablen i
 
 In Zeile 3 dagegen wird eine \emph{neue} Liste berechnet (nämlich \inPy{[1, 2]}). Diese neue Liste wird an einer eigenen Speicherstelle angelegt, überschreibt also nicht die alten Daten an der Adresse \inPy{data}. Wir speichern in Zeile 3 die Adresse in der \emph{lokalen} Variablen \inPy{data}. Das bedeutet, die Funtion \inPy{foobar} weiß nun nicht mehr, wo die Original-Liste sich befindet, sondern kann nur noch die Liste \inPy{[1 ,2]} ausgeben -- und dies geschieht auch in Zeile 4. Die ursprüngliche Liste besteht aber weiterhin. Wo diese sich befindet, ist immer noch in der Variablen \inPy{data} des Modul-Levels gespeichert. Wir sehen daher in Zeile 8 das Ergebnis von \inPy{append} (da dies die Adresse von \inPy{data} nicht verändert hat), nicht aber das Ergebnis von \inPy{data = data + [2]} (da hierfür eine neue Liste angelegt wurde).
 
+\parbox{\linewidth}{
 \begin{tcolorbox}[title=Speicherbild]
 \begin{center}
 \begin{tikzpicture}
@@ -308,7 +308,7 @@ In Zeile 3 dagegen wird eine \emph{neue} Liste berechnet (nämlich \inPy{[1, 2]}
 \end{tikzpicture}
 \end{center}
 \end{tcolorbox}
-
+\captionof{figure}{Entwicklung einer \inPy{list} als Funktionsparameter}}
 
 Durchdenken wir nun auch dieses Beispiel:
 \begin{codebox}[Beispiel: Übergabe von Immutables]
@@ -379,14 +379,13 @@ Ein Fall, in dem es sinnvoll sein kann, von diesem Leitsatz abzuweichen, sind Na
 In diesem Fall ist es also durchaus angebracht, Code zu schreiben wie:
 \begin{codebox}[Beispiel: globale Konstante]
 \begin{minted}[linenos]{python}
-gravitationalConstant = 6.674E-11
+GRAVITATIONALCONSTANT = 6.674E-11
 
 def forceBetweenBodies(radius, mass1, mass2) :
-  return gravitationalConstant * mass1 * mass2 / (radius**2)
+  return GRAVITATIONALCONSTANT * mass1 * mass2 / (radius**2)
 \end{minted}
 \end{codebox}
-
-Eine häufig angewandte Konvention ist auch, Konstanten nur mit GROSSBUCHSTABEN zu benennen.
+Konstanten werden häufig in GROSSBUCHSTABEN gesetzt, um die ProgrammiererInnen daran zu erinnern, dass diese nicht geändert werden sollten.
 \end{hintbox}
 
 Wenn versucht wird, innerhalb einer Funktion ein Symbol des Modul-Levels umzudefinieren, so legt Python stattdessen eine neue \emph{lokale} Variable an. Das heißt, der Bezug auf die ursprüngliche Variable geht verloren, und in der Funktion ist nur der neue Wert verfügbar. Auf die Modulebene hat dies keinen Einfluss.
@@ -561,7 +560,7 @@ print(average(1, 2, 3, 4, 5))    # Ausgabe: 3.0
 \end{minted}
 \end{codebox}
 
-Die \emph{fünf einzelnen Werte \inPy{1, 2, 3, 4, 5}} werden also zu \emph{einem einziglen \inPy{tuple args = (1, 2, 3, 4, 5)}} zusammengefasst.
+Die \emph{fünf einzelnen Werte} \inPy{1, 2, 3, 4, 5} werden also zu \emph{einem einziglen} \inPy{tuple args = (1, 2, 3, 4, 5)} zusammengefasst.
 
 Aus naheliegenden Gründen darf es nur einen variadischen Parameter pro Funktion geben -- andernfalls könnte der Python-Interpreter nicht zuordnen, welcher Wert zu welcher Liste gehören sollte.
 
@@ -772,7 +771,7 @@ Die Zeilen 10 und 11 dienen dazu, einen rudimentären Plot unserer Funktion zu e
 import math
 
 def dsin (x) :
-    return (f(x + epsilon) - f(x)) / epsilon
+    return (sin(x + epsilon) - sin(x)) / epsilon
 \end{minted}
 \end{codebox}
 

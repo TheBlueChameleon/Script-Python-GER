@@ -75,6 +75,8 @@ Der Schleifenkörper wird nie ausgeführt, wenn die Bedingung nicht bereits vor 
 
 \begin{hintbox}[Endlosschleifen]
 Manchmal möchte man, dass ein Programm auf unbestimmte Zeit läuft. Code, der die Messwerte einer Wetterstation verarbeitet, soll dies vielleicth \enquote{für immer} tun. In diesem Fall bietet sich eine Endlosschleife an:
+\end{hintbox}
+\begin{hintbox}[]
 \begin{codebox}[Code: Endlosschleife]
 \begin{minted}[linenos]{python}
 while True:
@@ -247,7 +249,7 @@ Als \emph{Container} dienen besonders häufig \inPy{range}-Objekte. Wann immer e
 \begin{minted}[linenos]{python}
 print("the first 10 square numbers are:")
 for i in range(10) :
-    print(i, "² = ", i**2, sep="")
+    print(f"{i}² = {i**2}")
 \end{minted}
 \end{codebox}
 
@@ -345,7 +347,7 @@ tasklist = ["write the script", "drink some coffee", "drink more coffee"]
 
 print("Your tasks today:")
 for i, task in enumerate(tasklist) :
-    print(i + 1, ". ", task, sep="")
+    print(f"{i + 1}. {task}")
 \end{minted}
 \end{codebox}
 
@@ -371,11 +373,7 @@ data2 = [1.8, 2.0, -3.8]
 
 print("Difference in datasets:")
 for i, t in enumerate(zip(data1, data2)) :
-    print(
-        "Datapoint ", i, ": ", t, 
-        " differs by : ", t[0] - t[1], 
-        sep=""
-    )
+    print(f"Datapoint {i}: {t} differs by : {t[0] - t[1]}")
 \end{minted}
 \end{codebox}
 
@@ -397,16 +395,16 @@ houseStark = {"Sigil" : "A grey direwolf on a white field",
 
 print("Summary of House Stark:")
 for key, value in houseStark.items() :
-    print(key, ":\t", value, sep="")
+    print(f"{key:5}: {value}")
 \end{minted}
 \end{codebox}
 
 \begin{cmdbox}[Ausgabe: \texttt{for} mit \texttt{dict}s]
 \begin{minted}{text}
 Summary of House Stark:
-Sigil:  A grey direwolf on a white field
-Words:  Winter Is Coming
-Seat:   Winterfell
+Sigil: A grey direwolf on a white field
+Words: Winter Is Coming
+Seat : Winterfell
 \end{minted}
 \end{cmdbox}
 
@@ -488,7 +486,8 @@ variable = [ expression for element in iterable ]
 print(evenSquares)
 \end{minted}
 \end{codebox}
-Dabei sind
+
+Dabei sind:
 \begin{itemize}
 \item \inPy{iterable} ein beliebiger Datencontainer, wie in allen vorigen Beispielen
 \item \inPy{element} eine Variable, über die nacheinander die einzelnen Elemente aus \inPy{iterable} durchgelesen werden. Auch hier können Tupel entpackt werden. In
@@ -525,7 +524,7 @@ Der Code erzeugt also eine \emph{Liste von Listen}:
 \begin{hintbox}[Sprechende Variablennamen]
 Im obigen Beispiel \emph{Telefonmatrix} taucht die Variable \inPy{row} zum ersten Mail in Zeile 2 auf, obwohl erst in Zeile 3 erklärt wird, welche Werte \inPy{row} haben wird, oder um welche Art von Werten (Integer, Fließkommazahlen, Strings, Container, ...) es sich überhaupt handelt. \emph{Strukturell} kommen wir also in die Gefahr von schwer lesbarem Code, und haben damit eine Fehlerquelle. Durch die Benennung der Variablen ist aber dennoch schnell klar, was hier passiert. Die Variablen \inPy{row} und \inPy{column} bezeichnen die Nummer von Zeile und Spalte einer Matrix, sind also Integers zwischen 0 und einer Obergrenze, die sich aus der Größe der Matrix ergibt.
 
-Solche Überlegungen zur Benennung der Objekte sind extrem wichtig in auch nur mittelgroßen Projekten. Geben Sie nicht der Versuchung nach, Variablen aus Bequemlichkeit einfach \inPy{a, b, c, ...} zu nennen, sondern überlegen Sie, welche Art von Information darin abgelegt werden soll, und schreiben dies dann auch aus! Auch Abkürzungen sollten vermieden werden, da sich hierbei oft Fehler einschleichen. Hieß die Variable nun \inPy{numElmL} oder \inPy{nel} oder \inPy{nElements}? Diese Frage stellt sich nicht, wenn Sie sich die kleine Mühe machen, konsequent \inPy{numberElementsList} zu tippen; Sie sparen sich dadurch die große Mühe, häufig zurück zu scrollen und Fehler auszumerzen, die sich daraus ergeben, dass Sie mal \inPy{numElmL} und mal \inPy{numElml} getippt haben.
+Solche Überlegungen zur Benennung der Objekte sind extrem wichtig in auch nur mittelgroßen Projekten. Geben Sie nicht der Versuchung nach, Variablen aus Bequemlichkeit einfach \inPy{a, b, c, ...} zu nennen, sondern überlegen Sie, welche Art von Information darin abgelegt werden soll, und schreiben dies dann auch aus! Auch Abkürzungen sollten vermieden werden, da sich hierbei oft Fehler einschleichen. Hieß die Variable nun \inPy{numElmL} oder \inPy{nel} oder \inPy{nElements}? Diese Frage stellt sich nicht, wenn Sie sich die kleine Mühe machen, konsequent \inPy{numberElementsList} zu tippen; Sie sparen sich dadurch die große Mühe, häufig zurück zu scrollen und Fehler auszumerzen, die sich daraus ergeben, dass Sie mal \inPy{numElmL} und mal \inPy{nel} getippt haben.
 \end{hintbox}
 
 Bei der List Comprehension können Sie auch die Aufnahme eines Wertes in die Ergebnis-Liste an eine Bedingung knüpfen. Sie erreichen dies, indem Sie einfach eine \inPy{if}-Klausel anfügen:
@@ -561,8 +560,8 @@ print(primeNumbers)
 List Comprehension lässt sich auch für \inPy{set}s und \inPy{dict}s umsetzen. Die Synax verlangt dann nur eine minimale Anpassung:
 \begin{codebox}[Syntax : List Comprehension (3)]
 \begin{minted}[linenos]{python}
-setVariable  = {       expression for element in iterable if condition }
-dictVariable = { key : expression for element in iterable if condition }
+setVariable  = {       Ausdruck for Element in Container if Bedingung }
+dictVariable = { key : Ausdruck for Element in Container if Bedingung }
 \end{minted}
 \end{codebox}
 Natürlich sind die \inPy{if}-Klauseln auch für \inPy{set}s und \inPy{dict}s optional.
