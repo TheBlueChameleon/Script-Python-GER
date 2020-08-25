@@ -40,7 +40,7 @@ Wir können uns in dem Kontext eine Tabelle vorstellen, in der wir unsere Verflo
 	\texttt{exbf3}  & Sönke         & 1.81 m          & intelligent, quite handsome, cheerful nature     & superficial, racist
 \end{tabular}
 \end{center}
-Ich sollte anmerken, dass diese Tabelle keine echten Menschen beschreibt. Weder die Namen noch die Eigenschaften stimmen mit tatsächlichen Exfreundinnen überein. Die genannten Eigenschaften sollen anschauliche Beispiele geben, sind aber nicht als Wertung von Eigenschaften im echten Leben zu verstehen.
+Ich sollte anmerken, dass diese Tabelle keine echten Menschen beschreibt. Weder die Namen noch die Eigenschaften stimmen mit tatsächlichen ExpartnerInnen überein. Die genannten Eigenschaften sollen anschauliche Beispiele geben, sind aber zwingend nicht als Wertung von Eigenschaften im echten Leben zu verstehen\footnote{Still, racism sucks.}.
 \end{tcolorbox}
 
 Dies wollen wir nun in Code abbilden. Wir beschreiben also die \emph{Klasse Expartner}. Dazu brauchen wir ein neues Syntaxelement:
@@ -501,6 +501,11 @@ Wenn Sie das tun werden Sie zwangsläufig auch über Methoden stoßen, die Ihnen
 Ich will Sie hiermit dazu ermutigen, die Sprache Python auch selbstständig zu erkunden. Kein Lehrbuch kann den massiven Sprachumfang vollständig erklären; daher gehört es auch zu Ihrer Aufgabe als ProgrammiererIn, sich selbst in Techniken und Konzepte einzuarbeiten.
 \end{hintbox}
 
+\begin{hintbox}[Attribute in \texttt{\_\_init\_\_} anlegen]
+Wir haben gesehen, dass Attribute der Klasse zunächst von allen Instanzen geteilt werden. Wie Sie gesehen haben, kann dies Probleme bereiten. Wir umgehen dies, indem wir die Attribute zu jeder \emph{Instanz} separat hinzufügen. Das geht am einfachsten, indem wir die Attrubte im Dunder \inPy{__init__} definieren. Im folgenden Text behalte ich die Attribute der Klasse \inPy{Expartner} in der Definition der Klasse selbst, um interne Mechanismen zu verdeutlichen. Ihnen will ich aber nahelegen, Zeilen der Form \inPy{Attribut = Standardwert} in der Methode \inPy{__init__} zu schreiben.
+\end{hintbox}
+
+
 \subsection{Darstellung: \inPy{__str__} und \inPy{__repr__}}
 Wie Sie wissen, können wir den Inhalt einer \inPy{list} direkt mit \inPy{print} ausgeben:
 \begin{codebox}[Beispiel: Ausgabe einer \texttt{list}]
@@ -552,7 +557,10 @@ class Expartner :
         reVal += "  Downsides   : " + str(self.downsides)[1:-1] + "\n"
         reVal += "  Total Rating: " + str(self.rating())
         return reVal
-        
+\end{minted}
+\end{codebox}
+\begin{codebox}[]
+\begin{minted}[linenos, firstnumber=last]{python}
 ex = Expartner("Sönke" , 1.81, 
               {"intelligent", "quite handsome", "cheerful nature"},
               {"superficial", "racist"})
@@ -642,10 +650,7 @@ exbfs = [
     Expartner("Sönke", 1.81,
               {"intelligent", "quite handsome", "cheerful nature"},
               {"superficial", "racist"})]
-\end{minted}
-\end{codebox}
-\begin{codebox}[]
-\begin{minted}[linenos, firstnumber=last]{python}
+
 exgfs = [
     Expartner("Steffie", 1.65, 
               {"intelligent", "beautiful", "has a dog"},
@@ -775,29 +780,505 @@ TypeError: '<' not supported between instances of 'Expartner' and 'int'
 
 Wenn Sie also die Klassen \inPy{Apple} und \inPy{Orange} schreiben, sollte ein \inPy{Apple} wissen, wie er sich mit einem anderen \inPy{Apple} vergleicht; auch eine \inPy{Orange} muss wissen, wie sie sich mit einer \inPy{Orange} vergleicht. Es reicht aber, in \inPy{Orange} den Vergleich mit \inPy{Apple} zu implementieren. \inPy{Apple} selbst kann sich mit einem \inPy{NotImplemented} begnügen\footnote{Dies scheint auch die Denkweise des Konzerns zu sein...}.
 
-
-\subsection{Rechenoperatoren: \inPy{__add__}, \inPy{__sub__}, \inPy{__mul__}, \inPy{__truediv__}, \inPy{__floordiv__}}
-\subsection{Rechtsseitige Rechenoperatoren: \inPy{__radd__}, \inPy{__rsub__}, \inPy{__rmul__}, \inPy{__rtruediv__}, \inPy{__rfloordiv__}}
-\subsection{Zahl der Elemente: \inPy{__len__}}
-Move to classes 2?
-\subsection{Absolutbetrag: \inPy{__abs__}}
 \subsection{Gebrauch als Funktion: \inPy{__call__}}
+Klasseninstanzen können auch als Funktionen gebraucht werden. Über die Syntax:
+\begin{codebox}[Syntax: Aufruf einer Instanz]
+\begin{minted}[linenos]{python}
+Instanz(Parameterliste)
+\end{minted}
+\end{codebox}
+
+wird der Dunder \inPy{__call__(self, Parameterliste)} aufgerufen. Wie bei allen Methoden darf die Parameterliste auch leer sein, Default-Werte annehmen und/oder variadische Elemente enthalten. Konkret kann dies so aussehen:
+
 \begin{codebox}[Beispiel: Aufrufbare Instanzen]
 \begin{minted}[linenos]{python}
 class Expartner :
     # wie oben
     
     def __call__(self) :
-        print("You shouldn't call your Ex'es. Leave the past behind")
+        print("You shouldn't call your Ex'es. Leave the past behind.")
 
 ex = Exgirlfriend("Sandra", 1.70)
 ex()
 \end{minted}
 \end{codebox}
-\subsection{Index-Zugriff: getitem, setitem, oder so}
+
+Dies kann etwa nützlich werden, wenn eine Funktion sehr viele Parameter bräuchte, wenn die Werte dieser Parameter sich durch den Code der Funktion verändern und im Nachhinein erhalten bleiben sollen, oder eine thematische Einheit bilden. Sie können sich etwa ein kleines Spiel vorstellen: Das Spiel muss zuerst konfiguriert werden (Schwierigkeitsgrad, Größe des Spielfelds, Spielerzahl, ...), bevor es gestartet werden kann. In diesem Fall ist es ein sinnvolles Programmdesign, eine Klasse \inPy{Game} zu erstellen, die alle diese Daten als Attribute verwaltet. Von dieser Klasse wird eine Instanz \inPy{match} erstellt. Sind (\eg über ein geeignetes User-Interface) alle Werte sinnvoll festgelegt, so kann die Instanz \inPy{match} gestartet, \ie aufgerufen werden. Nach Ende der Partie steht das Objekt \inPy{match} weiter zur Verfügung, und kann \eg für eine Highscore-Liste ausgewertet werden.
+
+\subsection{Rechenoperatoren: \inPy{__add__}, \inPy{__sub__}, \inPy{__mul__}, \inPy{__truediv__}, \inPy{__floordiv__}, \inPy{__matmul__}}
+Mit Instanzen von Klassen kann auch gerechnet werden wie mit \enquote{normalen Zahlen}. Natürlich ist dies nicht immer sinnvoll; beispielsweise habe ich keine Idee, welche Bedeutung dem Ausdruck\\
+\inPy{CharlottesLastEx - MyLastEx} zukommen sollte. Daher möchte ich Sie darum bitten, sich für die folgenden Abschnitte in ein neues Beispiel einzudenken. Wir werden hier \emph{Matrizen} wie aus der Mathematik bekannt behandeln.
+
+Eine Matrix ist eine Sammlung von Werten, die in einer rechteckigen Tabelle angeordnet sind, \ie eine Sammlung von Zeilen, wobei jede Zeile eine Sammlung von gleich vielen Zahlen ist. Eine Matrix lässt sich also als \emph{Liste von Listen} abbilden. Um eine Matrix als Klasse abzubilden, ist es also sinnvoll, ein Attribut \inPy{data} zu definieren, das diese Liste von Listen beinhaltet.
+
+Bei der Arbeit mit Matrizen ist es auch wichtig, die Größe der Matrix zu kennen. Beispielsweise ist die Matrixmultiplikation nur dann möglich, wenn die Zahl der Spalten der linken Matrix mit der Zahl der Zeilen der rechten Matrix zusammenfällt. Wir können mit \inPy{len} diese Information (Zeilenzahl und Spaltenzahl) in Erfahrung bringen. Wir wollen daher diese Information als Attribut \inPy{shape} in einem \inPy{tuple} speichern. (Ebenso könnten wir zwei \inPy{int}-Attribute \inPy{rows, cols} verwenden. Vorlieben variieren.)
+
+Jede Instanz von \inPy{Matrix} braucht seine eigenen Attribute \inPy{data, shape}. Es gibt keine Zahlen, die sich alle Matrizen teilen. Daher werden wir die genannten Attribute nicht direkt nach dem Header \inPy{class Matrix} anlegen, sondern erst in der Methode \inPy{__init__}. Sie erinnern sich: Diese Methode wird aufgerufen, sobald eine neue Instanz angelegt wird. Wenn wir hier Attribute einpfelgen, sorgen wir auch dafür, dass sie rein an die Instanz gebunden sind. Komplikationen wie im \emph{Beispiel: Versehentliches Verändern von Referenzen} werden so vermieden.
+
+Wenn wir eine neue Matrix anlegen, müssen wir ihre Größe und ihren Inhalt festlegen. Es gibt aber häufig Situationen, in denen wir die Matrixwerte erst Stück für Stück aufbauen können. Daher soll es auch möglich sein, eine \enquote{leere Matrix} mit fester Größe zu erstellen. Diese \enquote{leere Matrix} füllen wir mit Nullen auf. Wenn dagegen alle Werte schon bekannt sind, so wollen wir eine Liste von Listen als Parameter entgegen nehmen können und diese in unsere Matrix-Struktur einpflegen können.
+
+Mit diesen Überlegungen können wir den folgenden Code schreiben:
+\begin{codebox}[Beispiel: Klasse Matrix]
+\begin{minted}[linenos]{python}
+import copy
+
+class Matrix :
+    def __init__(self, shape, data = None) :
+        # check for validity of shape parameter
+        if type(shape) != tuple         :
+            raise Exception("Expected a tuple!")
+        if len (shape) != 2             :
+            raise Exception("Expected a 2-tuple!")
+        if shape[0] < 1 or shape[1] < 1 :
+            raise Exception("Expected positive values")
+        
+        self.shape = shape
+        
+        if data == None :
+            # fill with zeros
+            self.data  = []
+            for     row in range(shape[0]) :
+                self.data.append([])
+                for col in range(shape[1]) :
+                    self.data[row].append(0)
+        else :
+            self.setData(data)
+\end{minted}
+\end{codebox}
+\begin{codebox}[]
+\begin{minted}[linenos,firstnumber=last]{python}
+    def setData(self, data) :
+        if type(data)    != list : raise Exception("Expected a list of lists")
+        if type(data[0]) != list : raise Exception("Expected a list of lists")
+        
+        rows = len(data)
+        cols = len(data[0])
+        
+        # check if all provided rows have same length
+        for row in data :
+            if len(row) != cols : raise Exception("Ill-formed matrix")
+        
+        self.shape = (rows, cols)
+        self.data  = copy.deepcopy(data)
+\end{minted}
+\end{codebox}
+
+Zuerst testen wir, ob die angegebene \inPy{shape} in unserem Kontext sinnvoll ist. Falls nein, brechen wir mit Fehlermeldung ab (Zeilen 6-11). 
+
+In Zeile 14 übertragen wir die Daten des Parameters \inPy{shape} in das Attribut \inPy{self.shape}. Lassen Sie sich nicht von den gleichen Namen verwirren: \inPy{shape} kommt \enquote{von außen} und ist nicht dasselbe wie das Attribut \inPy{self.shape}, das zur Matrix gehört. Da wir hier mit \inPy{tuple}s arbeiten (die immutable sind), ist eine versehentliche Veränderung der Werte ausgeschlossen. Wir können ohne weiteres die Referenz übernehmen.
+
+In den Zeilen 17-21 erzeugen wir eine Null-Matrix der angeforderten Größe. In eine leere Liste fügen wir zunächst leere Listen (Zeilen) ein, die wir im Anschluss mit Nullen auffüllen.
+
+Der Parameter \inPy{data} enthält gegebenenfalls Werte, die in die Matrix eingetragen werden sollen. Falls wir beim Anlegen der Instanz keine Daten bereit haben, können wir dies durch \inPy{data = None} signalisieren. Es könnte auch sein, dass wir die Werte einer bestehenden Matrix später updaten wollen, ohne die Matrix selbst komplett neu anzulegen. Daher lagern wir das Befüllen mit Werten in eine eigene Methode aus, und rufen von \inPy{__init__} diese Methode \inPy{setData} auf (Zeile 23).
+
+In \inPy{setData} prüfen wir wieder zunächst den Datentypen (Liste von Listen; Zeile 25-26), und dann, ob die übergebenen Werte auf tatsächlich eine rechteckige Matrix beschreiben (Zeile 31-35). Um nicht versehentlich Referenzen zu übernehmen, benutzen wir \inPy{copy.deepcopy}, um die Werte in unsere Matrix zu übernehmen.
+
+Schon um zu testen, ob unsere Methoden so funktionieren, wie wir das wollen, fügen wir noch die Dunders \inPy{__str__} und \inPy{__repr__} hinzu:
+
+\begin{codebox}[]
+\begin{minted}[linenos,firstnumber=last]{python}
+    def __repr__(self) :
+        return f"<matrix of dimension {self.shape[0]}x{self.shape[1]}>"
+    
+    def __str__(self) :
+        reVal = ""
+        for row in self.data :
+            reVal += str(row) + "\n"
+        return reVal[:-1]               # remove superfluous line break
+\end{minted}
+\end{codebox}
+
+Nachdem wir so kurz wiederholt haben, wie wir eine Klasse konzipieren und ihr vier Methoden hinzugefügt haben, können wir uns nun der Aufgabe stellen, das Rechnen mit Matrizen zu implementieren. Wenn \inPy{A} und \inPy{B} Instanzen von \inPy{Matrix} sind, so wollen wir, dass Ausdrücke wie \inPy{A + B} korrekt ausgewertet werden. Zu diesem Zweck schreiben wir für jeden Operator einen speziellen Dunder. Im Falle der Addition ist das \inPy{__add__}:
+
+\begin{codebox}[Beispiel: Methode \texttt{\_\_add\_\_}]
+\begin{minted}[linenos,firstnumber=last]{python}
+    def __add__(self, other) :
+        if type(other) != Matrix      : return NotImplemented
+        if self.shape  != other.shape : raise Exception("Incompatible matrices")
+        
+        reVal = Matrix(self.shape)
+        
+        for     row in range(self.shape[0]) :
+            for col in range(self.shape[1]) :
+                reVal.data[row][col] = self.data[row][col] + other.data[row][col]
+        return reVal
+\end{minted}
+\end{codebox}
+
+Wie bei den Vergleichsoperatoren (\inPy{__eq__}, ...) bezieht sich \inPy{self} auf das Symbol links des Operators (also auf \inPy{A} in \inPy{A + B}), während \inPy{other} eine Referenz auf das rechte Symbol (\inPy{B}) erhält.
+
+Wir prüfen wieder, ob der Datentyp des rechten Operanden (\inPy{B}) geeignet ist (Zeile 46). Falls nein geben wir den Fehlerwert \inPy{NotImplemented} zurück, der Python die Chance gibt, verschiedene Fehlerbehandlungsmethoden anzuwenden. (Wir werden dies im nächsten Punkt besprechen). Falls die Größen der Matrizen nicht aufeinander passen, brechen wir das Programm mit einer Fehlermeldung ab (Zeile 47).
+
+Für die eigentliche Rechnung müssen wir eine neue Matrix bereit stellen, die das Ergebnis aufnimmt (Zeile 49). In diese können wir jetzt jeweils die komponentenweise Summe eintragen (Zeilen 51-53). Schließlich muss dieses so gefundene Ergebnis auch der aufrufenden Stelle mitgeteilt werden -- wir schließen also mit einer \inPy{return}-Zeile ab (Zeile 54).
+
+Das Zeichen \inPy{*} wird durch einen Aufruf der Methode \inPy{__mul__} aufgelöst. Hier wollen wir die \emph{komponentenweise} Matrixmultiplikation sowie die Multiplikation mit einem Skalar umsetzen:
+
+\begin{codebox}[Beispiel: Methode \texttt{\_\_mul\_\_}]
+\begin{minted}[linenos,firstnumber=last]{python}
+    def __mul__(self, other) :
+        reVal = Matrix(self.shape)
+        
+        if type(other) == Matrix :
+            if self.shape  != other.shape :
+                raise Exception("Incompatible matrices")
+            
+            for     row in range(self.shape[0]) :
+                for col in range(self.shape[1]) :
+                    reVal.data[row][col] = self .data[row][col] * \
+                                           other.data[row][col]
+            
+            return reVal
+\end{minted}
+\end{codebox}
+\begin{codebox}[]
+\begin{minted}[linenos,firstnumber=last]{python}
+        elif type(other) in (int, float, complex) :
+            for     row in range(self.shape[0]) :
+                for col in range(self.shape[1]) :
+                    reVal.data[row][col] = self.data[row][col] * other
+            
+            return reVal
+        
+        else :
+            return NotImplemented
+\end{minted}
+\end{codebox}
+
+Hier finden wir dieselbe Grundstruktur wie schon bei \inPy{__add__} wieder: Vorbereiten einer Ergebnis-Variable \inPy{reVal}, Typenprüfung, Schrittweiser Aufbau der Lösung, und \enquote{Abschicken} der Lösung mit \inPy{return} bzw. Zurückgeben des Fehlerwertes \inPy{NotImplemented}, wenn bei der Typenprüfung ein Fehler aufgetreten ist.
+
+Da wir durch die Multiplikation mit dem Skalar \inPy{-1} jetzt auch das Vorzeichen jeder Matrix-Komponente umdrehen können, lassen sich die Subraktion (\inPy{__sub__}) und die \emph{exakte Division} (\inPy{__truediv__}) mit sehr geringem Aufwand schreiben:
+
+\begin{codebox}[Beispiel: Methoden \texttt{\_\_sub\_\_} und \texttt{\_\_truediv\_\_}]
+\begin{minted}[linenos,firstnumber=last]{python}
+    def __sub__(self, other) :
+        return self + (other * -1)
+    
+    def __truediv__(self, other) :
+        return self * (1 / other)
+\end{minted}
+\end{codebox}
+
+Für die \emph{Integerdivision} (Division mit Abrunden, \inPy{__floordiv__}) dagegen müssen wir unser übliches Schema anwenden:
+
+\begin{codebox}[Beispiel: Methode \texttt{\_\_floordiv\_\_}]
+\begin{minted}[linenos,firstnumber=last]{python}
+    def __floordiv__(self, other) :
+        if type(other) in (int, float, complex) :
+            for     row in range(self.shape[0]) :
+                for col in range(self.shape[1]) :
+                    reVal.data[row][col] = self.data[row][col] // other
+            
+            return reVal
+        
+        else :
+            return NotImplemented
+\end{minted}
+\end{codebox}
+
+Vielleicht haben Sie sich schon zuvor gewundert, dass wir die Methode \inPy{__mul__} \emph{komponentenweise} implementiert haben. Für die übliche Matrix-Multiplikation 
+\begin{equation*}
+	(AB)_{ij} = \sum_{k} A_{ik} B_{kj}
+\end{equation*}
+ist nämlich der Dunder \inPy{__matmul__} vorgesehen. Dieser wird über den Operator \inPy{@} aufgerufen:
+
+\begin{codebox}[Beispiel: Methode \texttt{\_\_floordiv\_\_}]
+\begin{minted}[linenos,firstnumber=last]{python}
+    def __matmul__(self, other) :
+        if type(other) == Matrix :
+            if other.shape[0] != self.shape[1] :
+                raise Exception("Incompatible Shapes")
+            resultShape = (self.shape[0], other.shape[1])
+            result = Matrix(resultShape)
+            
+            for         i in range(resultShape[0]) :
+                for     j in range(resultShape[1]) :
+                    for k in range(other.shape[0]) :
+                        result.data[i][j] += self.data[i][k] * other.data[k][j]
+            return result
+        return NotImplemented
+\end{minted}
+\end{codebox}
+
+Natürlich sollten wir unsere Methoden auch testen:
+
+\begin{codebox}[Beispiel: Tests einiger Methoden]
+\begin{minted}[linenos,firstnumber=last]{python}
+A = Matrix((2,2), [[1,2], [3,4]])
+B = Matrix((2,3), [[9,8,7], [6,5,4]])
+
+print("A")
+print( A )
+print("B")
+print( B )
+
+print("A + A")
+print( A + A )
+
+print("A * A")
+print( A * A )
+
+print("A @ B")
+print( A @ B )
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Tests einiger Methoden]
+\begin{minted}{text}
+A
+[1, 2]
+[3, 4]
+B
+[9, 8, 7]
+[6, 5, 4]
+A + A
+[2, 4]
+[6, 8]
+A * A
+[1, 4]
+[9, 16]
+A @ B
+[21, 18, 15]
+[51, 44, 37]
+\end{minted}
+\end{cmdbox}
+
+\subsection{Rechtsseitige Rechenoperatoren: \inPy{__radd__}, \inPy{__rsub__}, \inPy{__rmul__}, \inPy{__rtruediv__}, \inPy{__rfloordiv__}}
+Im Moment können wir zwar für eine \inPy{Matrix A} den Ausdruck \inPy{A * 2} berechnen; für \inPy{2 * A} dagegen erhalten wir noch die Fehlermeldung
+\begin{cmdbox}[Fehlermeldung: Multiplikation mit Skalar von links]
+\begin{minted}{text}
+Traceback (most recent call last):
+  File "matrix.py", line 139, in <module>
+    print( 2 * A )
+TypeError: unsupported operand type(s) for *: 'int' and 'Matrix'
+\end{minted}
+\end{cmdbox}
+
+Um dies zu verstehen, erinnern wir uns, dass durch den Operator \inPy{*} die Methode \inPy{__mul__} des \emph{linken} Objekts aufgerufen wird, also hier der \inPy{int}-Instanz \inPy{2}. Natürlich \enquote{weiß \inPy{int} nicht}, wie es mit Matrizen umzugehen hat, und gibt damit den Fehlerwert \inPy{NotImplemented} zurück, der hier zu dieser Fehlermeldung führt. Bevor Python aber \enquote{aufgibt}, versucht der Interpreter, die Methode \inPy{__rmul__} des \emph{rechten} Operanden (also \inPy{A}) aufzurufen.
+
+Fügen wir also in unserer Klassen-Definition von \inPy{Matrix} noch folgende Zeilen ein:
+\begin{codebox}[Beispiel: Tests einiger Methoden]
+\begin{minted}[linenos,firstnumber=105]{python}
+    def __rmul__(self, other) :
+        return self * other
+\end{minted}
+\end{codebox}
+
+so kann Python auch \inPy{2 * A} berechnen: für die Methode \inPy{__rmul__} verweist der Parameter \inPy{other} auf den \emph{linken} Operanden (also die \inPy{2}). Wir haben hier die Reihenfolge des Ausdrucks umgedreht, und können so den schon bestehenden Code von \inPy{__mul__} ausnutzen.
+
+Ähnlich wie für die Multiplikation existieren auch rechtsseitige Methoden für die Addition, Subtraktion, Fließkomma- und Ganzzahldivision (\inPy{__radd__}, \inPy{__rsub__}, \inPy{__rtruediv__}, und \inPy{__rfloordiv__}). Alle diese Methoden haben dasselbe Verhalten, \ie sie werden aufgerufen, nachdem ihr linksseitiges Pendant \inPy{NotImplemented} zurückgegeben hat.
+
+
+\subsection{Index-Zugriff: \inPy{__getitem__}, \inPy{__setitem__}}
+Wir wollen auch einzelne Matrixelemente lesen und schreiben können, so wie wir auch bei \inPy{list}s etc. Elemente aus der Liste herausgereifen können. Zum \emph{Lesen} von einzelnen Werten dient der Dunder \inPy{__getitem__}. Neben dem obligatorischen \inPy{self} muss die Methode einen Index annehmen, und soll das durch diesen Index bezeichnete Objekt zurück geben. Wie wir das von \inPy{list}s kennen, geschieht der lesende Index-Zugriff über die Syntax \inPy{Instanz[Index]}.
+
+Klassischerweise versteht man unter einem Index eine einzige Ganzzahl; es spricht aber nichts dagegen, hier andere Datentypen auch zu verwerten. Da eine Matrix ein \emph{zweidimensionales} Objekt ist, könnten wir auch einen Tupel aus zwei Werten akzeptieren. Wenn \inPy{A} also eine Instanz von \inPy{Matrix} ist, so soll \inPy{A[1,2]} also das Matrixelement in der \emph{zweiten} Zeile und der \emph{dritten} Spalte ansprechen. (Die Zählung beginnt wie immer bei der Null).
+
+Falls tatsächlich nur eine einzelne Zahl übergeben wird, so ist es sinnvoll, diese als \emph{Zeilenindex} aufzufassen, und die ganze Zeile der Matrix zurück zu geben. Dies kann aus unserer gewählten Struktur heraus leicht implementiert werden, und hat den weiteren Vorteil, dass Konstrukte wie \inPy{A[row][column]} immer noch funktionieren. Hierbei wird zuerst \inPy{A[row]} ausgewertet und gibt dann eine \inPy{list} zurück; auf diese Liste wird dann wieder der Indexzugriff mit index \inPy{column} ausgewertet.
+
+Eine Implementierung dieser Gedanken kann so aussehen:
+
+\begin{codebox}[Beispiel: Lesender Indexzugriff]
+\begin{minted}[linenos,firstnumber=last]{python}
+    def __getitem__(self, index) :
+      if type(index) == int :
+        if 0 <= index < self.shape[0] :
+          return self.data[index]
+        else :
+          raise Exception("Invalid Index")
+        
+      elif type(index) == tuple :
+        if len(index) != 2 : raise Exception("Invalid Dimension")
+        
+        row = index[0]
+        col = index[0]
+        
+        if (0 <= row < self.shape[0]) and (0 <= col < self.shape[1]) :
+          return self.data[row][col]
+        else :
+          raise Exception("Invalid Index")
+      
+      else :
+        raise Exception("Invalid Index")
+\end{minted}
+\end{codebox}
+
+Ähnlich Funktioniert der Dunder \inPy{__setitem__}, der aufgerufen wird, wenn über die Syntax\\
+\inPy{Instanz[Index] = Ausdruck} ein Wert gesetzt werden soll. Neben den zuvor schon genannten Parametern \inPy{self} und \inPy{index} ist hier natürlich ein dritter Parameter \inPy{value} vonnöten. Einen Rückgabewert gibt es bei der Wertzuweisung dagegen nicht.
+
+Wir wollen auch hier der Logik folgen, dass sowohl \inPy{int}-Werte als auch \inPy{tuple}s akzeptiert werden sollen. Entsprechend implementieren wir die Methode folgendermaßen:
+
+\begin{codebox}[Beispiel: Schreibender Indexzugriff]
+\begin{minted}[linenos,firstnumber=last]{python}
+    def __setitem__(self, index, value) :
+      if type(index) == int :
+        if type(value) != list          : raise Exception("Invalid Data Type")
+        if len (value) != self.shape[1] : raise Exception("Invalid Dimension")
+        
+        if 0 <= index < self.shape[0] :
+          self.data[index] = value
+        else :
+          raise Exception("Invalid Index")
+        
+      elif type(index) == tuple :
+        if len(index) != 2 : raise Exception("Invalid Dimensionality")
+        row = index[0]
+        col = index[0]
+        
+        if (0 <= row < self.shape[0]) and (0 <= col < self.shape[1]) :
+          self.data[row][col] = value
+        else :
+          raise Exception("Invalid Index")
+        
+      else :
+        raise Exception("Invalid Index")
+\end{minted}
+\end{codebox}
+
+Mit diesen Ergänzungen zu unserer Klasse sind uns nun folgende Zugriffe möglich:
+\begin{codebox}[Beispiel: Tests -- Indexzugriff]
+\begin{minted}[linenos,firstnumber=last]{python}
+A = Matrix( (2,2) )
+A[0] = [1, 2]
+A[1, 1] = 4
+print(A)
+print(A[0, 1])
+print(A[1])
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Tests -- Indexzugriff]
+\begin{minted}{text}
+[1, 2]
+[0, 4]
+1
+[0, 4]
+\end{minted}
+\end{cmdbox}
+
+\begin{hintbox}[Slices]
+Aus Kapitel \ref{chp:Containers} kennen Sie das Konzept Slicing. Sie können Ihren Klassen ähnliche Fähigkeiten beibringen, wenn Sie den Datentyp \inPy{slice} als Parameter akzeptieren. Es handelt sich also um Instanzen der Klasse \inPy{slice}, die unter anderem die Attribute \inPy{start}, \inPy{step} und \inPy{step} haben.
+
+Experimentieren Sie damit herum!
+\end{hintbox}
+
+\subsection{Zahl der Elemente: \inPy{__len__}}
+Ähnlich wie \inPy{str} leitet auch der Befehl \inPy{len} nur auf den Dunder \inPy{__len__} um, der in jeder Klasse implementiert werden kann. Der Rückgabewert sollte ein \inPy{int}-Wert sein, der sich als Anzahl von Elementen interpretieren lässt. In unserem Fall ist also eine sinnvolle Implementierung:
+
+\begin{codebox}[Beispiel: \texttt{\_\_len\_\_}]
+\begin{minted}[linenos,firstnumber=149]{python}
+    def __len__(self) :
+      return self.shape[0] * self.shape[1]
+\end{minted}
+\end{codebox}
+
+
+\subsection{Absolutbetrag: \inPy{__abs__}}
+Die Funktion \inPy{abs} berechnet den \emph{Absolutbetrag} eines Objekts, indem sie das Ergebnis des Dunders \inPy{__abs__} weiterleitet.
+Was der Absolutbetrag einer Klasseninstanz ist, hängt sehr stark vom Kontext ab (und oft genug ist das Konzept überhaupt nicht anwendbar). Im Fall von Matrizen kann Beispielsweise die \emph{Maximumsnorm} berechnet werden, also das größte Element der Matrix selbst:
+
+\begin{codebox}[Beispiel: \texttt{\_\_abs\_\_}]
+\begin{minted}[linenos,firstnumber=last]{python}
+    def __abs__(self) :
+      return max( [max(line) for line in self.data] )
+\end{minted}
+\end{codebox}
 
 
 \section{Vererbung}
 \label{sec:Inheritance}
-%ExGfWithEyes erbt von ExGf; benutzt super() um eyeColor an __str__ anzuhängen.
+In größeren Projekten werden wir in die Situation kommen, dass sich Klassen stark ähneln, aber nicht in allen Details gleich sind. In dem Beispiel der Exfreundinnen: nur von manchen kann ich mich noch an die Augenfarbe erinnern. Wir wissen, dass wir zu jeder Instanz dynamisch Attribute hinzufügen können. Dies ändert natürlich nichts daran, wie die Methoden ausgeführt werden (und soll auch nichts daran ändern). Jedoch wäre es schön, wenn die Methode \inPy{__str__} diese zusätzliche Information Augenfarbe mit ausgegeben würde.
 
+Natürlich können wir eine zweite Klasse \inPy{ExpartnerWithEyeColor} anlegen, und allen Code der Klasse \inPy{Expartner} kopieren. Dies hätte aber auch den Effekt, dass Weiterentwicklungen an der Klasse \inPy{Expartner} doppelt gemacht werden müssen, also auch in \inPy{ExpartnerWithEyeColor} manuell eingepflegt werden müssen.
+
+Die Technik \emph{Vererbung} erlaubt uns, dies zu umgehen oder zu automatisieren. Von einer \emph{Basisklasse} wird eine Kopie angelegt, die wir \emph{abgeleitete Klasse} nennen. Diese Klasse hat zunächst alle Eigenschaften (\ie Attribute und Methoden) der Basisklasse. Definitionen innerhalb der abgeleiteten Klasse erweitern diese gegenüber der Basisklasse, oder überschreibt die Eigenschaften, die von der Basisklasse schon gegeben waren.
+
+Wir erreichen dies mit einem neuen Syntaxelement bei der Definition einer Klasse:
+\begin{codebox}[Syntax: Abgeleitete Klassen]
+\begin{minted}{python}
+class Abgeleitete_Klasse(Basisklasse)  :
+    neues_Attribut = Standardwert
+    ...
+    def neue_Methode(self, ...) :
+        ...
+\end{minted}
+\end{codebox}
+
+In unserem Beispiel wollten wir der abgeleiteten Klasse \inPy{ExpartnerWithEyeColor} ein Attribut \inPy{eyeColor} hinzufügen, und die Methode \inPy{__str__}  überarbeiten. Wir erreichen dies mit den folgenden Zeilen:
+
+\begin{codebox}[Beispiel: Abeleitete Klasse]
+\begin{minted}[linenos]{python}
+# Klasse Expartner wie oben
+
+class ExpartnerWithEyeColor(Expartner) :
+    eyeColor = None
+        
+    def __str__(self) :
+        reVal  = self.name + "\n"
+        reVal += "  Height      : " + str(self.height)          + "\n"
+        reVal += "  Upsides     : " + str(self.upsides)  [1:-1] + "\n"
+        reVal += "  Downsides   : " + str(self.downsides)[1:-1] + "\n"
+        reVal += "  Total Rating: " + str(self.rating())        + "\n"
+        reVal += "  Eye Color   : " + str(self.eyeColor)
+        return reVal
+
+ex = ExpartnerWithEyeColor("Reginald", 1.84,
+                          {"very intelligent", "handsome", "plays in a band"},
+                          {"flirty with everyone", "complains a lot"})
+ex.eyeColor = "blue"
+print(ex)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Abeleitete Klasse]
+\begin{minted}{text}
+Reginald
+  Height      : 1.84
+  Upsides     : 'very intelligent', 'handsome', 'plays in a band'
+  Downsides   : 'flirty with everyone', 'complains a lot'
+  Total Rating: 5
+  Eye Color   : blue
+\end{minted}
+\end{cmdbox}
+
+Durch das \inPy{(Expartner)} in Zeile 3 werden alle Attribute und Methoden von \inPy{Expartner} kopiert. Wir können also auch neue Instanzen mit \inPy{ex = ExpartnerWithEyeColor(name, height)} und haben die Methode \inPy{rating} zur Verfügung. Vergleiche zwischen Instanzen von \inPy{ExpartnerWithEyeColor} oder sogar zwischen Instanzen von \inPy{ExpartnerWithEyeColor} und \inPy{Expartner} sind direkt möglich (denn unsere Vergleichsmethoden prüfen nicht den Datentyp ab, sondern verlangen nur, dass eine Methode \inPy{rating} existiert). Die Methode \inPy{__str__} dagegen wurde überschrieben, und listet nun auch die Augenfarbe mit auf.
+
+\subsection{Methoden der Basisklasse -- super()}
+Unsere Implementierung oben hat noch zwei kleine Schönheitsfehler:
+\begin{itemize}
+\item In der Methode \inPy{__init__} kann die Augenfarbe noch nicht mit angegeben werden.
+\item Wenn wir die Methode \inPy{__str__} von \inPy{Expartner} ändern, müssen wir immer noch manuell diese Änderungen auch in \inPy{ExpartnerWithEyeColor} vornehmen.
+\end{itemize}
+Beide Methoden -- \inPy{__init__} und \inPy{__str__} -- sind sich in \inPy{Expartner} und \inPy{ExpartnerWithEyeColor} sehr ähnlich, aber nicht exakt identisch. Es wäre angenehm, wenn wir die Methoden der Basisklasse zur Konstruktion der abgeleiteten Klasse benutzen könnten -- und dies ist tatsächlich möglich!
+
+In Klassenmethoden kann die Funktion \inPy{super()} aufgerufen werden. Diese gibt eine Instanz von \inPy{self} zurück, das aber als Instanz der Basisklasse interpretiert wird. Damit können wir unsere Klasse \inPy{ExpartnerWithEyeColor} auch schreiben als:
+
+\begin{codebox}[Beispiel: Abeleitete Klasse mit Methoden der Basisklasse]
+\begin{minted}[linenos]{python}
+# Klasse Expartner wie oben
+
+class ExpartnerWithEyeColor(Expartner) :
+    eyeColor = None
+    
+    def __init__(self, name = None, height = None, eyeColor = None
+                 upsides = {}, downsides = {}) :
+        super().__init__(name, height, upsides, downsides)
+        self.eyeColor = eyeColor
+        
+    def __str__(self) :
+        return super().__str__() + "\n  Eye Color   : " + str(self.eyeColor)
+
+ex = ExpartnerWithEyeColor("Reginald", 1.84, "blue"
+                          {"very intelligent", "handsome", "plays in a band"},
+                          {"flirty with everyone", "complains a lot"})
+print(ex)
+\end{minted}
+\end{codebox}
+(Die Ausgabe bleibt hierbei unverändert.)
+
+Betrachten wir zuerst Zeile 12: Hier behandeln wir also die aktuelle Klasseninstanz \inPy{self} als Instanz der \emph{Basisklasse} \inPy{ExpartnerWithEyeColor}  (durch das Element \inPy{super()}). Von dieser Instanz rufen wir die Methode \inPy{__str__} auf, und erhalten so bereits die ersten Zeilen unserer Zusammenfassung. An diese wird nun noch eine weitere Zeile angehängt, und ergänzt so die Textdarstellung von \inPy{ExpartnerWithEyeColor}.
+
+Ähnlich lassen wir in Zeile 8 bereits alle Attribute ausfüllen, die schon in \inPy{Expartner} existiert haben. Insbesondere nutzen wir hier auch dieselbe Plausiblitätsprüfung: ExpartnerInnen mit negativer Körpergröße führen zu einer Fehlermeldung. Was danach noch übrig bleibt ist das Eintragen der Augenfarbe, was in Zeile 9 erledigt wird.
+
+\begin{hintbox}[Vererbungs-Tiefe klein halten]
+Die Technik \emph{Vererbung} ist zweifellos sehr nützlich, kann aber schnell unerwartete Nebeneffekte ansammeln. Über mehrere Ebenen hinweg geht der Überblick leicht verloren. Versuchen Sie daher nach Möglichkeit, abgeleitete Klassen nicht als Basisklasse anderer Klassen zu benutzen.
+\end{hintbox}
