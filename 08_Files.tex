@@ -265,19 +265,241 @@ another line another line
 
 
 \subsection{Dateien und Blockstrukturen}
-hintbox -- with -- enter and exit
+Im Kontext von Dateien können Sie das Schlüsselwort \inPy{with .. as} benutzen. Damit wird eine neue Umgebung (Einrückungsebene) geschaffen, innerhalb derer eine Datei geöffnet ist. Sehen Sie also \inPy{with} als eine Kurzform an, die automatisch eine geöffnete Datei schließt, wenn die Einrückungsebene von \inPy{with} geschlossen wird.
+
+\begin{codebox}[Syntax: \texttt{with .. as}]
+\begin{minted}[linenos]{python}
+with open(Dateiname, Modus) as Handle :
+    Datei_Anweisungen
+\end{minted}
+\end{codebox}
+
+Das oben gezeigte \emph{Beispiel: Text-Dateien Schreiben} lässt sich also auch so schreiben:
+\begin{codebox}[Beispiel: Text-Dateien Schreiben]
+\begin{minted}[linenos]{python}
+with open("output.txt", "w") as handle :
+    handle.write("Some text\n")
+    handle.write("another line " * 2 + "\n")
+    handle.write( str(handle) )
+\end{minted}
+\end{codebox}
+
+Wie schon zuvor wird die Datei \texttt{\enquote{output}} im Schreibmodus geöffnet und mit drei Zeilen gefüllt. Mit dem Ende von Zeile 4 wird die Datei automatisch geschlossen.
+
+\begin{hintbox}[\texttt{with}-Blocks für eigene Klassen: \texttt{\_\_enter\_\_} und \texttt{\_\_exit\_\_}]
+Wie Sie sich denken können, sind Handles nur Instanzen einer Klasse, nämlich \inPy{_io.TextIOWrapper}. Die gezeigten Methoden \inPy{write}, \inPy{read} und \inPy{close} sind im Prinzip nichts anderes, als die Methoden, die Sie im letzten Kapitel bereits kennengelernt haben.
+
+Das Verhalten, das über \inPy{with} erreicht wird, realisiert der Python-Interpreter durch aufruf zweier Dunders erreicht:
+
+Die Methode \inPy{__enter__(self)} wird mit Beginn des \inPy{with}-Blocks aufgerufen. Der Parameter \inPy{self} ist dabei gleich dem Objekt, das hinter \inPy{with} steht. In der Zeile \inPy{with open("output.txt", "w") as handle} erhält \inPy{self} also den Rückgabewert von \inPy{open}. Der Rückgabewert sollte das Objekt \inPy{self} einfach durchreichen.
+
+Die Methode \inPy{__exit__(self, exc_type, exc_value, exc_traceback)} wird aufgerufen, sobald der \inPy{with}-Block verlassen werden soll. Dies kann entweder sein, weil sein Ende erreicht wurde, oder weil im Code des \inPy{with}-Blocks ein Fehler aufgetreten ist. Die Fehlerbeschreibung ist dann in den Variablen \inPy{exc_...} enthalten. Hierauf soll in Kapitel \ref{chp:Exceptions} näher eingegangen werden.
+\end{hintbox}
+
+Die weit häufigste Aufgabe im Kontext von Dateien ist, diese Zeile für Zeile zu lesen und mit den geladenen Daten weitere Operationen zu bewerkstelligen (\eg aufsummieren, plotten, ...). Zu diesem Zweck können \inPy{for}-Schleifen verwendet werden:
+
+\begin{codebox}[Syntax: Dateihandles mit \texttt{for}]
+\begin{minted}[linenos]{python}
+for Zeile in handle :
+    Anweisungen
+\end{minted}
+\end{codebox}
+
+Diese Syntax enthält also bereits die Mechanik, die Sie sonst mit \inPy{handle.readline} umsetzten würden. Hier wird auch automatisch detektiert, ob das Dateiende bereits erreicht wurde.
+
+Wenn Sie tatsächlich den gesamten Dateiinhalt nach Zeilen aufgetrennt im Speicher brauchen, können Sie das Datei-Handle auch einfach in eine \inPy{list} umwandeln:
+
+\begin{codebox}[Beispiel: Dateihandles als \texttt{list}]
+\begin{minted}[linenos]{python}
+with open("output.txt", "r") as handle :
+    allLines = list(handle)
+    print("Zeile 1:",  allLines[0])
+\end{minted}
+\end{codebox}
+
+Dies ist vollkommen gleichwertig zu \inPy{allLines = handle.readlines()}
+
+\subsection{Dateicursor Bewegen und Bestimmen}
+Manchmal (selten) ist es nötig, die aktuelle Cursorposition in der Datei zu kennen oder zu verändern. Dazu dienen die Methoden \texttt{tell} und \texttt{seek}.
+
+\inPy{handle.tell()} gibt die aktuelle Position des Cursors ab Dateianfang zurück. Mit anderen Worten, der nächste \inPy{read}- oder \inPy{write}-Befehl wirkt auf die Bytes ab Position \inPy{handle.tell()}.
+
+Mit \inPy{seek} kann der Dateicursor verschoben werden. Die hat einen verpflichtenden Parameter \texttt{offset} und einen optionalen Parameter \texttt{from}. Offset gibt an, um wie viele Bytes der Dateicursor gegen einen bestimmten Referenzpunkt verschoben werden soll. Welcher Referenzpunkt das ist, wird über den Parameter \texttt{from} angegeben:
+\begin{itemize}
+\item Ist \texttt{from == 0} oder wird \texttt{from} ausgelassen, so bezieht sich \texttt{offset} auf den Dateianfang. Mit anderen Worten, \texttt{offset} ist die neue Position des Dateicursors.
+\item Ist \texttt{from == 1}, so ist der Referenzpunkt die aktuelle Position. \inPy{handle.seek(-10, 1)} verschiebt also den Dateicursor um 10 Bytes \emph{nach vorne}.
+\item Schließlich bedeutet \texttt{from == 2} einen Bezug auf das Dateiende. \inPy{handle.seek(0, 2)} verschiebt also den Dateicursor \emph{an das Dateiende}.
+\end{itemize}
+
+\begin{codebox}[Beispiel: Funktion zum Ermitteln der Länge einer Datei]
+\begin{minted}[linenos]{python}
+def length_of_file(handle) :
+    if handle.closed :
+        raise Exception("Datei muss geöffnet sein!")
+    
+    oldPos = handle.tell()
+    
+    handle.seek(0, 2)        # an das Dateiende springen
+    length = handle.tell()   # Cursorposition Dateiende = Länge!
+    
+    handle.seek(oldPos)      # Ausgangszustand wiederherstellen
+    return length
 
 
-for line in handle
-
-byteNum = handle.tell()
-handle.seek(byteNum)
-
-list(handle)
-
-listOfLines = handle.readlines()
-
-\section{JSON und pickle}
+with open("output.txt", "r") as handle :
+    print(handle.name, "ist", length_of_file(handle), "Bytes lang.")
+\end{minted}
+\end{codebox}
 
 
-\section{PIL}
+
+\section{Pickle und JSON}
+Die Berechnungen, die Sie in Python umsetzen, können sehr Zeit- und Ressourcen-Aufwändig sein. Wenn dieselben Ausgangsdaten für mehrere Teilprojekte gebraucht werden können, bietet es sich an, diese einmalig auf der Festplatte zu speichern, anstatt sie in jedem Teilprojekt neu zu berechnen. In diesem Fall sind die Daten also nicht für einen menschlichen Betrachter vorgesehen, sondern sollten von einem Computer möglichst effizient geschrieben und wieder entpackt werden können. Die Module \inPy{pickle} (englisch: Gewürzgurke) und JSON (\emph{JavaScript Object Notation} bieten hierzu einige Werkzeuge, die genau diese Aufgaben erledigen.
+
+\subsection{Pickle}
+Bei Pickle handelt es sich um ein Python-eigenes Format, das einige spezifische Eigenschaften der Sprache und seines Unterbaus ausnutzt, um sehr verschiedene Objekte bequem für die Archivierung in Dateien vorzubereiten. Leider kann hier nicht auf alle Details eingegangen werden; als Grundsatz können Sie sich jedoch merken:
+\begin{center}
+	\emph{Wenn Sie es in Python programmiert haben, können Sie es mit Pickle auf der Festplatte abspeichern.}
+\end{center}
+
+\begin{warnbox}[Sicherheitslücke Pickle]
+Der oben genannte Satz gilt so weit, dass Sie mit Pickle sogar Programmroutinen abspeichern können. Dies erlaubt leider auch, schadhaften Code in Pickle-Archiven unterzubringen. Laden Sie daher nur Archive aus vertrauenswürdigen Quellen (\eg selbst erstellte Archive oder Ergebnisse von ArbeitskollegInnen am selben Projekt). Vertrauen Sie hingegen niemals Archiven, die über das Internet bereitgestellt werden.
+\end{warnbox}
+
+Das Archivieren mit Pickle läuft in drei Schritten ab: 
+\begin{itemize}
+\item Laden des Moduls: \inPy{import pickle}
+\item Öffnen einer Datei im Binär-Schreibmodus: \inPy{handle = open(Dateiname, "wb")}
+\item Schreiben in eine Datei mit der Methode \texttt{dump}: \inPy{pickle.dump(Objekt, handle)}
+\end{itemize}
+
+In ähnlicher Manier kann mit \inPy{Objekt = pickle.load(handle)} ein Objekt aus der Archiv-Datei entpackt werden, und im Anschluss wie eine normale Variable weiter verwendet werden. Unter Objekt ist hierbei tatsächlich eine Variable beliebigen Typs zu verstehen (also \eg \inPy{int}, \inPy{complex}, Klasseninstanzen, Funktionen, ...).
+
+\begin{codebox}[Beispiel: Zahl und Klassenobjekt in Datei zwischenspeichern und wieder laden]
+\begin{minted}[linenos]{python}
+import pickle
+
+class Foo :
+    def __init__(self) :
+        self.bar = 1 + 1j
+        
+    def __str__(self) :
+        return "Foo object"
+
+complexNumber = -0.3 + 4.1j
+classObject   = Foo()
+
+with open("archive.pkl", "wb") as handle :
+    pickle.dump(complexNumber, handle)
+    pickle.dump(classObject  , handle)
+
+with open("archive.pkl", "rb") as handle :
+    #pickles = handle.readlines()
+    readComplex     = pickle.load(handle)
+    readClassObject = pickle.load(handle)
+
+print(readComplex)
+print(readClassObject, readClassObject.bar)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Zahl und Klassenobjekt in Datei zwischenspeichern und wieder laden]
+\begin{minted}{text}
+(-0.3+4.1j)
+Foo object (1+1j)
+\end{minted}
+\end{cmdbox}
+
+In einer Datei können also beliebig viele Objekte gespeichert werden. Diese Objekte können dann in derselben Reihenfolge zurück gelesen werden, in der sie auch geschrieben wurden.
+
+Der Inhalt der Datei \texttt{archive.pkl} ist nicht für menschliche Betrachter vorgesehen. Je nach Programm, das Sie zum Lesen benutzen, werden Sie eine Kette für Sie sinnloser Zeichen sehen oder auch nur eine Fehlermeldung erhalten.
+
+\begin{hintbox}[Dateinamen und Module]
+Sie haben den Befehl \inPy{import} bereits kennengelernt, um Programmkomponenten zu laden, die Sie dann im Anschluss benutzen können. Was dabei geladen wird, ist in der Regel normaler Python-Code. Die Zeile \inPy{import pickle} veranlasst also den Interpreter dazu, die Datei \texttt{pickle.py} zu suchen und die darin definierten Klassen und Methoden bereitzustellen. Diese Datei \texttt{pickle.py} wird dabei \emph{zuerst} im aktuellen Arbeitsverzeichnis gesucht, und dann in einer Reihe von Standard-Ordnern, die bei der Installation von Python festgelegt wurden.
+
+Wenn Sie das obige Beispiel \emph{Beispiel: Zahl und Klassenobjekt in Datei zwischenspeichern und wieder laden} als \texttt{pickle.py} abspeichern, werden Sie daher eine Fehlermeldung erhalten. Achten Sie also darauf, ihre Code-Dateien nicht nach den Modulen zu benennen, die Sie benutzen wollen.
+\end{hintbox}
+
+\subsection{JSON}
+JSON bezeichnet eine Syntax, mit der verschiedene Datenstrukturen als Text in Dateien abgelegt werden können. Der Fokus liegt hierbei auf Portierbarkeit: JSON-Dateien sollen von möglichst für Programme in möglichst vielen Sprachen verwertbar sein. Dies schränkt die Verwendbarkeit in Python leider leicht ein: nicht jedes beliebige Objekt kann direkt mit JSON archiviert werden. Stattdessen ist es oft nötig, komplexe Datenobjekte (Klasseninstanzen) in kleinere Objekte zu zerlegen (\inPy{list}s, \inPy{dict}s, ...), und diese dann zu schreiben. (Für fortgeschrittene ProgrammiererInnen besteht auch die Möglichkeit, JSON um eigene Encoder/Decoder zu erweitern und so auch komplexere Objekte ohne weitere Vorarbeit in Dateien abzulegen. Darauf kann hier leider nicht eingegangen werden.)
+
+JSON-Dateien sind Text-Dateien, können also von einem menschlichen Betrachter gelesen und verstanden werden. Darin schadhaften Code unterzubringen ist bedeutend schwieriger (wenn auch nicht ganz unmöglich). Das JSON-Format ist also die richtige Wahl für Sie, wenn Sie in Python Daten zu Zwischenergebnissen verarbeiten, die von anderen Programmen gelesen werden sollen, welche nicht in Python geschrieben sind, oder wenn das Lesen der Ergebnisse für einen Menschen ebenfalls möglich sein soll.
+
+Die folgenden Python-Datentypen können in JSON direkt codiert werden:
+
+\begin{minipage}{.49\linewidth}
+\begin{itemize}
+\item \inPy{int}
+\item \inPy{float}
+\item \inPy{str}
+\item \inPy{bool}
+\end{itemize}
+\end{minipage}
+\begin{minipage}{.49\linewidth}
+\begin{itemize}
+\item \inPy{list}
+\item \inPy{tuple}
+\item \inPy{dict}
+\item \inPy{None}
+\end{itemize}
+\end{minipage}
+
+Diese Datentypen können auch ineinander verschachtelt sein, \ie man kann auch ein \inPy{dict} mit mehreren \inPy{list}s ablegen, die ihrerseits wieder komplexere Datenstrukturen aus der oben genannten Liste enthalten.
+
+Der Datentyp \inPy{complex} dagegen wird \emph{nicht} unterstützt. Komplexe Zahlen müssen also entweder in Real- und Imaginärteil zerlegt werden und so als zwei \inPy{float}s gespeichert oder zu einem \inPy{str} umgewandelt werden.
+
+Ähnlich wie bei pickle sind für das Archivieren mit JSON drei Schritte notwendig: 
+\begin{itemize}
+\item Laden des Moduls: \inPy{import json}
+\item Öffnen einer Datei im Text-Schreibmodus: \inPy{handle = open(Dateiname, "w")}
+\item Schreiben in eine Datei mit der Methode \texttt{dump}: \inPy{json.dump(Objekt, handle)}
+\end{itemize}
+
+Zum Lesen ihres Archivs öffnen Sie die Datei im Text-Lesemodus (\inPy{"r"}), und benutzen die Methode \inPy{json.load}.
+
+Damit die Datei später auch wieder gelesen werden kann, darf nur ein einziges Objekt geschrieben werden. Wollen Sie mehrere Objekte in derselben Datei ablegen, so können Sie diese zu einem \inPy{dict} zusammenfassen.
+
+\begin{codebox}[Beispiel: Archive schreiben und lesen mit JSON]
+\begin{minted}[linenos]{python}
+import json
+
+complexNumber = -0.3 + 4.1j
+
+realPart      = complexNumber.real
+imaginaryPart = complexNumber.imag
+
+dictionary  = {1 : "one", 2 : "two", 3 : "three"}
+
+with open("archive.json", "w") as handle :
+    json.dump(
+        {"real" : realPart,
+         "imag" : imaginaryPart,
+         "dict" : dictionary},
+        handle
+    )
+    
+with open("archive.json", "r") as handle :
+    jsonObjects = json.load(handle)
+    
+
+readComplex = complex(jsonObjects["real"], jsonObjects["imag"])
+
+print(readComplex)
+print(jsonObjects["dict"])
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Archive schreiben und lesen mit JSON]
+\begin{minted}{text}
+(-0.3+4.1j)
+{'1': 'one', '2': 'two', '3': 'three'}
+\end{minted}
+\end{cmdbox}
+
+\begin{cmdbox}[Dateiinhalt: \texttt{archive.json}]
+\begin{minted}{text}
+{"real": -0.3, "imag": 4.1, "dict": {"1": "one", "2": "two", "3": "three"}}
+\end{minted}
+\end{cmdbox}
+
+Unter \url{https://www.w3schools.com/python/python_json.asp} finden Sie noch einige weitere Erläuterungen sowie zusätzliche Features, die hier nicht besprochen werden sollen.
