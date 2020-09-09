@@ -7,6 +7,7 @@ Die Sprache Python kennt insgesamt nur 33 Schlüsselworte. Aus diesen wenigen Sp
 
 Damit Routinen genutzt werden können, müssen diese zunächst im Arbeitsspeicher vorliegen. Kaum ein Programm wird \emph{alle} Routinen benutzen, die in der \emph{Standardbibliothek} der Sprache Python angeboten werden. Um also nicht eine unsinnig große Menge an Speicherplatz zu belegen, bevor auch nur eine einzige Zeile nützlichen Codes ausgeführt wird, können wir selbst bestimmen, welche \emph{Module} geladen werden sollen. Ein Modul ist eine Sammlung von Routinen, die einem gemeinsamen \enquote{Thema} zugeordnet sind (beispielsweise mathematische Funktionen).
 
+\section{Der Befehl \inPy{import}}
 Geladen wird ein Modul mit dem Befehl \inPy{import}:
 \begin{codebox}[Syntax]
 \mint{python}{import module}
@@ -90,3 +91,77 @@ Die für Python verfügbaren Module haben \idR einen Webauftritt, in der alle Fu
 	\url{https://docs.python.org/2/library/math.html}
 \end{center}
 und damit eine Beschreibung des Python-Moduls \texttt{math}. Stöbern Sie in dieser Auflistung, und gewöhnen Sie sich an die dort verwendete Sprache. Viele komplexe Aufgaben können durch Verwendung eines geeigneten Moduls sehr schnell gelöst werden. Dazu müssen Sie als ProgrammiererIn jedoch die entsprechenden Funktionen identifizeren und sich ihre Benutzung selbst anlesen können. Angesichts der Vielzahl an Aufgaben und verfügbaren Pakete kann kein Kurs erschöpfend auf die verfügaren Funktionen eingehen.
+
+\section{Eigene Module}
+Module in Python können auf verschiedene Art umgesetzt werden. In den meisten Fällen handelt es sich aber tatsächlich einfach um normalen Code, wie Sie ihn bereits gesehen haben und im weiteren kennen lernen werden. Das heißt, dass die \texttt{.py}-Dateien, die Sie hier zu schreiben lernen, auch ihrerseits als Module genutzt werden können. Wenn Sie also ihren Code in der Datei \texttt{myModule.py} speichern, so können Sie durch die Zeile \inPy{import myModule} (\emph{ohne} Erweiterung \texttt{.py}!) diesen Code in eine andere Code-Datei einbinden. Stellen Sie sich hierzu vor, dass der \inPy{import}-Befehl den Inhalt von \texttt{myModule.py} kopiert und einfügt.
+
+Damit der Python-Interpreter weiß, aus welchem Verzeichnis die Module geladen werden sollen, muss theoretisch auch eine Angabe des Verzeichnisses erfolgen. In Pyhton geschieht dies implizit, \ie der Interpreter sucht in einer Reine von Verzeichnissen und lädt das erste Modul, das einen passenden Namen hat. Der erste Ort, an dem gesucht wird, ist das aktuelle Arbeitsverzeichnis. Im Anschluss werden Ordner durchsucht, die bei der Installation von Python als \enquote{Standard-Pfade} festgelegt wurden.
+
+Beispiel: In Ihrem aktuellen Arbeitsverzeichnis befinden sich die Dateien \texttt{foo.py} und \texttt{bar.py}:
+\begin{codebox}[Beispiel: \texttt{foo.py}]
+\begin{minted}[linenos]{python}
+print("loaded foo")
+\end{minted}
+\end{codebox}
+
+\begin{codebox}[Beispiel: \texttt{bar.py}]
+\begin{minted}[linenos]{python}
+import foo
+print("executing bar")
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Ausführung von \texttt{bar.py}]
+loaded foo
+executing bar
+\end{cmdbox}
+
+Ein Modul kann nur ein einziges Mal geladen werden. Jeder weitere Versuch, dasselbe Modul mit \inPy{import} erneut zu laden, wird ignoriert. Die folgende Abwandlung von \texttt{bar.py} erzeugt also dieselbe Ausgabe wie oben:
+
+\begin{codebox}[Beispiel: \texttt{bar.py}]
+\begin{minted}[linenos]{python}
+import foo
+import foo
+print("executing bar")
+import foo
+\end{minted}
+\end{codebox}
+
+Befindet sich das zu ladende Modul in einem Unterordner des aktuellen Arbeitsverzeichnisses, so kann dies durch Punkte angedeutet werden. Wir nehmen an, dass das Hauptmodul \texttt{bar.py} im aktuellen Arbeitsverzeichnis liegt; das zu ladende Modul \texttt{foo.py} dagegen sei im Ordner \texttt{subfolder}. In dem Fall schreiben wir:
+
+\begin{codebox}[Beispiel: \texttt{bar.py}]
+\begin{minted}[linenos]{python}
+import subfolder.foo
+print("executing bar")
+\end{minted}
+\end{codebox}
+
+um das gewünschte Verhalten zu erreichen.
+
+\begin{hintbox}[Namenskollisionen mit anderen Modulen]
+In verschiedenen Ordnern können Dateien mit gleichem Dateinamen liegen. Sie können beispielsweise eine Datei namens \texttt{math.py} anlegen und diese in Ihrem Code-Verzeichnis speichern. Dies hat allerdings zur Folge, dass in allen Codes, die in diesem Ordner liegen, die Zeile \inPy{import math} nicht mehr die Python-Funktionen lädt, sondern was auch immer in Ihrer Datei geschrieben steht.
+
+Python-Module sind zahlreich und es werden regelmäßig neue Pakete veröffentlicht. Daher kann auch keine Liste an \enquote{verbotenen} Namen angegeben werden. Stattdessen kann ich Ihnen hier nur mitgeben: Wenn Sie beim Laden eines Moduls Probleme bekommen, sollten Sie die Namen der Dateien im aktuellen Arbeitsverzeichnis durchsehen. Eine eventuelle Namenskollision könnte Ursache Ihrer Probleme sein.
+\end{hintbox}
+
+Im Code kann auch der Name des aktuell ausgeführten Moduls abgefragt werden. Die Variable \inPy{__name__} enthält einen String, der den aktuellen Modulnamen speichert. Für das \emph{Hauptmodul} (also die Code-Datei, die ursprünglich gestartet wurde) ist dies immer \inPy{"__main__"}.
+
+\begin{codebox}[Beispiel: \texttt{foo.py}]
+\begin{minted}[linenos]{python}
+print("Module name:", __name__)
+\end{minted}
+\end{codebox}
+
+\begin{codebox}[Beispiel: \texttt{bar.py}]
+\begin{minted}[linenos]{python}
+import foo
+print("Module name:", __name__)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Ausführung von \texttt{bar.py}]
+\begin{minted}{text}
+Module name: foo
+Module name: __main__
+\end{minted}
+\end{cmdbox}
