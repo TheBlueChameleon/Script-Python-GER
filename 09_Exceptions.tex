@@ -1,0 +1,345 @@
+\chapter{Exceptions}
+\label{chp:Exceptions}
+\epigraph{
+	With few exceptions, one ought always do what one is afraid of.
+}{Viggo Mortensen}
+
+Wie wir gesehen haben, bricht der Python-Interpreter die Ausführung unseres Codes ab, wenn sich die angeforderten Operationen als nicht Durchführbar herausstellen. Der Ausdruck \inPy{x / y} ist grundsätzlich ein sinnvolles Python-Codeelement, kann aber nicht ausgewertet werden, wenn \texttt{y} den Wert 0 hat. In diesem Fall wird eine sogenannte \emph{Ausnahme} (\emph{Exception}) ausgelöst. Unser Ziel als ProgrammiererIn sollte es sein, solche Ausnahmen zu vermeiden. Manchmal ist es aber bequemer, im Nachgang auf Fehler zu reagieren, als diese bereits im Vorfeld abzufangen. Dieses Kapitel soll Ihnen zeigen, wie Sie in Ihre Codes Fehlerbehandlung einbauen.
+
+\section{\inPy{try-except}-Blocks}
+\subsection{Grundlegendes}
+Eine \emph{Ausnahme} ist eine Instanz einer Klasse, die Informationen zum letzten Laufzeitfehler enthält. Tritt ein Fehler in der Codeausführung auf, so wird eine Instanz dieser Klasse angelegt, und durch verschiedene Routinen durchgereicht. Ultimativ wird sie in einem Kernmodul des Python-Interpreters landen, der auf dieses Signal hin die Ausführung unterbricht -- es sei denn, wir schreiben Code, der diese Instanz abfängt und nicht mehr weiterreicht. Genau zu diesem Zweck existieren \inPy{try-except}-Blocks.
+
+\inPy{try-except}-Blocks bestehen aus einem \inPy{try}-Block, in dem Anweisungen stehen, die potentiell einen Fehler erzeugen könnten, sowie (mindestens) einem \inPy{except}-Block, in den beschrieben wird, was geschehen soll, wenn dieser Fehler auftritt:
+
+\begin{codebox}[Syntax: \texttt{try-except}]
+\begin{minted}{python}
+try :
+    Code der eine Ausnahme auslösen könnte
+except ExceptionClass as varible :
+    Code zur Fehlerbehandlung
+\end{minted}
+\end{codebox}
+
+Mit \texttt{ExceptionClass} ist dabei die \enquote{Art der Ausnahme} gemeint, also die Fehlerklasse, die Sie sonst bei Programmabbruch angezeigt bekämen:
+
+\begin{cmdbox}[Auslösen einer Exception und Anzeige in der Python-Konsole]
+\begin{minted}{text}
+>>> print(1/0)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ZeroDivisionError: division by zero
+\end{minted}
+\end{cmdbox}
+
+Die letzte Zeile der Fehlermeldung zeichnet die aufgetretene Ausnahme also als \texttt{ZeroDivisionError} aus. Eben dies sollte auch anstelle von \texttt{ExceptionClass} in einer entsprechenden \inPy{except}-Zeile stehen.
+
+\texttt{variable} ist eine neue Variable, mit der wir auf die Daten der Instanz von \texttt{ExceptionClass} zugreifen können.
+
+Tritt während der Ausführung des \inPy{try}-Blocks eine Ausnahme der Klasse \texttt{ExceptionClass} auf, so wird der Code des entsprechenden \inPy{except}-Blocks ausgeführt; danach setzt Python die Ausführung mit \emph{der ersten Zeile nach dem \inPy{try-except}-Block fort}.
+
+\begin{codebox}[Beispiel: Inverse]
+\begin{minted}[linenos]{python}
+for x in range(-3, 3) :
+    try :
+        print(1/x)
+    except ZeroDivisionError as e :
+        print("An exception was caught:", e)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Inverse]
+\begin{minted}{text}
+-0.3333333333333333
+-0.5
+-1.0
+An exception was caught: division by zero
+1.0
+0.5
+\end{minted}
+\end{cmdbox}
+
+Beachten Sie auch, dass es durchaus von Bedeutung ist, welche Strukturen Sie wie ineinander schachteln: Vertauschen Sie im obigen Beispiel den \inPy{for}- mit dem \inPy{try}-Block, so werden die Inversen der positiven Zahlen nicht mehr berechnet:
+
+\begin{codebox}[Beispiel: Inverse II]
+\begin{minted}[linenos]{python}
+try :
+    for x in range(-3, 3) :
+        print(1/x)
+except ZeroDivisionError as e :
+    print("An exception was caught:", e)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Inverse II]
+\begin{minted}{text}
+-0.3333333333333333
+-0.5
+-1.0
+An exception was caught: division by zero
+\end{minted}
+\end{cmdbox}
+
+Ist der aufgetretene Fehler nicht in der Klasse, die im \inPy{except}-Block genannt wurde, so ignoriert Python die bereitgestellte Fehlerbehandlung und bricht wie üblich die Fehlerbehandlung ab:
+
+\begin{codebox}[Beispiel: Fehlerklassen]
+\begin{minted}[linenos]{python}
+import math
+try :
+    print( math.log(-1) )
+except ZeroDivisionError as e :
+    print("An exception was caught:", e)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Fehlerklassen]
+\begin{minted}{text}
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+ValueError: math domain error
+\end{minted}
+\end{cmdbox}
+
+Ausnahmen haben eine hierarchische Struktur, \ie manche Ausnahmen sind Spezialisierungen von anderen. So ist beispielsweise \texttt{ZeroDivisionError} eine Abwandlung von \texttt{ArithmeticError}. In Beispiel: Inverse und Inverse II würden also genauso funktionieren, wenn Zeile 4 jeweils durch \inPy{except ArithmeticError as e :} ausgetauscht würde. Die allgemeinste (sinnvoll verwendbare) Fehlerklasse ist \texttt{Exception}. Im Kasten \emph{Ausgewählte Fehlerklassen} finden Sie eine Aufzählung häufig ausgelöster Ausnahmen.
+
+\begin{figure}
+\begin{tcolorbox}[title=Ausgewählte Fehlerklassen]
+ \renewcommand{\labelitemi}{\textbullet}
+ \renewcommand{\labelitemii}{\textendash}
+ \renewcommand{\labelitemiii}{\textperiodcentered}
+\begin{itemize}
+\item \texttt{Exception} (Generelle Fehlermeldung)
+	\begin{itemize}
+	\item \texttt{StopIteration} (Wird von \emph{iterierbaren} Objekten ausgelöst, um \inPy{for}-Schleifen mitzuteilen, dass sie fertig durchlaufen sind.)
+  \item \texttt{ArithmeticError} (Fehler bei Berechnungen)
+	  		\begin{itemize}
+	  		\item \texttt{FloatingPointError} (Fehler spezifisch für Fließkommaberechnungen)
+	    \item \texttt{OverflowError} (Ergebnis zu groß für den bereitgestellten Speicher)
+	    \item \texttt{ZeroDivisionError} (Division durch Null)
+  			\end{itemize}
+    \item \texttt{EOFError} (Lesezugriff nach Dateiende) (EOF: End of File)
+    \item \texttt{ImportError} (Fehler bei Bearbeitung einer \inPy{import}-Zeile)
+    		\begin{itemize}
+    		\item \texttt{ModuleNotFoundError} (Angegebenes Modul wurde nicht gefunden)
+    		\end{itemize}
+    	\item \texttt{LookupError} (Fehler bei Zugriff auf ein Container-Element)
+    		\begin{itemize}
+    		\item \texttt{IndexError} (Ungültiger Index)
+			\item \texttt{KeyError} (Ungültiger Schlüssel bei \inPy{dict}s)
+    		\end{itemize}
+		\item \texttt{NameError} (Symbol mit diesem Namen existiert nicht)
+		\item \texttt{OSError} (Fehler bei Nutzung von Funktionen des Betriebssystems)
+			\begin{itemize}
+			\item \texttt{FileExistsError} (Datei existiert bereits)
+      \item \texttt{FileNotFoundError} (Datei kann nicht gefunden werden)
+			\end{itemize}
+		\item \texttt{RuntimeError}
+			\begin{itemize}
+			\item \texttt{NotImplementedError} (Methode/Variante einer Methode einer Klasse wurde nicht implementiert)
+      \item \texttt{RecursionError}
+			\end{itemize}
+		\item \texttt{SyntaxError}
+			\begin{itemize}
+			\item \texttt{IndentationError}
+			\end{itemize}
+		\item \texttt{TypeError} (Datentyp kann nicht verarbeitet werden)
+		\item \texttt{ValueError} (Unzulässiger Wert bei Funktionsaufruf)
+	\end{itemize}
+\end{itemize}
+Siehe \url{https://docs.python.org/3/library/exceptions.html} für weitere Details.
+\end{tcolorbox}
+\end{figure}
+
+
+\subsection{Mehrteilige \inPy{except}-Blöcke}
+Hinter \inPy{except} darf auch ein \inPy{tuple} von Fehlerklassen stehen, die dann jeweils mit demselben Code behandelt werden. Wir können also beispielsweise schreiben:
+\begin{codebox}[Syntax: \texttt{tuple} von Fehlerklassen]
+\begin{minted}{python}
+except (ZeroDivisionError, ValueError) as e :
+\end{minted}
+\end{codebox}
+Wenn ein Fehler auftritt, der auf wenigstens eine der Klassen im \inPy{tuple} passt (im Beispiel also entweder ein \inPy{ZeroDivisionError} oder ein \inPy{ValueError}), betritt der Python-Interpreter die \inPy{except}-Umgebung und setzt nach dieser die Ausführung am Ende des \inPy{try-except}-Blocks fort.
+
+Daneben ist es auch möglich, mehrere \inPy{except}-Blöcke hintereinander zu setzen, und für jede Fehlerklasse einen eigenen Code zur Fehlerbehandlung zu schreiben. Dabei wird nur der \emph{erste \inPy{except}-Block} abgearbeitet, der zur ausgelösten Ausnahme passt.
+
+\begin{codebox}[Beispiel: Mehrere \texttt{except}-Blöcke]
+\begin{minted}[linenos]{python}
+try :
+    print(1/0)
+except ArithmeticError as e :
+    print("Arithmetic Unit Error")
+except ZeroDivisionError as e :
+    print("Division by Zero.")
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Mehrere \texttt{except}-Blöcke]
+\begin{minted}{text}
+Arithmetic Unit Error
+\end{minted}
+\end{cmdbox}
+
+Der Ausdruck \inPy{1/0} löst bekanntermaßen die Ausnahme \texttt{ZeroDivisionError} aus; diese ist jedoch eine Spezialisierung von \texttt{ArithmeticError}, welche im obigen Beispiel zuerst bearbeitet wird. Die Behandlung von \texttt{ZeroDivisionError} findet also unter keinen Umständen statt.
+
+\subsection{\inPy{else} und \inPy{finally}}
+Soll Code nur ausgeführt werden, wenn im \inPy{try}-Block \emph{kein} Fehler aufgetreten ist, so kann dies mit einem \inPy{else}-Block erreicht werden. Dieser Block steht hinter den \inPy{except}-Blöcken und wird ausgeführt, nachdem die Behandlung des \inPy{try}-Blocks abgeschlossen wurde.
+
+Das Schlüsselwort \inPy{finally} leitet einen weiteren Block ein, in dem Code steht, der ausgeführt wird, nachdem alle \inPy{except}- und \inPy{else}-Blöcke bearbeitet wurden, selbst wenn der tatsächlich eingetretene Fehler noch nicht abgefangen wurde:
+
+\begin{codebox}[Beispiel: Mehrere \texttt{try-except-else-finally}]
+\begin{minted}[linenos]{python}
+def divide(x, y):
+    try:
+        result = x / y
+    except ZeroDivisionError:
+        print("division by zero!")
+    else:
+        print("result is", result)
+    finally:
+        print("executing finally clause")
+
+print("divide(2, 1)")
+divide(2, 1)
+print()
+
+print("divide(2, 0)")
+divide(2, 0)
+print()
+
+print('divide("2", "0")')
+divide("2", "1")
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Mehrere \texttt{except}-Blöcke]
+\begin{minted}{text}
+divide(2, 1)
+result is 2.0
+executing finally clause
+
+divide(2, 0)
+division by zero!
+executing finally clause
+
+divide("2", "1")
+executing finally clause
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 3, in divide
+TypeError: unsupported operand type(s) for /: 'str' and 'str'
+\end{minted}
+\end{cmdbox}
+
+
+
+\subsection{\inPy{raise}}
+In Kapitel \ref{chp:Classes} (Klassen) haben wir bereits gesehen, dass wir mit dem Befehl \inPy{raise} die Fehlerbehandlung auslösen können: Nach \inPy{raise} können wir eine Fehlerklasse (\eg ValueError) nennen. Eine Instanz dieser Fehlerklasse wird dann angelegt und ruft das oben beschriebene Verhalten aus:
+\begin{itemize}
+\item Unbehandelt bricht der Python-Interpreter die Code-Ausführung ab und gibt eine Fehlermeldung aus
+\item In einem \emph{passenden} \inPy{except}-Block kann der Fehler \enquote{aufgefangen} und behandelt werden.
+\end{itemize}
+In der Regel erlauben die Fehlerklassen, ihrem Konstruktor noch ein String-Argument mitzugeben, in dem dann der aufgetretene Fehler in für Menschen lesbarer Form genauer beschrieben wird. In einem früheren Beispiel finden Sie etwa die Zeile
+\begin{codebox}[Beispiel: Auszug aus einem früheren Code]
+\begin{minted}{python}
+raise Exception("Incompatible Shapes")
+\end{minted}
+\end{codebox}
+
+Diese Zeile löst also eine Ausnahme vom Typ \inPy{exception} aus. Die Zusatzinformation \inPy{"Incompatible Shapes"} wird der Ausnahme angehängt und taucht auf, wenn Informationen zum aufgetretenen Fehler ausgegeben werden sollen.
+
+\begin{hintbox}[Fehlerklassen möglichst spezifisch wählen]
+Die Klasse \inPy{Exception} ist die allgemeinste Fehlerklasse. \emph{Alle} auftretenden Fehler werden über \inPy{except Exceptoin as e :} abgefangen. Die Behandlung von verschiedenen Arten von Fehlern kann sehr verschiedenartig sein. In manchen Fällen wollen Sie vielleicht nur eine Warnung auf dem Bildschirm ausgeben, während andere Fehlerklassen eine Datei bearbeiten sollten oder ein extern angeschlossenes Gerät ausschalten müssen.
+
+Damit Sie ihren Fehlerbehandlungs-Code richtig schreiben können und nicht in unerwarteten Situationen auslösen, sollten Sie auch geeignete, \emph{spezifische} Fehlerklassen wählen. Vermeiden Sie daher \inPy{raise Exception} bzw. \inPy{except Exceptoin as e :} und benutzen Sie stattdessen lieber Fehlerklassen wie \inPy{ZeroDivisionError}.
+\end{hintbox}
+
+Ausnahmen können auch nach der Behandlung \enquote{neu aufgelegt} werden. Wollen Sie beispielsweise eine detaillierte Fehlerbeschreibung ausgeben, aber dennoch das Programmende auslösen, so erreichen Sie dies, indem Sie im \inPy{except}-Block erneut \inPy{raise} (ohne weitere Argumente) schreiben:
+
+\begin{codebox}[Beispiel: Re-\texttt{raise}]
+\begin{minted}[linenos]{python}
+try :
+    x = 7
+    y = 0
+    print(x / y)
+except ZeroDivisionError as e :
+    print("Division durch 0 aufgetreten!")
+    print("Fehlerbeschreibung: ", e)
+    print("x =", x)
+    print("y =", y)
+    raise
+
+print("Wird nie ausgeführt.")
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Re-\texttt{raise}]
+\begin{minted}{text}
+Division durch 0 aufgetreten!
+Fehlerbeschreibung:  division by zero
+x = 7
+y = 0
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+ZeroDivisionError: division by zero
+
+\end{minted}
+\end{cmdbox}
+
+Wie Sie sehen, nennt die Ausgabe immer noch Zeile 4 als Punkt, an dem die Ausnahme ausgelöst wurde. Würden wir in Zeile 10 statt einem einfachen \inPy{raise} den Ausdruck \inPy{raise ZeroDivisionError}, so würde die Ausgabe auch Zeile 10 als Auslöser der Ausnahme melden.
+
+Ein solches re-raise verlässt den gesamten \inPy{try}-Block. Auch nachgelagerte, passende \inPy{except}-Blocks werden ignoriert. Ein äußerer \inPy{try}-Block dagegen kann die re-raised Ausnahme dagegen immer noch auffangen:
+\begin{codebox}[Beispiel: Re-\texttt{raise}]
+\begin{minted}[linenos]{python}
+try :
+    try :
+        print(1/0)
+    except ArithmeticError as e :
+        print("Arithmetic Unit Error")
+        raise   # leaves entire structure
+    except ZeroDivisionError as e :
+        print("Innerer Block wird übersprungen.")
+except ZeroDivisionError as e :
+    print("Äußerer Block wird behandelt")
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Re-\texttt{raise}]
+\begin{minted}{text}
+Arithmetic Unit Error
+Äußerer Block wird behandelt
+\end{minted}
+\end{cmdbox}
+
+Zeile 3 löst bekanntermaßen einen \inPy{ZeroDivisionError} aus. Dieser ist eine spezielle Form eines \inPy{ArithmeticError}s, und löst somit die Fehlerbehandlung in Zeile 4 aus (und damit die Ausgabe \texttt{Arithmetic Unit Error}). Das \inPy{raise} in Zeile 5 dann markiert den Fehler als noch nicht vollständig bearbeitet und verlässt den gesamten \inPy{try}-Block, der in Zeile 2 begonnen hat. Auch \inPy{except ZeroDivisionError} in Zeile 7 kommt damit nicht mehr in Frage.
+
+Dagegen findet die Fehlerbehandlung jetzt eine Ebene höher statt, \ie in dem \inPy{try}-Block, der in Zeile 1 begonnen hat. Damit wird also die Fehlerbehandlung in Zeile 9 ausgelöst, und wir finden eine zweite Meldung \texttt{Äußerer Block wird behandelt} auf dem Bildschirm.
+
+\section{Eigene Ausnahmen}
+Wir sollten Ausnahmen immer so spezifisch wie möglich aufwerfen. Die vorgefertigten Ausnahmen, die mit dem Standardumfang der Sprache Python angeboten werden, sind aber nicht besonders zahlreich und können unmöglich alle erdenklichen Szenarios abdecken, die wir als fehlerhaft behandeln wollen könnten. Wir müssen also auch eigene Fehlerklassen erstellen können.
+
+Dies Geschieht nach dem Formalismus von von Klassen, wie wir ihn in Kapitel \ref{chp:Classes} bereits kennengelernt haben. Ausnahmen sind damit einfach von \inPy{Exception} abgeleitete Klassen.
+
+Beispiel: Wir wollen fehlerhafte User-Eingaben als eigene Fehlerklasse abbilden. Dazu legen wir eine neue Klasse \inPy{UserInputError} an, die wir von \inPy{Exception} ableiten:
+
+\begin{codebox}[Beispiel: Eigene Fehlerklasse anlegen]
+\begin{minted}[linenos]{python}
+class UserInputError(Exception) :
+    pass
+
+try:
+    x = float(input("Bitte eine positive Zahl eingeben"))
+    if x < 0 :
+        raise UserInputError("Zahl war negativ!")
+except UserInputError as e :
+    print(e)
+    
+\end{minted}
+\end{codebox}
+
+Die Klasse \inPy{UserInputError} erbt alle Eigenschaften von \inPy{Exception} und ist damit effektiv eine Kopie von \inPy{Exception} mit neuem Namen. Wir müssen mindestens eine Code-Zeile in der Block-Anweisung \inPy{class} schreiben; daher setzen wir hier in \inPy{pass}, das keine weitere Auswirkung hat, aber die Anforderung an die Syntax erfüllt (keine leeren Block-Anweisungen).
+
+Mit dieser neuen Klasse können wir jetzt also alle Techniken anwenden, die wir oben bereits besprochen hatten.
+
+Natürlich können Sie Ihre Fehlerklassen auch weiter ausgestalten, und eigene Attribute und Methoden hinzufügen. Beim \inPy{raise} wird ein von Ihnen frei gestaltbarer Konstruktor aufgerufen (\ie die Methode \inPy{__init__}), was es Ihnen erlaubt, zusätzliche Informationen an die Fehlerbehandlung zu übertragen. Als Minimalbeispiel reicht aber bereits der oben gezeigte Code.
+
+Selbstverständlich können Sie auch ihre eigenen Fehlerklassen als Basisklassen verwenden. Das bedeutet, dass eine weitere Klasse \inPy{UserInputNumericError} von der bereits beschriebenen Klasse \inPy{UserInputError} erben könnte. Damit erzeugen Sie genau eine solche hierarchische Struktur, wie sie im Infokasten \emph{Ausgewählte Fehlerklassen} bereits beschrieben ist.
