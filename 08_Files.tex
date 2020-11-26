@@ -50,7 +50,7 @@ Um mit Dateien umzugehen, brauchen wir zunächst ein \emph{Handle auf die Datei}
 
 Wir erhalten ein solches Handle über den Befehl \inPy{open}:
 \begin{codebox}[Syntax: \texttt{open}]
-\begin{minted}{python}
+\begin{minted}{python3}
 handle = open(Dateiname, Modus)
 \end{minted}
 \end{codebox}
@@ -97,7 +97,7 @@ Unter \emph{Modus} verstehen wir, für welche Art Zugriff die Datei geöffnet we
 	\texttt{ab}			& Anhängen -- Binärmodus		& Dateicursor am \emph{Ende} der Datei. Neuen Dateien werden angelegt, alte Dateien \emph{nicht} überschrieben. \\
 	\bottomrule
 \end{tabular}
-\captionof{table}{Dateimodi in Python}
+\captionof{table}{Dateimodi in python3}
 \label{tab:FileModes}
 \end{center}
 
@@ -107,7 +107,7 @@ Absolute Pfadangaben sind von Natur aus unflexibel. Wenn Sie Ihr Programm an Kol
 
 Jede Datei, die geöffnet wurde, sollte auch wieder geschlossen werden. Dies geschieht mit der Methode \inPy{close}:
 \begin{codebox}[Syntax: \texttt{open}]
-\begin{minted}{python}
+\begin{minted}{python3}
 handle.close()
 \end{minted}
 \end{codebox}
@@ -119,7 +119,7 @@ Ob eine Datei noch geöffnet ist, können wir mit dem Attribut \inPy{closed} in 
 Sobald eine Datei in einem Text-Schreibmodus geöffnet wurde (\texttt{w},  \texttt{x} oder \texttt{a}), und solange sie noch nicht wieder geschlossen wurde, können wir mit der Methode \inPy{write} Text in eine Datei schreiben. Die Syntax ist denkbar einfach:
 
 \begin{codebox}[Syntax: \texttt{write}]
-\begin{minted}{python}
+\begin{minted}{python3}
 handle.write(Text)
 \end{minted}
 \end{codebox}
@@ -127,7 +127,7 @@ handle.write(Text)
 Dabei ist \inPy{Text} ein beliebiger Ausdruck, der zu einem String ausgewertet werden kann.
 
 \begin{codebox}[Beispiel: Text-Dateien Schreiben]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 handle = open("output.txt", "w")    # Text/Schreibmodus
 
 handle.write("Some text\n")
@@ -158,7 +158,7 @@ Schreiben im Binärmodus funktioniert prinzipiell genauso, wie wir es vom Textmo
 Eine Klasse von Objekten, das eine solche absolut unmissverständliche Darstellung haben, sind Instanzen der Klasse \inPy{bytes}. Diese können beispielsweise aus \inPy{list}s erstellt werden, wenn deren einzelne Elemente nur Werte zwischen \inPy{0} und \inPy{255} annehmen.
 
 \begin{codebox}[Beispiel: Binär-Dateien Schreiben]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 handle = open("output.dat", "wb")    # Binär/Schreibmodus
 
 data = bytes([65, 66, 67])
@@ -182,14 +182,14 @@ Beim Lesen können wir uns vorstellen, dass in der Datei ein \enquote{Cursor} pl
 
 Die Methode \inPy{read} im einfachsten Fall \emph{die gesamte Datei} in den Arbeitsspeicher:
 \begin{codebox}[Syntax: \texttt{read}]
-\begin{minted}{python}
+\begin{minted}{python3}
 StringVariable = handle.read()
 \end{minted}
 \end{codebox}
 
 Optional kann auch ein \inPy{int}-Parameter \inPy{size} mit übergeben werden. Dieser gibt eine Maximalmenge an Daten an, die aus der geöffneten Datei \inPy{handle} gelesen werden dürfen. 
 \begin{codebox}[Syntax: \texttt{read} (erweitert)]
-\begin{minted}{python}
+\begin{minted}{python3}
 StringVariable = handle.read(size)
 \end{minted}
 \end{codebox}
@@ -202,7 +202,7 @@ Die online-Dokumentation (\url{https://docs.python.org/3/tutorial/inputoutput.ht
 
 Beispiel: Wir wollen die im vorigen Abschnitt vorbereitete Datei \texttt{output.txt} zurück in den Arbeitsspeicher lesen. Dies erreichen wir mit dem folgenden Code:
 \begin{codebox}[Beispiel: Text-Dateien Lesen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 handle = open("output.txt", "r")    # Text/Lesemodus
 
 firstWord = handle.read(4)
@@ -230,7 +230,7 @@ Wird \enquote{nach dem Ende der Datei} versucht, weiter zu lesen, so ist das Erg
 
 Textdateien sollen besonders häufig Zeile für Zeile bearbeitet werden. Zu diesem Zweck existiert die Methode \inPy{readline}:
 \begin{codebox}[Syntax: \texttt{readline}]
-\begin{minted}{python}
+\begin{minted}{python3}
 StringVariable = handle.readline(size)
 \end{minted}
 \end{codebox}
@@ -239,7 +239,7 @@ StringVariable = handle.readline(size)
 Verwandt mit der Methode \inPy{readline} ist die Methode \inPy{readlines}: Diese liest \emph{die gesamte Datei}, zerlegt sie dabei aber bereits an den Zeilenumbrüchen, und packt die Teilde der Datei in eine \inPy{list}:
 
 \begin{codebox}[Beispiel: \texttt{readlines}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 handle = open("output.txt", "r")    # Text/Lesemodus
 
 lines = handle.readlines()
@@ -268,7 +268,7 @@ another line another line
 Im Kontext von Dateien können Sie das Schlüsselwort \inPy{with .. as} benutzen. Damit wird eine neue Umgebung (Einrückungsebene) geschaffen, innerhalb derer eine Datei geöffnet ist. Sehen Sie also \inPy{with} als eine Kurzform an, die automatisch eine geöffnete Datei schließt, wenn die Einrückungsebene von \inPy{with} geschlossen wird.
 
 \begin{codebox}[Syntax: \texttt{with .. as}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 with open(Dateiname, Modus) as Handle :
     Datei_Anweisungen
 \end{minted}
@@ -276,7 +276,7 @@ with open(Dateiname, Modus) as Handle :
 
 Das oben gezeigte \emph{Beispiel: Text-Dateien Schreiben} lässt sich also auch so schreiben:
 \begin{codebox}[Beispiel: Text-Dateien Schreiben]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 with open("output.txt", "w") as handle :
     handle.write("Some text\n")
     handle.write("another line " * 2 + "\n")
@@ -299,7 +299,7 @@ Die Methode \inPy{__exit__(self, exc_type, exc_value, exc_traceback)} wird aufge
 Die weit häufigste Aufgabe im Kontext von Dateien ist, diese Zeile für Zeile zu lesen und mit den geladenen Daten weitere Operationen zu bewerkstelligen (\eg aufsummieren, plotten, ...). Zu diesem Zweck können \inPy{for}-Schleifen verwendet werden:
 
 \begin{codebox}[Syntax: Dateihandles mit \texttt{for}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 for Zeile in handle :
     Anweisungen
 \end{minted}
@@ -310,7 +310,7 @@ Diese Syntax enthält also bereits die Mechanik, die Sie sonst mit \inPy{handle.
 Wenn Sie tatsächlich den gesamten Dateiinhalt nach Zeilen aufgetrennt im Speicher brauchen, können Sie das Datei-Handle auch einfach in eine \inPy{list} umwandeln:
 
 \begin{codebox}[Beispiel: Dateihandles als \texttt{list}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 with open("output.txt", "r") as handle :
     allLines = list(handle)
     print("Zeile 1:",  allLines[0])
@@ -332,7 +332,7 @@ Mit \inPy{seek} kann der Dateicursor verschoben werden. Die hat einen verpflicht
 \end{itemize}
 
 \begin{codebox}[Beispiel: Funktion zum Ermitteln der Länge einer Datei]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def length_of_file(handle) :
     if handle.closed :
         raise Exception("Datei muss geöffnet sein!")
@@ -376,7 +376,7 @@ Das Archivieren mit Pickle läuft in drei Schritten ab:
 In ähnlicher Manier kann mit \inPy{Objekt = pickle.load(handle)} ein Objekt aus der Archiv-Datei entpackt werden, und im Anschluss wie eine normale Variable weiter verwendet werden. Unter Objekt ist hierbei tatsächlich eine Variable beliebigen Typs zu verstehen (also \eg \inPy{int}, \inPy{complex}, Klasseninstanzen, Funktionen, ...).
 
 \begin{codebox}[Beispiel: Zahl und Klassenobjekt in Datei zwischenspeichern und wieder laden]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import pickle
 
 class Foo :
@@ -460,7 +460,7 @@ Zum Lesen ihres Archivs öffnen Sie die Datei im Text-Lesemodus (\inPy{"r"}), un
 Damit die Datei später auch wieder gelesen werden kann, darf nur ein einziges Objekt geschrieben werden. Wollen Sie mehrere Objekte in derselben Datei ablegen, so können Sie diese zu einem \inPy{dict} zusammenfassen.
 
 \begin{codebox}[Beispiel: Archive schreiben und lesen mit JSON]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import json
 
 complexNumber = -0.3 + 4.1j

@@ -161,8 +161,8 @@ Anstatt eine Kopie der Liste anzulegen, haben Sie nur eine \emph{Kopie der Refer
 
 Um nun das gewünschte Ziel zu erreichen, müssen Sie stattdessen die Funktion \inPy{copy} aus dem Modul \inPy{copy} benutzen:
 
-\begin{codebox}
-\begin{minted}{python}
+\begin{codebox}[Schema: Shallow Copy anlegen]
+\begin{minted}{python3}
 import copy
 
 # Code zum Aufbau der Liste originalList
@@ -179,7 +179,7 @@ Die \emph{Werte} von immutable objects dürfen sich nicht mehr ändern, sobald s
 Betrachten Sie dazu das folgende Beispiel:
 
 \begin{codebox}[Codebeispiel, width=.495\linewidth, on line, equal height group=immutableEvolutionGroup]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # int-Variablen sind immutable
 
 intVar = 100
@@ -240,7 +240,7 @@ Wir haben bereits den Operator \inPy{==} kennengelernt, der uns mitteilt, ob zwe
 
 Der Operator \inPy{is} vergleicht nicht die Werte, sondern die Speicheradressen, und gibt folglich \inPy{True} zurück, wenn zwei Variablen dasselbe Objekt referenzieren. Die folgenden beiden Codezeilen sind also äquivalent:
 \begin{codebox}[Übersetzung von \texttt{is}]
-\begin{minted}{python}
+\begin{minted}{python3}
 print( id(a) == id(b) )
 print(    a  is    b  )
 \end{minted}
@@ -250,7 +250,7 @@ print(    a  is    b  )
 \begin{hintbox}[]
 Beachten Sie, dass diese Bedeutung des Operators \inPy{is} manchmal unintuitives Verhalten erzeugt:
 \begin{warnbox}[Unintuitives Verhalten von \texttt{is}]
-\begin{minted}{python}
+\begin{minted}{python3}
 5 == 4 is not True
 \end{minted}
 \end{warnbox}
@@ -320,7 +320,7 @@ Die Addition von Listen führt zur Verkettung, wie Sie das schon von Strings ken
 
 \subsection{Beispiel}
 \begin{codebox}[Beispiel: Listenzugriffe]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 myList = [1, 2, -5, 3.14, "some text", [3, 2], (1+1j)]
 
 print(myList[0])        # erstes Element
@@ -354,7 +354,7 @@ Beachten Sie besonders die Klammern in Zeile 11: \inPy{myList += [[]]}. Die äu�
 
 \inPy{list}s sind mutable. Das heißt, für Kopien muss der \inPy{copy}-Befehl aus dem Modul \inPy{copy} verwendet werden, oder mittels der Slicing-Syntax eine Kopie erstellt werden:
 \begin{codebox}[Beispiel: mutable list]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import copy
 
 originalList = [1, 2, 3]
@@ -389,7 +389,7 @@ Dasselbe gilt für \inPy{altCopy}: der Slicing-Operator bewirkt dasselbe wie der
 Achtung: \inPy{list}s werden intern als Abfolge von Adressen der Elemente in der Liste realisiert. Wenn das referenzierte Objekt wiederum eine Liste ist, so kann selbst über eine \enquote{echte} Kopie die Original-Liste geändert werden. Die Funktion \inPy{deepcopy} aus dem Modul \inPy{copy} umgeht dies, indem wirklich \emph{rekursiv} Kopien von allen Ebenen der Liste angelegt werden:
 
 \begin{codebox}[Beispiel: Kopien mit \texttt{deepcopy}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import copy
 
 originalList = [1, 2, [1, 2]]
@@ -417,7 +417,7 @@ copy.deepcopy: [1, 2, [1, 2]]
 Eine solche Methode ist \inPy{append}. Sie wird verwendet, um Elemente zu einer Liste hinzuzufügen. Aufgerufen wird eine Methode, indem man das zugrundeliegende Datenobjekt nennt, und, getrennt durch einen Punkt, die Methode anhängt. Methoden sind \emph{Funktionen}, also folgt wie üblich eine Parameterliste in runden Klammern.
 
 \begin{codebox}[Beispiel: Methode \texttt{append}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 numbers = [1, 2]
 
 numbers.append(3)
@@ -445,7 +445,7 @@ Wie Sie sehen, wird in den Zeilen 3 und 4 jeweils ein Element zur Liste hinzgef�
 Ähnlich funktioniert die Methode \inPy{insert}: Sie fügt einen Wert zur Liste hinzu. Im Gegensatz zu \inPy{append} jedoch kann mit \inPy{insert} auch die Position innerhalb der Liste festgelegt werden: Beim Einfügen muss dazu sowohl der \emph{Index} (die Position in der Liste, an der eingefügt werden soll) als auch das Element selbst genannt werden:
 
 \begin{codebox}[Beispiel: Methode \texttt{insert}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 numbers = [1, 2]
 
 numbers.insert(1, 99)
@@ -473,7 +473,7 @@ Beachten Sie, dass das \emph{erste} Element einer Liste den Index \inPy{0} hat! 
 Das Gegenstück zu \inPy{insert} ist \inPy{remove}: Es löscht einen bestimmten Wert aus der Liste. Als Parameter wird der \emph{Wert} selbst angegeben, nicht der Index. Taucht der Wert in der Liste mehrfach auf, so wird das erste Element gelöscht, das dem Parameter gleicht. Ist der Parameter gar nicht in der Liste, so wird eine Fehlermeldung ausgegeben.
 
 \begin{codebox}[Beispiel: Methode \texttt{remove}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 numbers = [1, 2, 4, 3, 4, 4, 5]
 
 numbers.remove(4)
@@ -495,7 +495,7 @@ Wie der Name vermuten lässt, dienen diese Methoden dazu, \inPy{list}s zu sortie
 Wir werden in Kapitel \ref{chp:Funcs} eine Möglichkeit kennen lernen, diese Funktionalität zu erweitern.
 
 \begin{codebox}[Beispiel: Methode \texttt{sort} und \texttt{reverse}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 numbers = [5, -2, 3, 4, 4, 4, 5]
 
 numbers.sort()
@@ -520,7 +520,7 @@ numbers = [1, "broccoli"]
 Die Methode \inPy{pop} kombiniert die Aufgaben \enquote{lese das letzte Element der Liste} und \enquote{entferne das letzte Element der Liste}. Dies ist nützlich, um \enquote{Aufgabenstapel abzuarbeiten}.
 
 \begin{codebox}[Beispiel: Methode \texttt{pop}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 jobs = ["go have a coffee", 
         "think of some nice examples", 
         "write the chapter"]
@@ -548,7 +548,7 @@ finden Sie (knappe) Erklärungen zu allen Methoden, die sowohl die \inPy{list} a
 \inPy{tuple}s sind die immutable Cousins der \inPy{list}: auch sie repräsentieren Listen. Wie bei \inPy{list} spricht man Syntaxelemente über einen Index in [eckigen Klammern] an. Angelegt werden sie ähnlich, jedoch mit runden Klammern. Addition und Multiplikation funktionieren wie bei \inPy{list}s:
 
 \begin{codebox}[Beispiel: \texttt{tuple}s]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 tup_numbers = (1, 2, 3)
 print( tup_numbers + (4, 5) )
 print( 2 * tup_numbers)
@@ -571,7 +571,7 @@ print(b)
 Viele Funktionen in Python geben \inPy{tuple}s zurück. Ein Beispiel hierfür ist die Funktion \inPy{divmod}, die sowohl Quotient als auch Rest einer Division in einem Schritt berechnet:
 
 \begin{codebox}[Beispiel: \texttt{divmod}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 dm = divmod(11, 3)
 
 print("11 / 3 = ", dm[0], " Rest ", dm[1])
@@ -587,7 +587,7 @@ print("11 / 3 = ", dm[0], " Rest ", dm[1])
 Da \inPy{tuple}s \emph{immutable} sind, existieren keine Funktionen, die diese verändern, wie \eg \inPy{sort} oder \inPy{append}. Es ist jedoch möglich, aus einem \inPy{tuple} eine \inPy{list} mit gleichen Inhalten zu generieren, und diese dann -- nach Bearbeitung -- wieder in einen \inPy{tuple} zurückzuverwandeln:
 
 \begin{codebox}[Beispiel: Type conversion mit \texttt{list} und \texttt{tuple}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 tup_numbers = (5, 2, 3)
 
 lst_numbers = list(tup_numbers)
@@ -621,7 +621,7 @@ Auch, wenn hier der Eindruck entsteht, der \inPy{tuple tup_numbers} wäre verän
 Man erstellt \inPy{set}s wie \inPy{list}s, jedoch mit \{geschweiften Klammern\}. Das Ansprechen einzelner Elemente geschieht wieder wie bei \inPy{list}s durch Nennung des Index in [eckigen Klammern]. 
 
 \begin{codebox}[Beispiel: \texttt{set}s]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
 print(basket)
 print(basket[0])
@@ -638,7 +638,7 @@ orange
 Ähnlich wie \inPy{tuple}s können \inPy{set}s aus \inPy{list}s (oder allen anderen Datenstrukturen) konstruiert werden:
 
 \begin{codebox}[Beispiel: Type conversion mit \texttt{set}s]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 lst_numbers = [1, 2, 1, 3, 1, 4]
 set_numbers = set(lst_numbers)
 uniqueList = list(set_numbers)
@@ -659,7 +659,7 @@ Wie schon zuvor funktioniert die Addition wie bei \inPy{list}s. Die Multiplikati
 So, wie es zur \inPy{list} das \emph{immutable} Analogon \inPy{tuple} gibt, hat das \inPy{set} im \inPy{frozenset} sein \emph{immutable} Gegenstück. \inPy{frozenset}s haben keinen eigenen Typ von Klammern, und werden stattdessen über ihren Typnamen aus Listen (beliebigen Typs) generiert:
 
 \begin{codebox}[Beispiel: Type conversion mit \texttt{frozenset}s]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 lst_numbers = [1, 2, 1, 3, 1, 4]
 fst_numbers = frozenset(lst_numbers)
 uniqueList  = list(fst_numbers)
@@ -682,7 +682,7 @@ Strings wurden bereits in Abschnitt \ref{sub:datatypes} vorgestellt. Hier möcht
 
 Mit diesem Wissen ist es für Sie leicht, das folgende Verhalten nachzuvollziehen:
 \begin{codebox}[Beispiel: Strings als \texttt{tuple}s]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 powerlevel = "over 9000"
 tup_powerlevel = tuple(powerlevel)
 
@@ -712,7 +712,7 @@ Strings lassen sich auch \emph{indizieren}. \inPy{stringVariable[i]} gibt das \e
 
 Auf die einzelnen Elemente dieser \inPy{range}s kann wieder mit Index in [eckigen Klammern] zugegriffen werden:
 \begin{codebox}[Beispiel: \texttt{range}s]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 rng_numbers = range(2, 5, 2)
 print(rng_numbers[0], rng_numbers[1])
 \end{minted}
@@ -727,7 +727,7 @@ print(rng_numbers[0], rng_numbers[1])
 \inPy{range}s speichern nicht die Liste selbst, sondern nur die Daten, aus denen die Elemente generiert werden können. Man nennt sie daher auch \emph{generator objects}. Mehr dazu später. Wo die einzelnen Objekte explizit gebraucht werden, kann wieder eine Type Conversion zu den bekannten Datenstrukturen eingesetzt werden:
 
 \begin{codebox}[Beispiel: Type conversion mit \texttt{range}s]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 rng_numbers = range(2, 5, 2)
 lst_numbers = list(rng_numbers)
 
@@ -748,7 +748,7 @@ range(2, 5, 2)
 \inPy{dict}s verhalten sich wie \inPy{list}s, werden aber nicht über Zahlen sondern über beliebige \emph{Schlüssel} indiziert. Beim Erstellen werden in \{geschweiften Klammern\} Schlüssel-Wert-Paare aufgeführt, die über einen Doppelpunkt miteinander verbunden werden:
 
 \begin{codebox}[Beispiel: \texttt{dict}s]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 houseStark = {"Sigil" : "A grey direwolf on a white field",
               "Words" : "Winter Is Coming",
               "Seat"  : "Winterfell"}
@@ -769,7 +769,7 @@ Winter Is Coming
 Wird versucht, den Wert eines Schlüssels zu lesen, der noch nicht angelegt wurde, so bewirkt dies eine Fehlermeldung. Schreibender Zugriff dagegen legt ein neues Schlüssel-Wert-Paar an:
 
 \begin{codebox}[Beispiel: \texttt{dict}s : neue Schlüssel]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 houseStark = {"Sigil" : "A grey direwolf on a white field",
               "Words" : "Winter Is Coming", "Seat"  : "Winterfell"}
 
@@ -789,7 +789,7 @@ Aus \inPy{dict}s lassen sich \inPy{list}s, \inPy{set}s, \ldots generieren. Dabei
 
 
 \begin{codebox}[Beispiel: \texttt{dict}s : spezielle Methoden]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 houseStark = {"Sigil" : "A grey direwolf on a white field",
               "Words" : "Winter Is Coming", "Seat"  : "Winterfell"}
 
@@ -826,7 +826,7 @@ Die Zuordnung von Schlüssel zu Wert ist eine nicht-triviale Aufgabe, die im Hin
 Mit dem Schlüsselwort \inPy{in} kann geprüft werden, ob ein Objekt Teil einer Datenstruktur ist. Zurück gegeben wird ein \inPy{bool}ean:
 
 \begin{codebox}[Beispiel: Operator \texttt{in}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 myList = [1, 2, -5, 3.14, "some text", [3, 2], (1+1j)]
 
 print(3.14 in myList)        # True
@@ -837,7 +837,7 @@ print("meaning" in myList)   # False
 Insbesondere funktioniert das Schlüsselwort \inPy{in} auch mit \inPy{dict}s. Beachten Sie, auf welche Menge (Schlüssel, Werte, oder Schlüssel-Wert-Paare) Sie sich beziehen:
 
 \begin{codebox}[Beispiel: \texttt{dict}s : Operator \texttt{in}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 houseStark = {"Sigil" : "A grey direwolf on a white field",
               "Words" : "Winter Is Coming", "Seat"  : "Winterfell"}
 
@@ -865,7 +865,7 @@ Der Operator \inPy{len} gibt die Zahl der Elemente in einer Liste zurück. Das f
 
 
 \begin{codebox}[Beispiel: \texttt{dict}s : operator \texttt{len}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 myList = [5, 9, 2]
 
 print( len(myList) )    # 3
@@ -879,7 +879,7 @@ print( len([]) )        # 0
 Wie die Namen schon andeuten, geben diese Funktionen in der Reihenfolge umgedrehte bzw. sortierte Listen zurück. Tatsächlich ist der Rückgabetyp beider Funktionen \inPy{list}. Im Gegensatz zu den \emph{Methoden} \inPy{sort} und \inPy{reverse} wird aber eine Kopie angelegt:
 
 \begin{codebox}[Beispiel: \texttt{sort} vs. \texttt{sorted}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 myList = [5, 9, 2]
 sortedList = sorted(myList)
 
@@ -904,7 +904,7 @@ myList after sort  : [2, 5, 9]
 Dies lässt sich auch auf \inPy{dict}s anwenden. Achten Sie darauf, dass ohne weitere Angaben nur die Schlüssel des \inPy{dict}s herangezogen werden:
 
 \begin{codebox}[Beispiel: \texttt{dict}s : und \texttt{sorted}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 houseStark = {"Sigil" : "A grey direwolf on a white field",
               "Words" : "Winter Is Coming", "Seat"  : "Winterfell"}
 
@@ -927,7 +927,7 @@ Wie schon angesprochen ist die Anordnung der Elemente in \inPy{dict}s nicht fest
 Mit dem Befehl \inPy{zip} können Listen zu Tabellen zusammengeschlossen werden. Jede einzelne Liste liefert die Daten einer Spalte. Das Ergebnis ist eine Datensammlung, die man zum Beispiel wieder zu einer \emph{Liste von Zeilen} machen kann:
 
 \begin{codebox}[Beispiel: \texttt{dict}s : und \texttt{sorted}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 categories     = ["House", "Sigil", "Words", "Seat"]
 houseStark     = ["Stark", "A grey direwolf on a white field",
                   "Winter Is Coming", "Winterfell"]

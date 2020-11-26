@@ -10,19 +10,19 @@ Damit Routinen genutzt werden können, müssen diese zunächst im Arbeitsspeiche
 \section{Der Befehl \inPy{import}}
 Geladen wird ein Modul mit dem Befehl \inPy{import}:
 \begin{codebox}[Syntax]
-\mint{python}{import module}
+\mint{python3}{import module}
 \end{codebox}
 
 Sobald ein Modul geladen ist, können wir die darin zusammen gefassten Funktionen aufrufen. Zwei Module können Funktionen mit gleichem Namen haben. Damit klar ist, welche Funktion wirklich gemeint ist, muss der Modulname beim Funktionsaufruf mit genannt werden:
 
 \begin{codebox}[Syntax]
-\mint{python}{module.function(arguments)}
+\mint{python3}{module.function(arguments)}
 \end{codebox}
 
 Beispielsweise existieren die Module \inPy{math} und \inPy{cmath}. Beide stellen mathematische Funktionen zur Verfügung; jedoch ist \inPy{math} auf relle Zahlen ausgelegt, \inPy{cmath} dagegen auf komplexe Zahlen. Wir können die Funktionen aus beiden Modulen so benutzen:
 
 \begin{codebox}[Beispiel: Funktionen aus \texttt{math} und \texttt{cmath}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import math
 import cmath
 
@@ -41,12 +41,12 @@ Module können ihrerseits wieder aus Unter-Modulen bestehen, so dass sich ein \e
 Es ist lästig, für jeden Funktionsaufruf den vollen Präfix \inPy{matplotlib.pyplot} anzugeben. Stattdessen können für diese Modulpfade neue Symbole vergeben werden:
 
 \begin{codebox}[Syntax]
-\mint{python}{import long.module.path as alias}
+\mint{python3}{import long.module.path as alias}
 \end{codebox}
 
 Es ist beispielsweise sehr geläufig, das angesprochene Modul \inPy{matplotlib.pyplot} unter dem \emph{Alias} \inPy{plt} zu laden:
 \begin{codebox}[Beispiel: \texttt{import} mit Alias]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import matplotlib.pyplot as plt
 
 plt.figure()    # statt matplotlib.pyplot.figure()
@@ -55,18 +55,18 @@ plt.figure()    # statt matplotlib.pyplot.figure()
 
 Wenn Sie nur einzelne Funktionen eines Moduls benutzen, können Sie auch diese auch alternativ mit \inPy{from} laden:
 \begin{codebox}[Syntax]
-\mint{python}{from module import function}
+\mint{python3}{from module import function}
 \end{codebox}
 
 Um Namenskollisionen zu umgehen, besteht auch hier die Möglichkeit, ein Alias zu vergeben:
 \begin{codebox}[Syntax]
-\mint{python}{from module import function as alias}
+\mint{python3}{from module import function as alias}
 \end{codebox}
 Dieser Alias darf dann aber keinen Punkt (\texttt{.}) enthalten.
 
 Das obige Beispiel: \emph{Funktionen aus \inPy{math} und \inPy{cmath}} kann also auch folgendermaßen geschrieben werden:
 \begin{codebox}[Beispiel: \texttt{from} ... \texttt{import}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 from  math import sin
 from  math import pi
 from cmath import sin as csin
@@ -99,13 +99,13 @@ Damit der Python-Interpreter weiß, aus welchem Verzeichnis die Module geladen w
 
 Beispiel: In Ihrem aktuellen Arbeitsverzeichnis befinden sich die Dateien \texttt{foo.py} und \texttt{bar.py}:
 \begin{codebox}[Beispiel: \texttt{foo.py}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 print("loaded foo")
 \end{minted}
 \end{codebox}
 
 \begin{codebox}[Beispiel: \texttt{bar.py}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import foo
 print("executing bar")
 \end{minted}
@@ -119,7 +119,7 @@ executing bar
 Ein Modul kann nur ein einziges Mal geladen werden. Jeder weitere Versuch, dasselbe Modul mit \inPy{import} erneut zu laden, wird ignoriert. Die folgende Abwandlung von \texttt{bar.py} erzeugt also dieselbe Ausgabe wie oben:
 
 \begin{codebox}[Beispiel: \texttt{bar.py}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import foo
 import foo
 print("executing bar")
@@ -130,7 +130,7 @@ import foo
 Befindet sich das zu ladende Modul in einem Unterordner des aktuellen Arbeitsverzeichnisses, so kann dies durch Punkte angedeutet werden. Wir nehmen an, dass das Hauptmodul \texttt{bar.py} im aktuellen Arbeitsverzeichnis liegt; das zu ladende Modul \texttt{foo.py} dagegen sei im Ordner \texttt{subfolder}. In dem Fall schreiben wir:
 
 \begin{codebox}[Beispiel: \texttt{bar.py}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import subfolder.foo
 print("executing bar")
 \end{minted}
@@ -147,13 +147,13 @@ Python-Module sind zahlreich und es werden regelmäßig neue Pakete veröffentli
 Im Code kann auch der Name des aktuell ausgeführten Moduls abgefragt werden. Die Variable \inPy{__name__} enthält einen String, der den aktuellen Modulnamen speichert. Für das \emph{Hauptmodul} (also die Code-Datei, die ursprünglich gestartet wurde) ist dies immer \inPy{"__main__"}.
 
 \begin{codebox}[Beispiel: \texttt{foo.py}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 print("Module name:", __name__)
 \end{minted}
 \end{codebox}
 
 \begin{codebox}[Beispiel: \texttt{bar.py}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import foo
 print("Module name:", __name__)
 \end{minted}

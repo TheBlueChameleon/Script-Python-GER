@@ -7,7 +7,7 @@
 Viele Aufgaben wiederholen sich, oder lassen sich verallgemeinern. Folgender Code berechnet beispielsweise den Wert von Eulers Zahl, also $\exp(1)$, kann aber auch dazu verwendet werden, andere Potenzen von $e$ zu finden:
 
 \begin{codebox}[Beispiel: Exponentialfunktion]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 x0           = 1.0
 x            = 1.0
 denominator  = 1.0
@@ -33,7 +33,7 @@ Funktionen sind \enquote{abgetrennte Codebereiche}, die unabhängig vom restlich
 Ein solcher Codebereich wird eingeleitet durch eine \inPy{def}-Zeile und wird durch Einrückung vom restlichen Code abgetrennt, ähnlich, wie wir das schon von \inPy{if}-Blöcken und \inPy{for}-Schleifen kennen:
 
 \begin{codebox}[Syntax: Funktionen]
-\begin{minted}{python}
+\begin{minted}{python3}
 def Funktionsname (Parameterliste) :
     normaler Code
     ...
@@ -58,7 +58,7 @@ Ein Funktionsaufruf macht also mehrere Dinge:
 Nach Ende des Funktionsaufrufs wird an der aufrufenden Stelle ein Wert erhalten (eben der Rückgabewert der Funktion). Dieser kann in einer Variablen gespeichert werden, oder an andere Funktionen weitergegeben werden.
 
 \begin{codebox}[Beispiel: Exponentialfunktion als Funktion]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def expFunction(x0) :
     x           = 1.0
     denominator = 1.0
@@ -87,7 +87,7 @@ e³ = 20.063392857142855
 
 Wird kein Rückgabewert genannt, so weist Python automatisch den Pseudo-Rückgabewert \inPy{None} zu. Es handelt sich dabei um eine Konstante, die eben genau für die Abwesenheit eines Wertes steht, und sollte auch nicht mit dem Text \inPy{"None"} verwechselt werden.
 \begin{codebox}[Beispiel: Funktion \enquote{ohne} Rückgabewert]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import math
 
 def printBoxed(text, boxSize) :
@@ -122,7 +122,7 @@ The function returned: None
 
 Wie erwähnt wird die Ausführung der Funktion sofort beendet, sobald der Interpreter auf eine \inPy{return}-Anweisung stößt. Daher haben die Zeilen 4 und 7 im folgenden Beispiel keinerlei Auswirkung:
 \begin{codebox}[Beispiel: Funktion mit mehreren \texttt{return}-Anweisungen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def max (a, b) :
     if a > b :
         return a
@@ -145,7 +145,7 @@ print(max(2, 1))
 
 Funktionen können auch mehrere Rückgabewerte haben. Diese werden dann durch Kommata getrennt bei \inPy{return} aufgeführt und vom Python-Interpreter automatisch zu einem \inPy{tuple} \enquote{gepackt}. An der aufrufenden Stelle kann dieser \inPy{tuple} auch wieder automatisch entpackt werden:
 \begin{codebox}[Beispiel: Rückgabe eines \texttt{tuple}s]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def returnATuple () :
     return 1, 2, 3
 
@@ -169,7 +169,7 @@ In Zeile 2 könnte gleichermaßen auch stehen: \inPy{return (1, 2, 3)}. Der Effe
 Wichtig ist, immer im Kopf zu behalten, dass die Variablen, die in einer Funktion benuzt werden, vom restlichen Programm unabhängig sind. Es darf also sich widersprechende Definitionen geben; die Definitionen gelten nur jeweils innerhalb einer Funktion:
 
 \begin{codebox}[Beispiel: Gleiches Symbol{,} unterschiedliche Inhalte]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def foobar() :
     a = 7
     print("in foobar: a =", a)
@@ -194,7 +194,7 @@ Das \inPy{a} in \inPy{foobar} erhält also seine eigene Speicherstelle. Je nach 
 In Python dürfen Funktionen auch ineinander verschachtelt werden. Dies kann zum Beispiel nütlich werden, wenn eine Funktion aus mehreren, sich wiederholenden Teilaufgaben besteht, die sonst nirgendwo gebraucht werden:
 
 \begin{codebox}[Beispiel: Verschachtelte Funktionen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def veryComplexTask(listOfObjects) :
     def subTask(element) :
         # ...
@@ -214,7 +214,7 @@ Wir hatten festgestellt, dass die Variablen, die wir in einer Funktion verwenden
 
 Sehen wir uns dazu folgenden Code an:
 \begin{codebox}[Beispiel: Übergabe von Referenz by Value]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def foobar(data) :
     data.append(1)
     data = data + [2]
@@ -312,7 +312,7 @@ In Zeile 3 dagegen wird eine \emph{neue} Liste berechnet (nämlich \inPy{[1, 2]}
 
 Durchdenken wir nun auch dieses Beispiel:
 \begin{codebox}[Beispiel: Übergabe von Immutables]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def foobar(data) :
     data = 2
     print("in foobar: data =", data)
@@ -342,7 +342,7 @@ In systemnahen Sprachen wie C müssen Sie das mit im Auge behalten. Bei der Arbe
 Bisher habe ich Ihnen verschwiegen, dass es möglich ist, innerhalb von Funktionen auf Variablen des Modullevels zuzugreifen. Dabei dürfen aber nur solche Operationen durchgeführt werden, die den Speicherort der Variablen nicht verändern. Auf Modulebene dagegen sind die Symbole in den Funktionen nie zugänglich.
 Sehen Sie sich hierzu das folgende Beispiel an:
 \begin{codebox}[Beispiel: lokale Variablen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 foo = ["foo"]
 
 def foobar() :
@@ -378,7 +378,7 @@ Ein Fall, in dem es sinnvoll sein kann, von diesem Leitsatz abzuweichen, sind Na
 \begin{hintbox}[]
 In diesem Fall ist es also durchaus angebracht, Code zu schreiben wie:
 \begin{codebox}[Beispiel: globale Konstante]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 GRAVITATIONALCONSTANT = 6.674E-11
 
 def forceBetweenBodies(radius, mass1, mass2) :
@@ -393,7 +393,7 @@ Wenn versucht wird, innerhalb einer Funktion ein Symbol des Modul-Levels umzudef
 Soll tatsächlich von der Funktion aus der Wert der Variablen auf Modulebene geändert werden, so kann dies mit dem Befehl \inPy{global} geschehen. Mit \inPy{global Symbol} wird dem Python-Interpreter mitgeteilt, dass mit \inPy{Symbol} tatsächlich immer das Objekt der Modulebene gemeint ist.
 
 \begin{codebox}[Beispiel: lokale und globale Variablen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 foo = "foo"
 bar = "bar"
 
@@ -429,7 +429,7 @@ Oft schreiben wir Funktionen, die fast jedes Mal mit denselben Parametern aufger
 In Python ist es jedoch möglich, solche Standardwerte zu definieren. Beim Aufruf dürfen diese dann einfach weggelassen werden, können jedoch auch explizit durch einen anderen Wert ersetzt werden. Sie erreichen solche \emph{optionalen Parameter}, indem sie in der ersten Zeile der Funktion (in der Funktionssignatur) hinter einen Parameter ein \inPy{= defaultWert}  setzen.
 
 \begin{codebox}[Syntax: Funktionen mit optinalem Parameter]
-\begin{minted}{python}
+\begin{minted}{python3}
 def Funktionsname (Parameter1, ..., OptionalerParameter = Defaultwert) :
     normaler Code
 \end{minted}
@@ -438,7 +438,7 @@ def Funktionsname (Parameter1, ..., OptionalerParameter = Defaultwert) :
 Im Beispiel unserer Box kann das so aussehen:
 
 \begin{codebox}[Beispiel: Funktion mit optionalem Parameter]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import math
 
 def printBoxed(text, boxSize = 60) :
@@ -476,7 +476,7 @@ Wird also nur ein Parameter angegeben, so setzt der Interpreter für den Zweiten
 
 Funktionen dürfen beliebig viele optionale Parameter haben. Diese Parameter mit Vorgabewert müssen aber \emph{hinter} den normalen Parametern stehen. Im Aufruf dürfen Parameter auch nur \enquote{von hinten weg} weggelassen werden:
 \begin{codebox}[Beispiel: Funktion mit mehreren optionalen Parametern (1)]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def defaults(a, b, c=0, d=0) :
   print(a, b, c, d)
   
@@ -492,7 +492,7 @@ defaults(1, 2, 3)           # ok, Ausgabe: 1 2 3 0
 Um das Verhalten zu erreichen, das in der (fehlerhaften) Zeile 9 des obigen Beispiels angedeutet wird, kann \emph{im Funktionsaufruf} durch ein Gleichheitszeichen erklärt werden, welcher Parameter denn gemeint ist. Die Reihenfolge muss dann nicht eingehalten werden! Allerdings müssen diejenigen Parameter, die rein über ihre Position in der Liste identifiziert werden sollen, zuerst genannt werden. Man nennt solche Parameter, die über ein Schlüsselwort zugewiesen werden \emph{Keyword-Parameter}, da sie eben über einen Schlüssel identifiziert werden. Im Gegensatz dazu nennt man Parameter, die nur über ihre Position in der Liste zuordbar sind \emph{Positionale Parameter}.
 
 \begin{codebox}[Beispiel: Funktion mit mehreren optionalen Parametern (2)]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def defaults(a, b, c=0, d=0) :
   print(a, b, c, d)
   
@@ -508,7 +508,7 @@ defaults(9, c=7, b=8)       # ok, Ausgabe 9 8 7 0
 Die Funktion \inPy{print}\footnote{Tatsächlich ist \inPy{print} genau eine solche Funktion, wie Sie sie in diesem Kapitel kennen lernen. Die meisten Befehle in Python sind tatsächlich solche Funktionen und aus \enquote{kleineren} Befehlen zusammengesetzt} erlaubt es, das \enquote{Trennzeichen} zwischen den einzelnen Informationsblöcken frei zu wählen. Dazu dient der \emph{Keyword-Parameter} \inPy{sep}. Standardmäßig ist dieser als Leerzeichen (\inPy{" "}) festgelegt.
 
 \begin{codebox}[Beispiel: Optionaler Paramter \texttt{sep} in der Funktion \texttt{print} (1)]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 print(1, 2)
 print(1, 2, sep=",")        # Ausgabe: 1,2
 print(1, 2, sep="---")      # Ausgabe: 1---2
@@ -519,7 +519,7 @@ print(1, 2, sep="")         # Ausgabe: 12
 Daneben gibt es auch den Keyword-Parameter \inPy{end}. Dieser enthält Zeichen, die am Ende jedes Aufrufs von \inPy{print} gedruckt werden sollen. Üblicherweise ist das ein Zeilenumbruch.
 
 \begin{codebox}[Beispiel: Optionaler Paramter \texttt{sep} in der Funktion \texttt{print} (2)]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 print("The Planet Arrakis")
 print("The Planet Arrakis", end="")
 print("The Planet Arrakis", end="---\n")
@@ -540,7 +540,7 @@ Sie können Funktionen auch so schreiben, dass eine beliebige Zahl von Werten an
 Um dieses Verhalten zu erreichen müssen Sie nicht etwa eine endlos lange Signatur tippen, sondern können ein neues Syntax-Konstrukt nutzen:
 
 \begin{codebox}[Syntax: Variadische Funktionen (1)]
-\begin{minted}{python}
+\begin{minted}{python3}
 def Funktionsname (Parameterliste, ...,
                    *variadischerParameter,
                    optionaleParameter = default, ...) :
@@ -551,7 +551,7 @@ def Funktionsname (Parameterliste, ...,
 \emph{Zwischen} normalen und den optionalen Parametern oder \emph{hinter} den optionalen Parametern können Sie also durch einen Stern (\inPy{*}) vor dem Parameternamen andeuten, dass hier eine beliebig lange Kette von Werten akzeptiert werden soll. Diese Werte werden automatisch zu einem \inPy{tuple} zusammengepackt, die im Code den Namen trägt, den Sie für \inPy{variadischerParameter} angegeben haben.
 
 \begin{codebox}[Beispiel: Durchschnitt vieler Werte mit variadischem Parameter]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def average(*args) :
   total = sum(args)
   return total / len(args)
@@ -567,7 +567,7 @@ Aus naheliegenden Gründen darf es nur einen variadischen Parameter pro Funktion
 Analog zu den variadischen Parameter gibt es auch variadische \emph{Keyword}-Parameter, also eine beliebig lange Folge von Schlüsseln und zugehörigen Werten. Diese werden mit einer ähnlichen Syntax erklärt:
 
 \begin{codebox}[Syntax: Variadische Funktionen (2)]
-\begin{minted}{python}
+\begin{minted}{python3}
 def Funktionsname (Parameterliste, ...
                    *variadischerParameter, 
                    optionaleParameter = default, ...
@@ -579,7 +579,7 @@ def Funktionsname (Parameterliste, ...
 Python packt diese variadischen Keyword-Argumente automatisch zu einem \inPy{dict} zusammen.
 
 \begin{codebox}[Beispiel: Variadische Keyword-Parameter]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def presentMe(**kwargs) :
   print("Here are a few details about me:")
   for (key, value) in kwargs.items() :
@@ -604,7 +604,7 @@ cellphoneNumber :  ask nicely
 Wie angedeutet können Sie positionale Parameter, Keyowrd-Parameter, variadische Parameter und variadische Keyword-Parameter in beliebiger Kombination verwenden. Jedoch muss die Reihenfolge dieser Gruppen sowohl bei der Deklaration als auch beim Aufruf eingehalten werden.
 
 \begin{codebox}[Beispiel: Verschiedene Arten von Parametern im Zusammenspiel]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def parameterShowcase(a, b, c="default-Param", *args, **kwargs) :
     print("a     :", a)
     print("b     :", b)
@@ -658,7 +658,7 @@ kwargs: {'key': 'value'}
 Dieses automatische Verpacken kann auch Rückgängig gemacht werden: Wenn Sie im Funktionsaufruf vor einen Container (\inPy{list}s, \inPy{tuple}s, ...) ein Sternchen (\texttt{*}) setzen, so werden die Elemente des Containers nacheinander den Parametern der Funktion zugeordnet
 
 \begin{codebox}[Beispiel: Entpacken von Listen in Funktionsaufrufen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import math
 
 def vectorLength(x, y = 0, z = 0) :
@@ -674,7 +674,7 @@ print(vectorLength(*vector2D))         # x = 3, y = 4, z = 0
 \inPy{dict}s können auf zweierlei Weise entpackt werden: Mit einem einfachen Sternchen \texttt{*}, ebenso wie auch normale Listen entpackt werden, oder mit einem doppelten Sternchen \texttt{**}, um so den Keyword-Parametern zugewiesen zu werden:
 
 \begin{codebox}[Beispiel: Entpacken von \texttt{dict}s in Funktionsaufrufen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 params = {"sep" : ", ", "end" : "#\n"}
 
 print("The Planet Caladan", "Home of House Atreides",  params)
@@ -693,11 +693,11 @@ The Planet Caladan, Home of House Atreides#
 In Zeile 3 wird also \inPy{params} einfach als dritter Parameter gedruckt: Wir erhalten die Darstellung des gesamten \inPy{dict}s.
 
 Zeile 4 wird umgesetzt zu 
-\mint{python}{print("The Planet Caladan", "Home of House Atreides", "sep", "end")} 
+\mint{python3}{print("The Planet Caladan", "Home of House Atreides", "sep", "end")} 
 und entsprechend sieht auch die Ausgabe auf dem Bildschrim aus.
 
 Zeile 5 schließlich interpretiert Python als
-\mint{python}{print("The Planet Caladan", "Home of House Atreides", sep=', ', end='#\n')}
+\mint{python3}{print("The Planet Caladan", "Home of House Atreides", sep=', ', end='#\n')}
 weswegen das Komma zwischen \texttt{The Planet Caladan} und \texttt{Home of House Atreides} eingeschoben wird.
 
 \section{Funktionen und Module als Parameter und Rückgabewerte}
@@ -715,7 +715,7 @@ Dieses \emph{mathematische Rezept} gibt uns eine Anleitung, wie wir eine neue Fu
 Während den Grenzübergang $\varepsilon \to 0$ nur in der Mathematik möglich ist, können wir eine sinnvolle Abschätzung (Annäherung) dieser Ableitung erhalten, indem wir den Limes einfach ignorieren und für $\varepsilon$ einen beliebigen, sehr kleinen Wert einsetzen. Mit dieser Idee schreiben wir den folgenden Code:
 
 \begin{codebox}[Beispiel: numerisches Ableiten]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import math
 
 def derivative (f, epsilon = 1e-7) :
@@ -767,7 +767,7 @@ In Zeile 8 kommt die Funktion \inPy{derivative} auch zum Einsatz: Gegeben die Fu
 Die Zeilen 10 und 11 dienen dazu, einen rudimentären Plot unserer Funktion zu erstellen. In Kapitel \ref{chp:Matplotlib} werden wir Mittel kennen lernen, ansprechendere Grafiken zu erzeugen. Für den Moment soll Sie nur interessieren, dass das soeben erstellte Objekt \inPy{dsin} genauso aufgerufen werden kann, als hätten Sie es mit den folgenden Zeilen explizit programmiert:
 
 \begin{codebox}[Beispiel: expliziter Differentialquotient]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import math
 
 def dsin (x) :
@@ -779,14 +779,14 @@ def dsin (x) :
 \emph{Lambdas} sind \enquote{Funktionen in anderem Gewand}. Zunächst können Sie sich Lambdas als Kurzform für besonders einfache Funktionen vorstellen, denn sie können und müssen mit einer einzigen Zeile geschrieben werden. Sie werden erstellt mit der Syntax:
 
 \begin{codebox}[Syntax: Lambdas]
-\begin{minted}{python}
+\begin{minted}{python3}
 Symbol = lambda Parameterliste : Rückgabewert
 \end{minted}
 \end{codebox}
 
 Dies ist äquivalent zu folgendem Code-Template:
 \begin{codebox}[Syntax: Äquivalent von Lambdas]
-\begin{minted}{python}
+\begin{minted}{python3}
 def Symbol (Parameterliste) :
     return Rückgabewert
 \end{minted}
@@ -795,7 +795,7 @@ def Symbol (Parameterliste) :
 Für die Parameterliste gilt dasselbe wie oben gesagt: Positionale, Optioale, Keyword- und variadische Parameter sind allesamt erlaubt und verhalten sich ebenso, wie Sie das jetzt von normalen Funktionen kennen. Auch aufgerufen werden Lambdas auf dieselbe Art wie normale Funktionen.
 
 \begin{codebox}[Beispiel: Durchschnitt vieler Werte Lambda-Funktion]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 average = lambda *args : return sum(args) / len(args)
 print(average(1, 2, 3, 4, 5))    # Ausgabe: 3.0
 \end{minted}
@@ -815,7 +815,7 @@ Es ist dabei aber auch möglich, das Sortierkriterium selbst zu spezifizieren. W
 Wir erreichen dies, indem wir \inPy{sorted} den optionalen Keyword-Parameter \inPy{key} mitgeben. Hier nennen wir genau die Funktion $f$, die unser Sortierkriterium beschreibt.
 
 \begin{codebox}[Beispiel: Sortieren mit Lambda]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 data = [5, 1, 4, 7]
 
 print( sorted(data) )                        # default: Aufsteigende Sortierung
@@ -834,7 +834,7 @@ Es gilt also in diesem Beispiel: $f(x) = -x$. Wenn die Werte $-x$ aufsteigend so
 Beachten Sie, dass die Lambda-Funktion \emph{direkt an dem Ort} definiert wird, wo sie auch gebraucht wird, und den restlichen Code nicht \enquote{verstopft}. Natürlich müssen Sie diese Aufgabe nicht über ein vor Ort definiertes Lambda lösen; folgende beiden Versionen sind auch möglich (aber etwas unhandlicher):
 
 \begin{codebox}[Beispiel: Sortieren -- Alternativen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def funcSorter(x) :
     return -x
 lambdaSorter = lambda x : -x

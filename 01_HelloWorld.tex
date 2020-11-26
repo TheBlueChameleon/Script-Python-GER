@@ -111,7 +111,7 @@ Wobei \texttt{[myCode]} selbstverständlich durch den von Ihnen vergebenen Datei
 \subsection{Beispiel}
 Schreiben Sie den folgenden Code in eine Textdatei, und speichern Sie diese als \texttt{HelloWorld.py} ab. (Achten Sie auch auf Groß/Kleinschreibung).
 \begin{codebox}[Datei \texttt{HelloWorld.py}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 print("Hello World!")
 \end{minted}
 \end{codebox}
@@ -187,7 +187,7 @@ Dabei werden folgende Zeichen als Operatoren verstanden:
 	
 	\bottomrule[1.5pt]	
 \end{tabularx}
-\caption{Rechenoperatoren in Python}
+\caption{Rechenoperatoren in python3}
 \end{table}
 
 Auch das Rechnen mit \emph{komplexen Zahlen} ist möglich. Als imaginäre Einheit wird das Zeichen \inPy{j} verwendet:
@@ -239,7 +239,7 @@ Variablen können einzelne Buchstaben sein, dürfen aber auch ganze Worte zum Na
 	
 	\bottomrule[1.5pt]	
 \end{tabularx}
-\caption{Beispiele für Variablen in Python}
+\caption{Beispiele für Variablen in python3}
 \end{table}
 
 \begin{hintbox}[Sprechende Variablennamen]
@@ -489,7 +489,7 @@ wird Python daher als \emph{duck typed language} bezeichnet.
 Um den in einer Variablen gespeicherten Wert zu erfahren, haben wir bisher in der Interpreter-Umgebung den Namen der Variable eingegeben. In längeren Codes, wie wir sie im Code-Eingabe-Bereich schreiben, funktioniert dies aus technischen Gründen leider nicht. Stattdessen können wir aber den \inPy{print} benutzen. Betrachten Sie das folgende Beispiel:
 
 \begin{codebox}[Beispiel: Ausgabe von Werten mit \texttt{print}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 a = 2
 b = a * 7.5 + 2
 print(a, b, "konstanter Text", a * "x")
@@ -510,7 +510,7 @@ Weiter sehen Sie, dass \inPy{print} nicht nur einen einziges Argument verarbeite
 Wie Sie bald sehen werden, können Codes lang und komplex werden. Es wird Ihnen helfen, schwer erfassbare Abschnitte durch Fließtext-Kommentare zu ergänzen. Solche Kommentare markieren Sie durch ein Raute-Zeichen (\#). Der Interpreter wird alle Zeichen hinter dem Kommentar-Zeichen bis zum Zeilenende ignorieren.
 
 \begin{codebox}[Beispiel: Kommentare]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 print("Normaler Code, der ausgeführt wird")  # Dies wird nicht mehr ausgeführt
 #print("auch dies wird nicht ausgeführt")
 \end{minted}
@@ -519,7 +519,7 @@ print("Normaler Code, der ausgeführt wird")  # Dies wird nicht mehr ausgeführt
 Normalerweise enden Python-Anweisungen mit dem Zeilenumbruch. An manchen Stellen kann es Ihren Code übersichtlicher machen, Anweisungen auf mehrere Zeilen zu verteilen. Dass eine Anweisung trotz Zeilenumbruch über das Zeilenende gelesen werden soll, erreichen Sie, indem Sie einen Backslash (\textbackslash) setzen:
 
 \begin{codebox}[Beispiel: Mehrzeilige Anweisungen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 x = 1
 a = 2 + \
     3 * x + \
@@ -532,7 +532,7 @@ a = 2 + \
 \section{Formatierte Strings}
 Wir können Strings erzeugen, in denen die Werte von Variablen als Text dargestellt werden. Zu diesem Zweck haben wir bereits die Funktion \inPy{str} kennengelernt. Wir wissen auch, dass wir Strings durch die Addition verketten können. Ein bequemerer Weg kann über \emph{Format-Strings} erreicht werden:
 \begin{codebox}[Syntax: Format-String]
-\begin{minted}{python}
+\begin{minted}{python3}
 f"normaler Text {Ausdruck} mehr normaler Text {weiterer Ausdruck:Format} ..."
 \end{minted}
 \end{codebox}
@@ -542,7 +542,7 @@ Ein Format-String beginnt also mit einem vorangestellten \inPy{f}, und wird eben
 Wie schon zuvor auch steht \inPy{Ausdruck} für eine Variable, eine Zahl oder eine komplette Rechnung. Der Ausdruck wird zuerst \emph{evaluiert} (\enquote{ausgerechnet}), und dann in den String eingebaut. Die \{geschweiften Klammern\} sind nicht Teil des Endprodukts, sondern zeigen dem Interpreter an, dass hier eine Ersetzung gemacht werden muss.
 
 \begin{codebox}[Beispiel: Formatstrings]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 a = 1
 b = 2
 s = f"a + b = {a + b}"
@@ -556,7 +556,7 @@ a + b = 3
 
 Dieser Code ist im Ergebnis gleichwertig zu 
 \begin{codebox}[Beispiel: Gleichwertiger Code ohne Formatstrings]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 a = 1
 b = 2
 s = "a + b = " + str(a + b)
@@ -566,7 +566,7 @@ print(s)
 
 Wenn Sie tatsächlich \{geschweifte Klammern\} im Ergebnis brauchen, so erreichen sie dies, indem Sie im Formatstring ein doppeltes Klammerpaar setzen:
 \begin{codebox}[Beispiel: Formatstrings mit Escape-Sequenz]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 a = 1
 b = 2
 s = f"{{a + b}} = {{{a + b}}}"
@@ -584,7 +584,7 @@ Im Syntax-Kasten wurde bereits angedeutet, dass abgetrennt durch einen Doppelpun
 Die einfachste Formatvorgabe, die sie setzen können, ist eine Zahl. Diese Zahl gibt dann an, wie viele Zeichen zur Darstellung des Ausdrucks verwendet werden sollen. Auf diese Weise können Sie bequem tabellarische Ansichten erstellen:
 
 \begin{codebox}[Beispiel: Formatstrings mit Vorgabe der Zeichenlänge]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 name1 = "Dusky"
 score1 = 9001
 name2 = "Joe"
@@ -605,7 +605,7 @@ Beachten Sie, dass zwischen dem Doppelpunkt und dem Format \emph{kein} Leerzeich
 
 Wie Sie sehen, werden Strings linksbündig ausgegeben, während Zahlen rechtsbündig formatiert werden. Diese Standard-Einstellung kann durch ein vorangestelltes \inPy{<}, \inPy{>} oder \inPy{^} überschrieben werden:
 \begin{codebox}[Beispiel: Formatstrings und Alignment]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 text  = "sample"
 value = 123
 print( f"|{text:15}| |{value:15}|" )
@@ -625,7 +625,7 @@ print(f"|{text:^15}| |{value:^15}|")
 
 Ist der Ausdruck zu lang, um mit der vorgegebenen Zeichenzahl gedruckt zu werden, so ignoriert Python die Zeichenzahl und druckt den vollen Text. Durch einen Punkt vor der Zahl bringen Sie Python dazu, stattdesen die Ausgabe abzuschneiden. Dies funktioniert jedoch nur bei Strings, und kann nicht mit den Zeichen \inPy{<}, \inPy{>} oder \inPy{^} kombiniert werden:
 \begin{codebox}[Beispiel: Formatstrings und String-Truncation]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 text = "very long sample text"
 print( f"|{text:.4}|" )
 \end{minted}
@@ -638,7 +638,7 @@ print( f"|{text:.4}|" )
 
 Natürlich können die Effekte durch Hilfsvariablen dennoch kombiniert werden:
 \begin{codebox}[Beispiel: Kombination von Formatierungen über Hilfsvariablen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 value = 1234567890
 step1 = f"{value}"         # zu String
 step2 = f"{step1:.5}"      # Länge beschränken
@@ -654,7 +654,7 @@ print(final)
 
 Bei \emph{Zahlen} dient ein vorangestelltes Leerzeichen im Formatstring als Platzhalter für ein eventuelles Vorzeichen. Alternativ kann auch ein Pluszeichen (\inPy{+}) gesetzt werden, um anzudeuten, dass das Vorzeichen \emph{immer} Teil des Ergebnisses sein soll, selbst wenn die Zahl positiv ist:
 \begin{codebox}[Beispiel: Formatstrings und Vorzeichen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 pos =  10
 neg = -10
 print(f"|{pos: 15}| |{neg: 15}|")
@@ -670,7 +670,7 @@ print(f"|{pos:+15}| |{neg:+15}|")
 
 Eine vorangestellte \inPy{0} füllt den zur Verfügung gestellten Platz mit Nullen auf. Dies ist mit Leerzeichen und Pluszeichen kombinierbar: 
 \begin{codebox}[Beispiel: Formatstrings und führende Nullen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 pos =  10
 neg = -10
 print(f"|{pos: 015}| |{neg: 015}|")
@@ -686,7 +686,7 @@ print(f"|{pos:+015}| |{neg:+015}|")
 
 Speziell für Fließkommazahlen gibt es das Zeichen \inPy{f}, das eine Steuerung der Anzeige von Nachkommastellen ermöglicht:
 \begin{codebox}[Beispiel: Formatstrings und Fließkommazahlen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 num = 1.2
 print(f"|{num}|")
 print(f"|{num:f}|")
@@ -716,7 +716,7 @@ Sie werden feststellen, dass es zu einer Aufgabe sehr viele \emph{funktionierend
 
 Das folgende Beispiel:
 \begin{codebox}[Beispiel: Unlesbarer Code]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 p = lambda x: int(( -13214 * x**11 + 956318 * x**10 - 30516585 * x**9 + 
                      564961485 * x**8 - 6717043212 * x**7 + 53614486464 * x**6 
                     -291627605005 * x**5 + 1074222731065 * x**4 

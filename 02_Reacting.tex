@@ -17,7 +17,7 @@ In dieser Zeile erkennen Sie ein Schema, das Sie beim Programmieren in Python (u
 Eine \emph{Funktion} wird aufgerufen, indem ihr Name genannt wird, und in Klammern dahinter eine \emph{Parameterliste} übergeben wird. Dies ist eine durch Kommata getrennte Liste von Werten, wie sie es schon von \inPy{print} kennen. Die Funktion berechnet auf Basis der Argumente in der Parameterliste einen Wert, der wiederum in einer (oder mehreren) Variablen gespeichert oder auch verworfen werdem kann. Neben der Berechnung von Werten können Funktionen auch Nebeneffekte haben, wie etwa die Ausgabe von Text auf dem Bildschirm\footnote{\inPy{print} ist eine Funktion. Sie hat den \enquote{Nebeneffekt}, dass Text ausgegeben wird, und den Rückgabewert \inPy{None}. Mehr dazu in Kapitel \ref{chp:Funcs}.}.
 
 \begin{codebox}[Beispiel: \texttt{input}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 inText   = input("Bitte geben Sie eine Zahl ein: ")
 inNumber = float(inText)
 print("Das Quadrat dieser Zahl ist", inNumber ** 2)
@@ -47,7 +47,7 @@ Sie werden feststellen, dass es einige Zeit dauert, bis Ihr Code das tut, was Si
 
 Es bietet sich daher an, \inPy{input}-Zeilen auszukommentieren und stattdessen konstante Werte vorzugeben. Schreiben Sie zum Beispiel:
 \begin{codebox}[\texttt{input} auskommentieren]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 inText   = "1.5" # input("Bitte geben Sie eine Zahl ein: ")
 inNumber = float(inText)
 print("Das Quadrat dieser Zahl ist", inNumber ** 2)
@@ -92,7 +92,7 @@ Tabelle \ref{tab:OperatorsComparison} listet weitere Vergleichsoperatoren auf.
 \bottomrule[1pt]
 \end{tabularx}
 \end{center}
-\caption{Vergleichsoperatoren in Python}\label{tab:OperatorsComparison}
+\caption{Vergleichsoperatoren in python3}\label{tab:OperatorsComparison}
 \end{table}
 
 Das Ergebnis eines Vergleichs ist selbst eine Information, die in einer Variablen gespeichert werden kann. Der \emph{Datentyp} eines solches Vergleichs nennt sich \inPy{bool}\footnote{Häufig spricht man auch von \emph{Booleans}, benannt nach dem englischen Mathematiker George Boole.}. Ein solcher Boolean kann nur entweder \inPy{True} oder \inPy{False} sein.
@@ -104,7 +104,7 @@ Mit diesen \emph{Booleans} kann nun auch wieder gerechnet werden. Wenig sinnvoll
 Interessanter dagegen sind \emph{logische Verknüpfungen}: Wir können uns eine Gesamtaussage vorstellen, die aus zwei oder mehreren Teilaussagen besteht. So kann die Gesamtaussage \emph{Es ist angenehm warm} dann erfüllt (\inPy{True}) sein, wenn sowohl die Teilaussage \emph{Es ist wärmer als 20°C}, ALS AUCH die Teilaussage \emph{Es ist kälter als 25°C} erfüllt ist. Formal wird dies mit dem \emph{logischen Operator} \inPy{and} ausgedrückt: Nur wenn beide Booleans \inPy{True} sind, ist das Ergebnis von \inPy{and} auch \inPy{True}. Folgendes Beispiel zeigt Ihnen die Anwendung des logischen Operators \inPy{and}:
 
 \begin{codebox}[Beispiel: \texttt{and}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 temperature = float(input("Bitte geben Sie die aktuelle Temperatur ein: "))
 
 warmEnough = temperature > 20
@@ -142,7 +142,7 @@ Schließlich existiert noch das logische Nicht (\inPy{not}), das einen Wahrheits
 \subsection{\inPy{if}-Blöcke}
 Wir können dafür sorgen, dass ein Teil des Codes nur dann ausgeführt wird, wenn ein Wahrheitswert gleich \inPy{True} ist. Dazu verwenden wir das Schlüsselwort \inPy{if}:
 \begin{codebox}[Syntax: \texttt{if} (1)]
-\begin{minted}{python}
+\begin{minted}{python3}
 normaler_Code
 
 if Wahrheitswert :
@@ -164,7 +164,7 @@ Viele Code-Editoren setzen automatisch Leerzeichen, wenn die Tabulator-Taste ged
 
 Das \inPy{if} kann zu einer \emph{wenn-sonst}-Struktur ausgeweitet werden, indem ein \inPy{else}-Block angefügt wird:
 \begin{codebox}[Syntax: \texttt{if} (2)]
-\begin{minted}{python}
+\begin{minted}{python3}
 normaler_Code
 
 if Wahrheitswert :
@@ -179,7 +179,7 @@ normaler_Code
 Wie zu erwarten, wird der Block \inPy{Wenn_Anweisungen} nur ausgeführt, wenn \inPy{Wahrheitswert} gleich \inPy{True} ist. Andernfalls (und nur dann!) befolgt der Python-Interpreter den Block \inPy{Sonst_Anweisungen}.
 
 \begin{codebox}[Beispiel: \texttt{if} und \texttt{and}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 temperature = float(input("Bitte geben Sie die aktuelle Temperatur ein: "))
 
 if (temperature > 20) and (temperature < 25) :
@@ -192,7 +192,7 @@ else :
 Schließlich kann diese Struktur nochmals erweitert werden, um mehrere Bedingungen aneinander zu reihen. Dazu verwenden wir das Schlüsselwort \inPy{elif}, was für \inPy{else if} steht:
 
 \begin{codebox}[Syntax: \texttt{if} (3)]
-\begin{minted}{python}
+\begin{minted}{python3}
 normaler_Code
 
 if Wahrheitswert_1 :
@@ -214,7 +214,7 @@ Beachten Sie: von den \inPy{Anweisungen}-Blocks in dieser Struktur wird nur ein 
 
 Betrachten Sie dazu folgenden Code:
 \begin{codebox}[Beispiel: \texttt{elif}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 temperature = float(input("Bitte geben Sie die aktuelle Temperatur ein: "))
 
 if   temperature < 20 :
@@ -230,7 +230,7 @@ Das \inPy{and}, das wir zuvor gebraucht haben, ist nun schon in der Anordnung de
 
 Durchdenken Sie bitte auch dieses \emph{fehlerhafte} Beispiel:
 \begin{warnbox}[Fehlerhafter Code: \texttt{elif}, leftupper=7mm]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 i = 23
 
 if   i < 25 :
@@ -244,7 +244,7 @@ Die Zahl \inPy{23} erfüllt zwar beide Bedingungen (\inPy{i < 25} und \inPy{i > 
 
 \inPy{if}-Blöcke können auch ineinander verschachtelt werden:
 \begin{codebox}[Beispiel: Verschachtelte \texttt{if}-Blöcke]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 i = int(input("Bitte geben Sie eine Ganzahl ein: "))
 
 if i % 2 == 0 :
@@ -267,7 +267,7 @@ untergeordnet.
 
 Das oben gezeigte Beispiel Beispiel: \emph{Verschachtelte \inPy{if}-Blöcke} ist im Ergebnis äquivalent zum folgenden Code:
 \begin{warnbox}[Beispiel: Redundanz bei \texttt{if} mit logischen Operatoren, leftupper=7mm]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 i = int(input("Bitte geben Sie eine Ganzahl ein: "))
 
 if   i % 2 == 0 and i > 100 :
@@ -297,7 +297,7 @@ Durchdenken Sie zur Verdeutlichung nochmal diese beiden Beispiele:
                   nobeforeafter,
                   raster column skip=0.5cm]
 	\begin{warnbox}[Gültigkeitsprüfung: Reihe von \texttt{if}s, leftupper=7mm]
-	\begin{minted}[linenos]{python}
+	\begin{minted}[linenos]{python3}
 playerCount = int(input(
     "Bitte Spielerzahl eingeben: "
 ))
@@ -316,7 +316,7 @@ if playerCount > 5) :
 	\end{warnbox}
 %
 	\begin{codebox}[Gültigkeitsprüfung: logisches Oder]
-	\begin{minted}[linenos]{python}
+	\begin{minted}[linenos]{python3}
 playerCount = int(input(
     "Bitte Spielerzahl eingeben: "
 ))
@@ -344,7 +344,7 @@ Block-Strukturen wie \inPy{if} verlangen, dass in jedem Teil-Block Anweisungen s
 \subsection{Der Ternäre Operator}
 Eine häufige Aufgabe beim Programmieren ist die \emph{bedingte Zuweisung} eines Wertes. Abhängig vom Wert eines Ausdrucks soll der Wert einer Variablen gesetzt werden. Sie wissen bereits, dass Sie dies mit einem \inPy{if}-Block erledigen können:
 \begin{codebox}[Bedingte Wertzuweisung mit \texttt{if}-Block]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 if Bedingung :
     variable = Wert1
 else :
@@ -355,7 +355,7 @@ else :
 Für diese Aufgabe existiert eine Kurzform des \emph{ternären Operators}\footnote{Operatoren brauchen \emph{Argumente}, aus denen Werte berechnet werden können. Man klassifiziert nach der Zahl der notwendigen Argumente. So gibt es das \emph{unäre} \inPy{not}, das \emph{binäre} \inPy{+} und eben den ternären Operator, der \emph{drei} Argumente braucht.}, die sich schon fast wie englischer Prosa-Text liest:
 
 \begin{codebox}[Bedingte Wertzuweisung mit dem Ternären Operator]
-\begin{minted}{python}
+\begin{minted}{python3}
 variable = Wert1 if Bedingung else Wert2
 \end{minted}
 \end{codebox}
@@ -363,7 +363,7 @@ variable = Wert1 if Bedingung else Wert2
 Sie können diese Ausdrucksform sogar an die Stelle anderer Ausdrücke setzen und beispielsweise an Funktionen als Argument übergeben:
 
 \begin{codebox}[Beispiel: Ternärer Operator als Argument]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 x = float(input("Bitte geben Sie eine Zahl ein: "))
 print("Der Betrag von", x, "ist:", x if x > 0 else -x)
 \end{minted}

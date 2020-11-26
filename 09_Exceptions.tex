@@ -13,7 +13,7 @@ Eine \emph{Ausnahme} ist eine Instanz einer Klasse, die Informationen zum letzte
 \inPy{try-except}-Blocks bestehen aus einem \inPy{try}-Block, in dem Anweisungen stehen, die potentiell einen Fehler erzeugen könnten, sowie (mindestens) einem \inPy{except}-Block, in den beschrieben wird, was geschehen soll, wenn dieser Fehler auftritt:
 
 \begin{codebox}[Syntax: \texttt{try-except}]
-\begin{minted}{python}
+\begin{minted}{python3}
 try :
     Code der eine Ausnahme auslösen könnte
 except ExceptionClass as varible :
@@ -39,7 +39,7 @@ Die letzte Zeile der Fehlermeldung zeichnet die aufgetretene Ausnahme also als \
 Tritt während der Ausführung des \inPy{try}-Blocks eine Ausnahme der Klasse \texttt{ExceptionClass} auf, so wird der Code des entsprechenden \inPy{except}-Blocks ausgeführt; danach setzt Python die Ausführung mit \emph{der ersten Zeile nach dem \inPy{try-except}-Block fort}.
 
 \begin{codebox}[Beispiel: Inverse]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 for x in range(-3, 3) :
     try :
         print(1/x)
@@ -62,7 +62,7 @@ An exception was caught: division by zero
 Beachten Sie auch, dass es durchaus von Bedeutung ist, welche Strukturen Sie wie ineinander schachteln: Vertauschen Sie im obigen Beispiel den \inPy{for}- mit dem \inPy{try}-Block, so werden die Inversen der positiven Zahlen nicht mehr berechnet:
 
 \begin{codebox}[Beispiel: Inverse II]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 try :
     for x in range(-3, 3) :
         print(1/x)
@@ -83,7 +83,7 @@ An exception was caught: division by zero
 Ist der aufgetretene Fehler nicht in der Klasse, die im \inPy{except}-Block genannt wurde, so ignoriert Python die bereitgestellte Fehlerbehandlung und bricht wie üblich die Fehlerbehandlung ab:
 
 \begin{codebox}[Beispiel: Fehlerklassen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import math
 try :
     print( math.log(-1) )
@@ -154,7 +154,7 @@ Siehe \url{https://docs.python.org/3/library/exceptions.html} für weitere Detai
 \subsection{Mehrteilige \inPy{except}-Blöcke}
 Hinter \inPy{except} darf auch ein \inPy{tuple} von Fehlerklassen stehen, die dann jeweils mit demselben Code behandelt werden. Wir können also beispielsweise schreiben:
 \begin{codebox}[Syntax: \texttt{tuple} von Fehlerklassen]
-\begin{minted}{python}
+\begin{minted}{python3}
 except (ZeroDivisionError, ValueError) as e :
 \end{minted}
 \end{codebox}
@@ -163,7 +163,7 @@ Wenn ein Fehler auftritt, der auf wenigstens eine der Klassen im \inPy{tuple} pa
 Daneben ist es auch möglich, mehrere \inPy{except}-Blöcke hintereinander zu setzen, und für jede Fehlerklasse einen eigenen Code zur Fehlerbehandlung zu schreiben. Dabei wird nur der \emph{erste \inPy{except}-Block} abgearbeitet, der zur ausgelösten Ausnahme passt.
 
 \begin{codebox}[Beispiel: Mehrere \texttt{except}-Blöcke]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 try :
     print(1/0)
 except ArithmeticError as e :
@@ -187,7 +187,7 @@ Soll Code nur ausgeführt werden, wenn im \inPy{try}-Block \emph{kein} Fehler au
 Das Schlüsselwort \inPy{finally} leitet einen weiteren Block ein, in dem Code steht, der ausgeführt wird, nachdem alle \inPy{except}- und \inPy{else}-Blöcke bearbeitet wurden, selbst wenn der tatsächlich eingetretene Fehler noch nicht abgefangen wurde:
 
 \begin{codebox}[Beispiel: Mehrere \texttt{try-except-else-finally}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 def divide(x, y):
     try:
         result = x / y
@@ -240,7 +240,7 @@ In Kapitel \ref{chp:Classes} (Klassen) haben wir bereits gesehen, dass wir mit d
 \end{itemize}
 In der Regel erlauben die Fehlerklassen, ihrem Konstruktor noch ein String-Argument mitzugeben, in dem dann der aufgetretene Fehler in für Menschen lesbarer Form genauer beschrieben wird. In einem früheren Beispiel finden Sie etwa die Zeile
 \begin{codebox}[Beispiel: Auszug aus einem früheren Code]
-\begin{minted}{python}
+\begin{minted}{python3}
 raise Exception("Incompatible Shapes")
 \end{minted}
 \end{codebox}
@@ -256,7 +256,7 @@ Damit Sie ihren Fehlerbehandlungs-Code richtig schreiben können und nicht in un
 Ausnahmen können auch nach der Behandlung \enquote{neu aufgelegt} werden. Wollen Sie beispielsweise eine detaillierte Fehlerbeschreibung ausgeben, aber dennoch das Programmende auslösen, so erreichen Sie dies, indem Sie im \inPy{except}-Block erneut \inPy{raise} (ohne weitere Argumente) schreiben:
 
 \begin{codebox}[Beispiel: Re-\texttt{raise}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 try :
     x = 7
     y = 0
@@ -289,7 +289,7 @@ Wie Sie sehen, nennt die Ausgabe immer noch Zeile 4 als Punkt, an dem die Ausnah
 
 Ein solches re-raise verlässt den gesamten \inPy{try}-Block. Auch nachgelagerte, passende \inPy{except}-Blocks werden ignoriert. Ein äußerer \inPy{try}-Block dagegen kann die re-raised Ausnahme dagegen immer noch auffangen:
 \begin{codebox}[Beispiel: Re-\texttt{raise}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 try :
     try :
         print(1/0)
@@ -322,7 +322,7 @@ Dies Geschieht nach dem Formalismus von von Klassen, wie wir ihn in Kapitel \ref
 Beispiel: Wir wollen fehlerhafte User-Eingaben als eigene Fehlerklasse abbilden. Dazu legen wir eine neue Klasse \inPy{UserInputError} an, die wir von \inPy{Exception} ableiten:
 
 \begin{codebox}[Beispiel: Eigene Fehlerklasse anlegen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 class UserInputError(Exception) :
     pass
 

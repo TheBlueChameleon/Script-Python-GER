@@ -45,7 +45,7 @@ Ich sollte anmerken, dass diese Tabelle keine echten Menschen beschreibt. Weder 
 
 Dies wollen wir nun in Code abbilden. Wir beschreiben also die \emph{Klasse Expartner}. Dazu brauchen wir ein neues Syntaxelement:
 \begin{codebox}[Syntax: Klassen]
-\begin{minted}{python}
+\begin{minted}{python3}
 class Klassenname  :
     Attribut1 = Standardwert
     Attribut2 = Standardwert
@@ -57,7 +57,7 @@ Wie also schon bei Funktionen gibt die Einrückungsebene an, was zur Klasse geh�
 
 Wir legen eine Instanz mit der folgenden Syntax an:
 \begin{codebox}[Syntax: Instanzen anlegen]
-\begin{minted}{python}
+\begin{minted}{python3}
 Instanz = Klassenname()
 \end{minted}
 \end{codebox}
@@ -66,7 +66,7 @@ Beachten Sie die leeren Klammern! Diese sind nötig, um Python mitzuteilen, dass
 
 Sie können nun sowohl lesend als auch schreibend auf die Tabelle zugreifen, indem Sie Klasse und Attribut mit einem Punkt verbinden:
 \begin{codebox}[Syntax: Zugriff auf Klassenelemente]
-\begin{minted}{python}
+\begin{minted}{python3}
 Instanz.Attribut = Wert   # Schreibender Zugriff
 print(Instanz.Attribut)   # Beispiel für lesenenden Zugriff
 \end{minted}
@@ -74,7 +74,7 @@ print(Instanz.Attribut)   # Beispiel für lesenenden Zugriff
 
 Damit können wir die obige Tabelle so in Code übersetzen:
 \begin{codebox}[Beispiel: Klassen als reine Container]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 class Expartner :
     name      = None
     height    = None
@@ -103,7 +103,7 @@ Wir haben oben die Instanzen der Klasse \inPy{Expartner} als Tabelle dargestellt
 Das bedeutet, dass auch die Gedanken zu lokalen und globalen Variablen auf Klassen anwendbar sind. Instanzen einer Klasse können in Funktionen angelegt werden, und existieren dann nur dort. Sie können auch als Parameter an Funktionen übergeben werden, und von diesen verändert werden. Änderungen an den Attributen sind auch an der aufrufenden Stelle zu sehen solange der Speicherort der Instanz selbst sich nicht ändert:
 
 \begin{codebox}[Beispiel: Instanzen als Funktionsparameter]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # Klasse Expartner und Instanz exgf1 wie oben
 
 def makeNameUppercase(ex) :
@@ -196,7 +196,7 @@ Das Symbol \inPy{exgf1} ist eine Referenz auf eine Speicherstelle, die selbst wi
 
 Im folgenden Beispiel dagegen wird in der Funktion eine neue Speicherstelle angelegt; damit sind die Änderungen nach Funktionsaufruf auch nicht mehr sichtbar:
 \begin{codebox}[Beispiel: Lokale Instanz]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # Klasse Expartner, Instanz exgf1 und showEx wie oben
 
 def makePerfect(ex) :
@@ -233,7 +233,7 @@ Der bedeutende Unterschied liegt also in Zeile 4: Hier wird dem lokalen Symbol \
 
 Auch ohne, dass dies in der Definition der Klasse angegeben wurde, können einzelnen Instanzen neue Attribute hinzugefügt werden. Dies betrifft dann aber nur \emph{eine spezielle Instanz}, ohne an der Definition der Klasse etwas zu ändern:
 \begin{codebox}[Beispiel: Dynamische Erweiterung]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # Klasse Expartner wie oben
 
 exbf1 = Expartner()
@@ -248,7 +248,7 @@ print(exbf2.eyeColor)    # Ausgabe: blue
 
 Ebenso kann auch die \emph{Klasse als Ganzes} dynamisch verändert werden. Das bedeutet, wir können neue Attribute erstellen, die jede Instanz der Klasse \enquote{nachträglich} hinzugefügt wird. Dies geschieht einfach über
 \begin{codebox}[Syntax: Klassen dynamisch erweitern]
-\begin{minted}{python}
+\begin{minted}{python3}
 Klasse.Attribut = Wert
 \end{minted}
 \end{codebox}
@@ -260,7 +260,7 @@ Bis hierhin haben wir Klassen nur als etwas aufwändigere Variante eines \inPy{d
 
 Wir erreichen dies, indem wir die Funktion \emph{in der Klasse} definieren, und als ersten Parameter \inPy{self} verlangen:
 \begin{codebox}[Syntax: Klassen mit Methoden]
-\begin{minted}{python}
+\begin{minted}{python3}
 class Klassenname  :
     def Methode(self, weitereParameter ...) :
        normaler Code
@@ -269,7 +269,7 @@ class Klassenname  :
 
 Dieser verpflichtende Parameter \inPy{self} wird automatisch beim Aufruf übergeben, und enthält eine Referenz auf die Instanz, auf die die Methode angewandt werden soll. Aufgerufen werden Methoden ähnlich dem Zugriff auf die Attribute:
 \begin{codebox}[Syntax: Aufruf von Methoden]
-\begin{minted}{python}
+\begin{minted}{python3}
 Instanz.Methode(weitereParameter)
 \end{minted}
 \end{codebox}
@@ -278,7 +278,7 @@ Dabei müssen wirklich nur \inPy{weitereParameter} übergeben werden; der Wert f
 
 Das folgende Beispiel illustriert Klassen mit Methoden sowie ihre Verwendung:
 \begin{codebox}[Beispiel: Klasse mit Methoden]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 class Expartner :
     name      = None
     height    = None
@@ -303,7 +303,7 @@ Daneben gewinnen wir Freiraum bei der Namensgebung: Die Klasse \inPy{Partner} ka
 
 Methoden dürfen auch ohne Parameter definiert werden, müssen aber immer noch das obligatorische \inPy{self} entgegen nehmen. Damit können wir folgenden Code schreiben, und damit die vergangenen Beziehungen miteinander vergleichen:
 \begin{codebox}[Beispiel: Klasse mit Methode ohne Parameter]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 class Expartner :
     traits = {
         "good taste in music"         :   2,
@@ -352,7 +352,7 @@ Rating of time with Reginald: 5
 
 Das Attribut \inPy{traits} ist Teil der Klasse \inPy{Expartner}. Damit hat also auch jede Instanz ein eigenes Feld, in dem Bewertungskriterien eingetragen werden können. Wir haben also die Möglichkeit, \enquote{nochmal nachzujustieren}. Vielleicht war Arista zwar \enquote{nur} \inPy{"beautiful"}, aber doch um ein bisschen hübscher als Steffie. Wir könnten also folgenden -- fehlerhaften! -- Code schreiben (in den wir aus didaktischen Gründen auch Zeile 23 einfügen und im Anschluss erklären):
 \begin{warnbox}[Beispiel: Versehentliches Ändern von Referenzen, leftupper=7mm]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # Klasse Expartner wie oben
 
 exgfs = [Expartner(), Expartner(), Expartner()]
@@ -411,7 +411,7 @@ Einige Namen für Methoden werden automatisch an bestimmten Stellen aufgerufen. 
 Mit \inPy{__init__} wird ein \emph{Initializer} beschrieben, also eine Funktion, die aufgerufen wird, sobald eine neue Instanz einer Klasse angelegt wird. Üblicherweise werden hier die Werte der einzelnen Attribute gesetzt. Gegebenenfalls können auch Gültigkeitsprüfungen eingeführt werden. Beispielsweise können wir damit unsere Klasse folgendermaßen erweitern:
 
 \begin{codebox}[Beispiel: Klasse mit Initializer]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 class Expartner :
     traits = {
         "intelligent"                 :   5,
@@ -441,7 +441,7 @@ Der Befehl \inPy{raise} ist ihnen noch neu, und wird im Detail in Kapitel \ref{c
 
 Entsprechend finden Sie nun folgendes Verhalten:
 \begin{codebox}[Beispiel: Ungültiger Parameter im Initializer]
-\begin{minted}[linenos, firstnumber=24]{python}
+\begin{minted}[linenos, firstnumber=24]{python3}
 gotye = Expartner("Somebody That I Used To Know", -1)
 \end{minted}
 \end{codebox}
@@ -463,7 +463,7 @@ Auch im Initializer dürfen Attribute definiert werden. Sie erinnern sich, dass 
 Wir können hierzu den Befehl \inPy{dir} benutzen: Dieser Befehl listet alle Attribute und Methoden eines Objekts auf. Ein Objekt kann dabei sowohl ein Datentyp (\ie eine Klasse), eine Variable oder auch ein komplexer Ausdruck sein.
 
 \begin{codebox}[Beispiel: \texttt{dir}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 class Empty :
     def __init__(self) :
         self.attribute = "something"
@@ -509,7 +509,7 @@ Wir haben gesehen, dass Attribute der Klasse zunächst von allen Instanzen getei
 \subsection{Darstellung: \inPy{__str__} und \inPy{__repr__}}
 Wie Sie wissen, können wir den Inhalt einer \inPy{list} direkt mit \inPy{print} ausgeben:
 \begin{codebox}[Beispiel: Ausgabe einer \texttt{list}]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 houseNumbers = [12, 21, 12, 7]  # yes, they really belong to the last four
 print(houseNumbers)
 \end{minted}
@@ -520,7 +520,7 @@ print(houseNumbers)
 
 Dagegen erhalten wir für unsere Klasse so nur eine sehr unzufriedenstellende Antwort
 \begin{codebox}[Beispiel: Ausgabe einer Instanz von \texttt{Expartner} mit Standard-Methode]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # Klasse Expartner und Instanz ex wie oben
 print(ex)
 \end{minted}
@@ -544,7 +544,7 @@ Der Befehl \inPy{print} kann eigentlich nur mit Strings umgehen. Wird ein Parame
 Long story short: Wenn wir einen Dunder \inPy{__str__} zur Klasse hinzufügen, können wir eine schönere Ausgabe erreichen. Dies kann z.B. so aussehen:
 
 \begin{codebox}[Beispiel: Ausgabe einer Instanz von \texttt{Expartner} mit eigener Methode]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 class Expartner :
     # ... Attribute wie oben ...
     # ... __init__ wie oben ...
@@ -560,7 +560,7 @@ class Expartner :
 \end{minted}
 \end{codebox}
 \begin{codebox}[]
-\begin{minted}[linenos, firstnumber=last]{python}
+\begin{minted}[linenos, firstnumber=last]{python3}
 ex = Expartner("Sönke" , 1.81, 
               {"intelligent", "quite handsome", "cheerful nature"},
               {"superficial", "racist"})
@@ -581,7 +581,7 @@ Sönke
 Halten Sie sich vor Augen: Der Aufruf von \inPy{__str__} geschieht durch die Funktion \inPy{str}, die wiederum von \inPy{print} aufgerufen wird. Das heißt, auch wenn Sie direkt \inPy{str} benutzen, erhalten Sie den String, wie er von Ihrer Methode vorbereitet wird.
 
 \begin{codebox}[Beispiel: \texttt{str} und Klassen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # Klasse Expartner und Instanz ex wie oben
 text = str(ex)
 lines = text.split("\n")
@@ -608,7 +608,7 @@ Wir müssen also definieren, was unter \inPy{a == b}, \inPy{a != b}, \inPy{a < b
 Beispiel: da wir hier die Vergangenheit mit wissenschaftlichen Methoden aufarbeiten wollen, bietet es sich an, die Beziehungen nach der Bewertung (dem Ergebnis der Methode \inPy{rating}) zu ordnen:
 
 \begin{codebox}[Beispiel: Implementation der Vergleichsmethoden]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 class Expartner:
     # ... Attribute wie oben ...
     # ... __init__ wie oben ...
@@ -637,7 +637,7 @@ class Expartner:
 Sobald diese Magic Methods implementiert sind, können alle Operationen durchgeführt werden, die einen Vergleich benötigen:
 
 \begin{codebox}[Beispiel: Anwendung der Vergleichsmethoden]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # Klasse Expartner wie oben
 
 exbfs = [
@@ -722,7 +722,7 @@ Beachten Sie, dass der \emph{Datentyp} der zu vergleichenden Objekte eine wesent
 
 \begin{minipage}{.49\linewidth}
 \begin{warnbox}[Beispiel: Inkompatible Datentypen (1), leftupper=7mm]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # Expartner, allExes wie oben
 print(allExes[0] < 0)
 \end{minted}
@@ -731,7 +731,7 @@ print(allExes[0] < 0)
 %
 \begin{minipage}{.49\linewidth}
 \begin{warnbox}[Beispiel: Inkompatible Datentypen (2), leftupper=7mm]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # Expartner, allExes wie oben
 print(0 > allExes[0])
 \end{minted}
@@ -749,7 +749,7 @@ AttributeError: 'int' object has no attribute 'rating'
 Durchdenken wir zuerst das Beispiel: Inkompatible Datentypen (1). Der Ausdruck \inPy{allExes[0] < 0} wird also übersetzt in einen Aufruf der Methode \inPy{Expartner.__lt__(allExes[0], 0)}, \ie \inPy{allExes[0]} wird als erster Parameter \inPy{self} übergeben, und \inPy{0} ist der Wert von \inPy{other}. Damit ist \inPy{other} also vom Typ \inPy{int} und hat folglich auch keine Methode \inPy{rating} -- diese Methode ist nur für Instanzen der Klasse \inPy{Expartner} erklärt. Damit ist auch die Fehlermeldung für diesen Fall verständlich. Sie als ProgrammiererIn müssen also entweder darauf achten, nur \enquote{sinnvolle} Vergleiche anzufordern, oder aber in den Dunders \inPy{__eq__}, ... verschiedene Vergleichsmethoden für verschiedene Datentypen anzubieten. Hierzu können Sie beispielsweise den folgenden Ansatz wählen:
 
 \begin{codebox}[Beispiel: Typabhängige Vergleichsmethoden]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 class Expartner:
     # ... Attribute wie oben ...
     # ... rating wie oben ...
@@ -783,7 +783,7 @@ Wenn Sie also die Klassen \inPy{Apple} und \inPy{Orange} schreiben, sollte ein \
 \subsection{Gebrauch als Funktion: \inPy{__call__}}
 Klasseninstanzen können auch als Funktionen gebraucht werden. Über die Syntax:
 \begin{codebox}[Syntax: Aufruf einer Instanz]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 Instanz(Parameterliste)
 \end{minted}
 \end{codebox}
@@ -791,14 +791,14 @@ Instanz(Parameterliste)
 wird der Dunder \inPy{__call__(self, Parameterliste)} aufgerufen. Wie bei allen Methoden darf die Parameterliste auch leer sein, Default-Werte annehmen und/oder variadische Elemente enthalten. Konkret kann dies so aussehen:
 
 \begin{codebox}[Beispiel: Aufrufbare Instanzen]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 class Expartner :
     # wie oben
     
     def __call__(self) :
         print("You shouldn't call your Ex'es. Leave the past behind.")
 
-ex = Exgirlfriend("Sandra", 1.70)
+ex = Expartner("Sandra", 1.70)
 ex()
 \end{minted}
 \end{codebox}
@@ -819,7 +819,7 @@ Wenn wir eine neue Matrix anlegen, müssen wir ihre Größe und ihren Inhalt fes
 
 Mit diesen Überlegungen können wir den folgenden Code schreiben:
 \begin{codebox}[Beispiel: Klasse Matrix]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 import copy
 
 class Matrix :
@@ -846,7 +846,7 @@ class Matrix :
 \end{minted}
 \end{codebox}
 \begin{codebox}[]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
     def setData(self, data) :
         if type(data)    != list : raise Exception("Expected a list of lists")
         if type(data[0]) != list : raise Exception("Expected a list of lists")
@@ -876,7 +876,7 @@ In \inPy{setData} prüfen wir wieder zunächst den Datentypen (Liste von Listen;
 Schon um zu testen, ob unsere Methoden so funktionieren, wie wir das wollen, fügen wir noch die Dunders \inPy{__str__} und \inPy{__repr__} hinzu:
 
 \begin{codebox}[]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
     def __repr__(self) :
         return f"<matrix of dimension {self.shape[0]}x{self.shape[1]}>"
     
@@ -891,7 +891,7 @@ Schon um zu testen, ob unsere Methoden so funktionieren, wie wir das wollen, fü
 Nachdem wir so kurz wiederholt haben, wie wir eine Klasse konzipieren und ihr vier Methoden hinzugefügt haben, können wir uns nun der Aufgabe stellen, das Rechnen mit Matrizen zu implementieren. Wenn \inPy{A} und \inPy{B} Instanzen von \inPy{Matrix} sind, so wollen wir, dass Ausdrücke wie \inPy{A + B} korrekt ausgewertet werden. Zu diesem Zweck schreiben wir für jeden Operator einen speziellen Dunder. Im Falle der Addition ist das \inPy{__add__}:
 
 \begin{codebox}[Beispiel: Methode \texttt{\_\_add\_\_}]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
     def __add__(self, other) :
         if type(other) != Matrix      : return NotImplemented
         if self.shape  != other.shape : raise Exception("Incompatible matrices")
@@ -914,7 +914,7 @@ Für die eigentliche Rechnung müssen wir eine neue Matrix bereit stellen, die d
 Das Zeichen \inPy{*} wird durch einen Aufruf der Methode \inPy{__mul__} aufgelöst. Hier wollen wir die \emph{komponentenweise} Matrixmultiplikation sowie die Multiplikation mit einem Skalar umsetzen:
 
 \begin{codebox}[Beispiel: Methode \texttt{\_\_mul\_\_}]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
     def __mul__(self, other) :
         reVal = Matrix(self.shape)
         
@@ -931,7 +931,7 @@ Das Zeichen \inPy{*} wird durch einen Aufruf der Methode \inPy{__mul__} aufgelö
 \end{minted}
 \end{codebox}
 \begin{codebox}[]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
         elif type(other) in (int, float, complex) :
             for     row in range(self.shape[0]) :
                 for col in range(self.shape[1]) :
@@ -949,7 +949,7 @@ Hier finden wir dieselbe Grundstruktur wie schon bei \inPy{__add__} wieder: Vorb
 Da wir durch die Multiplikation mit dem Skalar \inPy{-1} jetzt auch das Vorzeichen jeder Matrix-Komponente umdrehen können, lassen sich die Subraktion (\inPy{__sub__}) und die \emph{exakte Division} (\inPy{__truediv__}) mit sehr geringem Aufwand schreiben:
 
 \begin{codebox}[Beispiel: Methoden \texttt{\_\_sub\_\_} und \texttt{\_\_truediv\_\_}]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
     def __sub__(self, other) :
         return self + (other * -1)
     
@@ -961,7 +961,7 @@ Da wir durch die Multiplikation mit dem Skalar \inPy{-1} jetzt auch das Vorzeich
 Für die \emph{Integerdivision} (Division mit Abrunden, \inPy{__floordiv__}) dagegen müssen wir unser übliches Schema anwenden:
 
 \begin{codebox}[Beispiel: Methode \texttt{\_\_floordiv\_\_}]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
     def __floordiv__(self, other) :
         if type(other) in (int, float, complex) :
             for     row in range(self.shape[0]) :
@@ -982,7 +982,7 @@ Vielleicht haben Sie sich schon zuvor gewundert, dass wir die Methode \inPy{__mu
 ist nämlich der Dunder \inPy{__matmul__} vorgesehen. Dieser wird über den Operator \inPy{@} aufgerufen:
 
 \begin{codebox}[Beispiel: Methode \texttt{\_\_floordiv\_\_}]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
     def __matmul__(self, other) :
         if type(other) == Matrix :
             if other.shape[0] != self.shape[1] :
@@ -1002,7 +1002,7 @@ ist nämlich der Dunder \inPy{__matmul__} vorgesehen. Dieser wird über den Oper
 Natürlich sollten wir unsere Methoden auch testen:
 
 \begin{codebox}[Beispiel: Tests einiger Methoden]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
 A = Matrix((2,2), [[1,2], [3,4]])
 B = Matrix((2,3), [[9,8,7], [6,5,4]])
 
@@ -1057,7 +1057,7 @@ Um dies zu verstehen, erinnern wir uns, dass durch den Operator \inPy{*} die Met
 
 Fügen wir also in unserer Klassen-Definition von \inPy{Matrix} noch folgende Zeilen ein:
 \begin{codebox}[Beispiel: Tests einiger Methoden]
-\begin{minted}[linenos,firstnumber=105]{python}
+\begin{minted}[linenos,firstnumber=105]{python3}
     def __rmul__(self, other) :
         return self * other
 \end{minted}
@@ -1078,7 +1078,7 @@ Falls tatsächlich nur eine einzelne Zahl übergeben wird, so ist es sinnvoll, d
 Eine Implementierung dieser Gedanken kann so aussehen:
 
 \begin{codebox}[Beispiel: Lesender Indexzugriff]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
     def __getitem__(self, index) :
       if type(index) == int :
         if 0 <= index < self.shape[0] :
@@ -1108,7 +1108,7 @@ Eine Implementierung dieser Gedanken kann so aussehen:
 Wir wollen auch hier der Logik folgen, dass sowohl \inPy{int}-Werte als auch \inPy{tuple}s akzeptiert werden sollen. Entsprechend implementieren wir die Methode folgendermaßen:
 
 \begin{codebox}[Beispiel: Schreibender Indexzugriff]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
     def __setitem__(self, index, value) :
       if type(index) == int :
         if type(value) != list          : raise Exception("Invalid Data Type")
@@ -1136,7 +1136,7 @@ Wir wollen auch hier der Logik folgen, dass sowohl \inPy{int}-Werte als auch \in
 
 Mit diesen Ergänzungen zu unserer Klasse sind uns nun folgende Zugriffe möglich:
 \begin{codebox}[Beispiel: Tests -- Indexzugriff]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
 A = Matrix( (2,2) )
 A[0] = [1, 2]
 A[1, 1] = 4
@@ -1165,7 +1165,7 @@ Experimentieren Sie damit herum!
 Ähnlich wie \inPy{str} leitet auch der Befehl \inPy{len} nur auf den Dunder \inPy{__len__} um, der in jeder Klasse implementiert werden kann. Der Rückgabewert sollte ein \inPy{int}-Wert sein, der sich als Anzahl von Elementen interpretieren lässt. In unserem Fall ist also eine sinnvolle Implementierung:
 
 \begin{codebox}[Beispiel: \texttt{\_\_len\_\_}]
-\begin{minted}[linenos,firstnumber=149]{python}
+\begin{minted}[linenos,firstnumber=149]{python3}
     def __len__(self) :
       return self.shape[0] * self.shape[1]
 \end{minted}
@@ -1177,7 +1177,7 @@ Die Funktion \inPy{abs} berechnet den \emph{Absolutbetrag} eines Objekts, indem 
 Was der Absolutbetrag einer Klasseninstanz ist, hängt sehr stark vom Kontext ab (und oft genug ist das Konzept überhaupt nicht anwendbar). Im Fall von Matrizen kann Beispielsweise die \emph{Maximumsnorm} berechnet werden, also das größte Element der Matrix selbst:
 
 \begin{codebox}[Beispiel: \texttt{\_\_abs\_\_}]
-\begin{minted}[linenos,firstnumber=last]{python}
+\begin{minted}[linenos,firstnumber=last]{python3}
     def __abs__(self) :
       return max( [max(line) for line in self.data] )
 \end{minted}
@@ -1194,7 +1194,7 @@ Die Technik \emph{Vererbung} erlaubt uns, dies zu umgehen oder zu automatisieren
 
 Wir erreichen dies mit einem neuen Syntaxelement bei der Definition einer Klasse:
 \begin{codebox}[Syntax: Abgeleitete Klassen]
-\begin{minted}{python}
+\begin{minted}{python3}
 class Abgeleitete_Klasse(Basisklasse)  :
     neues_Attribut = Standardwert
     ...
@@ -1206,7 +1206,7 @@ class Abgeleitete_Klasse(Basisklasse)  :
 In unserem Beispiel wollten wir der abgeleiteten Klasse \inPy{ExpartnerWithEyeColor} ein Attribut \inPy{eyeColor} hinzufügen, und die Methode \inPy{__str__}  überarbeiten. Wir erreichen dies mit den folgenden Zeilen:
 
 \begin{codebox}[Beispiel: Abeleitete Klasse]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # Klasse Expartner wie oben
 
 class ExpartnerWithEyeColor(Expartner) :
@@ -1253,7 +1253,7 @@ Beide Methoden -- \inPy{__init__} und \inPy{__str__} -- sind sich in \inPy{Expar
 In Klassenmethoden kann die Funktion \inPy{super()} aufgerufen werden. Diese gibt eine Instanz von \inPy{self} zurück, das aber als Instanz der Basisklasse interpretiert wird. Damit können wir unsere Klasse \inPy{ExpartnerWithEyeColor} auch schreiben als:
 
 \begin{codebox}[Beispiel: Abeleitete Klasse mit Methoden der Basisklasse]
-\begin{minted}[linenos]{python}
+\begin{minted}[linenos]{python3}
 # Klasse Expartner wie oben
 
 class ExpartnerWithEyeColor(Expartner) :
