@@ -1,0 +1,17 @@
+# patterns to exclude
+*.aux
+*.log
+*.lof
+*.lot
+*.out
+*.pdf
+*.synctex.gz
+*.toc
+
+# files to ignore
+.directory
+
+# directories to exclude
+Source Material/
+_minted-Programmieren_in_Python/
+evolution/
