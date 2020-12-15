@@ -394,7 +394,6 @@ with open("archive.pkl", "wb") as handle :
     pickle.dump(classObject  , handle)
 
 with open("archive.pkl", "rb") as handle :
-    #pickles = handle.readlines()
     readComplex     = pickle.load(handle)
     readClassObject = pickle.load(handle)
 
