@@ -89,6 +89,8 @@ plt.show()
 \end{tcolorbox}
 
 \section{Einfache Formatierungen und andere Plot-Arten}
+Die folgenden Abschnitte stellen eine Auswahl an Themen dar; für eine volle Übersicht der Features von MatPlotLib-Plots siehe \url{https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.plot.html}.
+
 \subsection{Format-Angaben im Befehl \texttt{plot}}
 Es wurde schon angesprochen, dass die Standard-Einstellungen der MatPlotLib nicht übernommen werden müssen. Im einfachsten Fall können wir direkt im \texttt{plot}-Befehl eine andere Linienfarbe und -form festlegen: Nach den Y-Werten kann ein optionaler String übergeben werden, in dem diese Information enthalten ist:
 \mint{python3}{plt.plot(X, Y, "r--")}
@@ -137,7 +139,7 @@ für einen Graphen aus blauen Punkten, die durch mit einer Linie verbunden sind.
 
 Soll eine Kurve in einer Farbe gezeichnet werden, die nicht in Tabelle \ref{tab:PlotFormatStrings} aufgeführt sind, kann das Keyword-Argument \texttt{color} verwendet werden. Hier gibt man die Farbe als RGBA-String mit führendem Raute-Symbol an. Das bedeutet, dass der Rot- Grün- und Blau-Anteil der Farbe sowie die Deckkraft (\enquote{Alpha-Wert}) als zweistellige Hexadezimalzahl geschrieben wird und diese vier Zahlen dann aneinander gereiht werden. Für ein dunkles Rot kann man also schreiben:
 \mint{python3}{plt.plot(X, Y, color="#7F0000FF")}
-Dabei ist \inPy{7F} der Rot-Anteil (entspricht 50\% Intensität), \inPy{00} jeweils der Grün- und Blau-Anteil und \inPy{FF} die Deckkraft (entspricht 100\%).
+Dabei ist \texttt{7F} der Rot-Anteil (entspricht 50\% Intensität), \texttt{00} jeweils der Grün- und Blau-Anteil und \texttt{FF} die Deckkraft (entspricht 100\%).
 
 \subsection{Legenden Anzeigen und Gitter anzeigen -- \texttt{legend}, \texttt{label} und \texttt{grid}}
 Weiter ist es natürlich auch möglich, Graphen zu benennen und eine Legende anzeigen zu lassen. Dazu sind zwei Dinge nötig:
@@ -361,12 +363,11 @@ plt.show()
 \subsection{Andere Plot-Arten}
 Neben Kurven in einem X-Y-Diagramm kann die MatPlotLib auch andere Arten von Visualisierungen erzeugen.
 
-\subsubsection{Barplots}
-Barplots oder Balkendiagramme verhalten sich ähnlich wie die Punkt- oder Liniendiagramme, die im letzten Abschnitt gezeigt wurden. Alle oben erwähnten Befehle funktionieren auch hier, außerdem kann auch das Keyword-Argument \texttt{color} verwendet werden. Erstellt werden Barplots mit den Befehlen \texttt{bar} (vertikale Balken) und \texttt{barh} (horizontale Balken). Die \enquote{X-Werte} dürfen für Barplots auch Strings enthalten, und werden entsprechend als Beschriftung angebracht.
+\subsubsection{Balkendiagramme}
+Barplots oder Balkendiagramme verhalten sich ähnlich wie die Punkt- oder Liniendiagramme, die im letzten Abschnitt gezeigt wurden. Alle oben erwähnten Befehle funktionieren auch hier, außerdem kann auch das Keyword-Argument \texttt{color} verwendet werden. Erstellt werden Barplots mit den Befehlen \texttt{bar} (vertikale Balken) und \texttt{barh} (horizontale Balken). Die \enquote{X-Werte} dürfen für Barplots auch Strings enthalten, und werden entsprechend als Beschriftung angebracht. Wie schon bei den Liniendiagrammen können auch hier mehrere Graphen auf demselben Plot dargestellt werden.
 
 \begin{codebox}[Beispiel: Barplots]
 \begin{minted}[linenos]{python3}
-import random
 import matplotlib.pyplot as plt
 
 X = ["Smoot", "Fnord", "R'lyeh"]
@@ -397,35 +398,494 @@ plt.show()
 \end{tcolorbox}
 \end{tcbraster}
 
+Siehe auch \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.bar.html} für weitere Details und \url{https://matplotlib.org/3.1.1/gallery/lines_bars_and_markers/bar_stacked.html} für ein weiteres Beispiel.
+
 \subsubsection{Kuchendiagramme}
-pie
-\subsubsection{Histogramme}
-hist(data, bins, orientation='horizontal')
+Kuchendiagramme sind die klassische Darstellungsform, wenn die Anteile verschiedener Beiträge zu einem Gesamten visualisiert werden sollen. Die MatPlotLib erlaubt das Erstellen solcher Diagramme mit dem Befehl \texttt{pie}. Wie auch schon zuvor kann im einfachsten Fall eine einfache \inPy{list} übergeben werden, um ein minimales Kuchendiagramm zu erstellen. Die Werte müssen sich dabei \emph{nicht} zu 100\% bzw. zu 1 aufaddieren.
+
+\begin{codebox}[Beispiel: Einfaches Kuchendiagramm, width=.55\linewidth, nobeforeafter, equal height group = grpXmpSimplePie]
+\begin{minted}[linenos]{python3}
+import matplotlib.pyplot as plt
+
+contributions = {
+    "trial & error"               : 90,
+    "searching the web"           : 50,
+    "despair, fits of anger, etc" : 10,
+    "writing small bits of code"  : 30,
+    "brilliant ideas"             : 1
+}
+
+plt.pie( contributions.values() )
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Einfaches Kuchendiagramm, width=.45\linewidth, nobeforeafter, equal height group = grpXmpSimplePie]
+	\includegraphics[width=\linewidth]{./gfx/plt-pie-simple}
+	\captionof{figure}{Einfaches Kuchendiagramm der matplotlib}
+\end{tcolorbox}
+
+Selbstverständlich kann auch hier ein Titel mit \texttt{title} hinzugefügt werden. Die Befehle \texttt{xlabel} und \texttt{ylabel} erstellen tatsächlich Textfelder an den zu erwartenden Stellen, und können für Beschriftungen \enquote{missbraucht} werden. Labels funktionieren wie schon bei \texttt{plot} gezeigt, \ie über das optionale Argument \texttt{labels} werden Texte zugewiesen; der Befehl \texttt{legend} sorgt dafür, dass diese dann in einer Box angezeigt werden. Zusätzlich werden Labels direkt neben den Kuchenstücken angezeigt, wenn solche mit dem Keyword Argument \texttt{labels} als \inPy{list} übergeben werden. Dagegen hat der Befehl \texttt{grid} keine Effekt. 
+
+Eine Auswahl an optionalen Argumenten für den Befehl \texttt{pie} ist in Tabelle \ref{tab:OptArgsPie} aufgeführt. Weitere Argumente sind unter \url{https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.pie.html} aufgeführt.
+
+\begin{tcolorbox}[title=Auswahl an Optionalen Argumenten bei \texttt{pie}]
+	\begin{tabularx}
+		{\linewidth}
+		{>{\ttfamily}p{.2\linewidth} | p{.2\linewidth} p{.5\linewidth}}
+		\textrm{\textbf{Schlüsselwort}} & \textbf{Datentyp} & \textbf{Effekt} \tabcrlf
+		labels & 
+			\texttt{list} oder \texttt{tuple} &
+			Liste von Strings, die neben jedem Kuchenstück angezeigt werden soll. Die Länge der Liste muss mit der Anzahl der Kuchenstücke
+			 übereinstimmen.\\
+		colors &
+			\texttt{list} oder \texttt{tuple} &
+			Liste von Strings mit Farbangaben. Farbangaben können entweder einzelne Buchstaben wie in Tabelle \ref{tab:PlotFormatStrings} sein, ausgewählte englische
+			Farbnamen oder hexadezimale Farbangaben \\
+		explode &
+			\texttt{list} oder \texttt{tuple} &
+			Liste von Zahlen, die angeben, wie weit jedes Kuchenstück vom Mittelpunkt abgesetzt sein soll in Einheiten des Kreisradius (\ie 0 bedeutet: Kuchenstück-Spitze
+			berührt den Mittelpunkt; 1 bedeutet: Kuchenstück-Spitze würde den Rand des Kreises berühren) \\
+		autopct &
+			String oder Funktion &
+			Wenn hier ein String übergeben wird, interpretiert die MatplotLib diesen als Format-String (siehe Abschnitt \ref{sec:FormatStringsTable}).
+			Bei einer Funktion dagegen wird erwartet, dass die Funktion eine Zahl zwischen 0 und 100 als Argument akzeptiert, und einen String zurückgibt, der eine
+			Textentsprechung dieser Zahl enthält.
+	\end{tabularx}
+	\captionof{table}{Optionale Argumenten bei \texttt{matplotlib.pyplot.pie} (Auswahl)}
+	\label{tab:OptArgsPie}
+\end{tcolorbox}
+
+\begin{codebox}[Beispiel: Verändertes Kuchendiagramm]
+\begin{minted}[linenos]{python3}
+import matplotlib.pyplot as plt
+
+contributions = {
+    "trial & error"                 : 99,
+    "searching the web"             : 50,
+    "despair, fits of anger, etc"   : 10,
+    "writing small bits\n of code"  : 30,
+    "brilliant ideas"               : 1
+}
+
+def percentToWords(x) :
+    if        x <  5 : return "virtually nothing"
+    elif  5 < x < 20 : return "a little"
+    elif 20 < x < 50 : return "quite a bit"
+    else             : return "the majority"
+
+plt.title("Time Allocation in a coding project")
+plt.xlabel("taken from experience")
+
+plt.pie(
+    contributions.values(),
+    labels=contributions.keys(),
+    colors=["#0000AAFF", "blue", "r", "green", "gold"],
+    explode=(0, 0.1, 0, 0, .3),
+    autopct=percentToWords
+)
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Verändertes Kuchendiagramm]
+\begin{center}
+	\includegraphics[width=.68\linewidth]{./gfx/plt-pie-args}
+	\captionof{figure}{Kuchendiagramm mit Optionen}
+\end{center}
+\end{tcolorbox}
+
 \subsubsection{Stackplots}
-stackplot
+Wo eine Zusammensetzung über eine Zeit verfolgt werden soll, bietet sich die Darstellungsfomr \emph{stacked plot} an, die mit dem Befehl \texttt{stackplot} erstellt wird. Wie schon bei normalen Plots ist das erste, optionale Argument eine Liste von X-Werten. Danach können entweder mehrere eindimensionale Listen stehen, die als Y-Werte aufgetragen werden, oder eine zweidimensionale Liste:
+
+\begin{codebox}[Beispiel: Stackplot]
+\begin{minted}[linenos]{python3}
+import csv
+import matplotlib.pyplot as plt
+
+years    = []
+africa   = []
+americas = []
+asia     = []
+europe   = []
+oceania  = []
+colors   = ["gold", "black", "red", "blue", "green"]
+
+with open("annual-number-of-births-by-world-region.csv", "r") as handle :
+    # Daten von https://ourworldindata.org/world-population-growth
+    # Datei enthält Daten in der Form:
+    # Year,Asia,Africa,America,Europe,Oceania
+    # 1950,11071.722,8896.969,62638.002,11837.577,360.997
+    # 1951,11178.006,9031.823,62344.074,11917.33,366.362
+    # ...
+      
+    reader = csv.reader(handle)
+    
+    labels = next(reader)[1:]    # erste Zeile lesen;
+                                 # Spaltenüberschriften ohne "Years" übernehmen
+
+    for line in reader :         # verbleibende Zeilen einlesen
+        years   .append(float(line[0])       )
+        africa  .append(float(line[1]) / 1000)  # line[i] / 1000: Daten sind in
+        americas.append(float(line[2]) / 1000)  # Tausend Geburten angegeben.
+        asia    .append(float(line[3]) / 1000)  # Plot soll in Millionen sein.
+        europe  .append(float(line[4]) / 1000)
+        oceania .append(float(line[5]) / 1000)
+
+
+plt.title ("annual number of births by world region")
+plt.xlabel("year")
+plt.ylabel("annual number of births in millions")
+plt.legend(loc="upper left")
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[]
+\begin{minted}[linenos, firstnumber=last]{python3}
+plt.stackplot(
+    years,
+    asia, africa, americas, europe, oceania,
+    labels=labels,
+    colors=colors
+)
+
+# Alternative, erzeugt selbes Ergebnis:
+# data = [asia, africa, americas, europe, oceania]
+# plt.stackplot(years, data, labels = labels, colors=colors)
+
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Stackplot]
+\begin{center}
+	\includegraphics[width=.8\linewidth]{./gfx/plt-stackplot}
+	\captionof{figure}{Stackplot: Anzahl Geburten über die Zeit je Kontinent}
+\end{center}
+\end{tcolorbox}
+
+Für weitere Details, siehe \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.stackplot.html}
+
+
 \subsubsection{Scatterplots}
-scatter
-\subsubsection{Flussdiagramme}
-quiver
-\subsubsection{Äquipotentiallinien}
-isosurface
+Scatterplots erlauben es, Orten in einer Fläche ein Gewicht zuzuweisen. Dem Befehl \texttt{scatter} können bis zu vier Parameter übergeben werden. Die ersten beiden davon sind X- und Y-Koordinaten der Punkte, die geplottet werden sollen, übergeben als \inPy{list}. Der dritte Parameter enthält eine \inPy{list} mit der Größe der Punkte und ist optional. Als vierten Parameter kann die Farbe der einzelnen Punkte als \inPy{list} übergeben werden.
+
+\begin{codebox}[Beispiel: Scatterplot]
+\begin{minted}[linenos]{python3}
+import csv
+import matplotlib.pyplot as plt
+
+lat = []      # geographische Länge
+lng = []      # geographische Breite
+pop = []      # Einwohnerzahl
+col = []      # Farbe
+
+colors = {
+    "primary" : "red",     # Bundeshauptstadt
+    "admin"   : "blue",    # Landeshauptstadt
+    "minor"   : "black"    # andere Stadt
+}
+
+# Größe des Punktes aus Einwohnerzahl berechnen: kleine Städte sollen dabei
+# nicht "verschwinden"
+sizer = lambda x : 0.5 if x < 10000 else x / 10000
+
+with open("cities-locations-populations-Germany.csv", "r") as handle :
+    # Daten von https://simplemaps.com/data/de-cities
+    # Datei enthält Daten in der Form:
+    # city,lat,lng,country,iso2,admin_name,capital,population,population_proper
+    # Berlin,52.5167,13.3833,Germany,DE,Berlin,primary,3644826,3644826
+    # Hamburg,53.5500,10.0000,Germany,DE,Hamburg,admin,1841179,1841179
+    # ...
+    
+    reader = csv.reader(handle)
+    
+    next(reader)
+    
+    for line in reader :
+            lat.append(float(line[1]))
+            lng.append(float(line[2]))
+            pop.append( sizer(float(line[7]))  )
+            col.append( colors[line[6]] )
+
+plt.figure(figsize=(6,7.5))
+plt.title("Deutschland: Städte")
+plt.xlabel("Geographische Länge")
+plt.ylabel("Geographische Breite")
+plt.scatter(lng, lat, pop, col)
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Scatterplot]
+\begin{center}
+	\includegraphics[width=.7\linewidth]{./gfx/plt-de}
+	\captionof{figure}{Scatterplot: Städte Deutschlands}
+\end{center}
+\end{tcolorbox}
+
+Siehe auch \url{https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.axes.Axes.scatter.html}
+
+\subsubsection{Histogramme}
+Häufig wird dieselbe Simulation mehrfach mit verschiedenen Ausgangswerten durchgeführt. Wir erhalten so eine Liste von Ergebnissen. Oft interessiert uns dann, wie häufig ein bestimmtes Ergebnis erhalten wurde. 
+
+Beispiel:\\
+In der folgenden Liste:
+\mint{python3}{[1, 5, 2, 1, 6, 2, 6, 8, 4]}
+finden wir die folgende Häufigkeit der Zahlen:
+\mint{python3}{{1:2, 2:2, 4:1, 5:1, 6:2, 8:1}}
+Eine solche Aufschlüsselung nennt sich \emph{Histogramm}. In der Regel führen wir dann \emph{bins} ein, \ie Wertebereiche, die als eine Klasse gezählt werden sollen. Wollen wir also jeweils zwei aufeinanderfolgende Zahlen als eine Klasse zählen, so erhalten wir folgende Aufschlüsselung:
+\mint{python3}{{1:4, 3:1, 5:3, 7:1}}
+
+Mit der MatPlotLib können solche Histogramme automatisch erstellt\footnote{Tatsächlich erfolgt die Datenanalyse im Hintergrund mit dem Modul numpy, das in Kapitel \ref{chp:Numpy} besprochen wird. Aus didaktischen Gründen wollen wir hier zuerst die MatPlotLib besprechen.} und als Plot dargestellt werden. Hierzu dient der Befehl \texttt{hist}. Als Parameter wird eine Liste von Ergebnissen übergeben, aus der automatisch das Histogramm berechnet und daraus ein Balkendiagramm erstellt. Rückgabewert von \texttt{hist} ist ein Tupel bestehend aus den \inPy{list}s\footnote{Eigentlich numpy-Arrays; diese verhalten sich aber im Wesentlichen wie \inPy{list}s. Siehe Kapitel \ref{chp:Numpy} für Details.} \texttt{count} und \texttt{bins} sowie einem \texttt{Patch}-Objekt. In \texttt{count[i]} ist gespeichert, wie viele Ergebnisse jeweils in die \texttt{i}-te Klasse fallen; \texttt{bins[i]} gibt an, bei welchem Wert die \texttt{i}-te Klasse beginnt. Auf das \texttt{Patch}-Objekt kann hier nicht näher eingegangen werden.
+
+\begin{codebox}[Beispiel: Einfaches Histogramm]
+\begin{minted}[linenos]{python3}
+import matplotlib.pyplot as plt
+
+data = [1, 5, 2, 1, 6, 2, 6, 8, 4]
+
+count, bins, patches = plt.hist(data)
+print(bins)
+print(count)
+plt.show()
+\end{minted}
+\end{codebox}
+
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{cmdbox}[Konsolenausgabe: Einfaches Histogramm]
+\begin{minted}{text}
+[1.  1.7 2.4 3.1 3.8 4.5 5.2 5.9 6.6
+  7.3 8. ]
+[2. 2. 0. 0. 1. 1. 0. 2. 0. 1.]
+\end{minted}
+\end{cmdbox}
+%
+\begin{tcolorbox}[title=Plot: Einfaches Histogramm]
+	\includegraphics[width=\linewidth]{./gfx/plt-hist-simple}
+	\captionof{figure}{Einfaches Histogramm}
+\end{tcolorbox}
+\end{tcbraster}
+
+Der optionale \inPy{int}-Parameter \texttt{bins} gibt an, in wie viele Klassen diese Liste unterteilt werden soll. Über das Keyword-Argument \texttt{range} kann ein \inPy{tuple} übergeben werden, der die untere und obere Schranke für die Klassierung enthält. 
+
+Hier sei ein beschränkter \emph{Random Walk} gezeigt: Ein Betrunkener geht \texttt{N} Schritte eine Straße entlang. Bei jedem Schritt wird er entweder nach links oder nach rechts torkeln; die Wahrscheinlichkeit für einen Schritt nach Links beträgt dabei \texttt{pleft}. Die Straße ist insgesamt \texttt{B} Schritte breit. Der Plot zeigt, wie wahrscheinlich der Betrunkene am Ende seines Laufs an einem 
+
+\begin{codebox}[Beispiel: Drunk Walk als Histogramm]
+\begin{minted}[linenos]{python3}
+import random
+import matplotlib.pyplot as plt
+
+runs   = 10000
+N      = 100
+B      = 20
+pLeft  = 0.5
+drifts = [0] * runs
+
+for run in range(runs) :
+    drift  = 0
+    for step in range(N) :
+        r = random.uniform(0, 1)
+    
+        if r < pLeft :                      # Schritt nach links
+            if drift != -B : drift -= 1
+        else :                              # Schritt nach rechts
+            if drift != +B : drift += 1
+  
+    drifts[run] = drift
+
+data, bins, patches = plt.hist(drifts, 
+                               bins=B+1, range=(-B-1, B+1),
+                               histtype='step'
+)
+
+plt.title ("Drunk Walk")
+plt.xlabel("Drift")
+plt.ylabel("Häufigkeit")
+
+print("Histogramm-Daten:")
+for b, d in zip(bins, data) :
+    print(f"\t{b:+3.0f} bis {b+2:+3.0f}: {d:5.0f}")
+
+plt.show()
+\end{minted}
+\end{codebox}
+
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{cmdbox}[Konsole: Drunk Walk als Histogramm]
+\begin{minted}{text}
+Histogramm-Daten:
+        -21 bis -19:    93
+        -19 bis -17:   253
+        -17 bis -15:   254
+        -15 bis -13:   317
+        -13 bis -11:   388
+        -11 bis  -9:   519
+         -9 bis  -7:   589
+         -7 bis  -5:   671
+         -5 bis  -3:   735
+         -3 bis  -1:   783
+         -1 bis  +1:   789
+         +1 bis  +3:   769
+         +3 bis  +5:   775
+         +5 bis  +7:   669
+         +7 bis  +9:   571
+         +9 bis +11:   484
+        +11 bis +13:   367
+        +13 bis +15:   308
+        +15 bis +17:   281
+        +17 bis +19:   191
+        +19 bis +21:   194
+\end{minted}
+\end{cmdbox}
+%
+\begin{tcolorbox}[title=Plot: Drunk Walk als Histogramm]
+	\includegraphics[width=\linewidth]{./gfx/plt-hist-drunkWalk}
+	\captionof{figure}{Histogramm zum Drunk Walk}
+\end{tcolorbox}
+\end{tcbraster}
+
+Für weitere Parameter, siehe \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.hist.html}
+
+\subsubsection{Vektorfelder}
+Die Größen, die wir auftragen wollen, können nicht nur eindimensionale Größen sein, sondern auch eine \enquote{Richtung} haben. Beispielsweise könnten wir Windgeschwindigkeit und -Richtung über einem großen Gebiet darstellen wollen. Zu diesem Zweck dient der Befehl \texttt{quiver}. 
+
+Ähnlich wie schon bei \texttt{plot} und den anderen gezeigten Befehlen reicht es im einfachsten Fall, nur die zu plottenden Daten selbst zu übergeben. Diese müssen dann in \emph{zwei} Listen übergeben werden, da ja auch \emph{zwei}dimensionale Daten dargestellt werden sollen. Die erste Liste enthält also die X-Komponenten der Windrichtungen; in der zweiten Liste sind die Y-Komponenten angegeben. Die Listen selbst müssen dann ebenfalls \emph{zwei}dimensional sein, da die Windgeschwindigkeit an einem \emph{Ort} angegeben wird, der selbst eine X- und Y-Komponente hat.
+
+\begin{codebox}[Beispiel: Wirbelfeld ohne explizite Ortsangabe]
+\begin{minted}[linenos]{python3}
+import matplotlib.pyplot as plt
+
+width  = 10
+height = 15
+
+xPoints = [x / 10 for x in range(- width, + width)]
+yPoints = [y / 10 for y in range(-height, +height)]
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[]
+\begin{minted}[linenos, firstnumber=last]{python3}
+dataX = []
+dataY = []
+
+for r, y in enumerate(yPoints) :
+    dataX.append([])
+    dataY.append([])
+    for x in xPoints :
+        dataX[r].append(-y)
+        dataY[r].append(+x)
+
+plt.quiver(dataX, dataY)
+plt.show()
+\end{minted}
+\end{codebox}
+
+\begin{tcolorbox}[title=Plot: Wirbelfeld]
+\begin{center}
+	\includegraphics[width=.6\linewidth]{./gfx/plt-vortex}
+	\captionof{figure}{Wirbelfeld}
+\end{center}
+\end{tcolorbox}
+
+Wie schon zuvor nimmt die MatPlotLib hierzu an, dass die Punkte einen Abstand von 1 zueinander haben, sowohl in X- als auch Y-Richtung. Wo dies nicht der Fall ist, können auch zwei Listen \texttt{X, Y} mit übergeben werden, die jeweils die X- bzw. Y-Koordinate zum \texttt{i}-ten Datenpunkt. In diesem Fall dürfen die Listen mit den Pfeil-Daten auch als \emph{eindimensionale} Liste übergeben werden, \ie ihr Index weist ihnen schon ihre Position im Raum zu. Den obigen Plot kann man daher auch mit diesen Zeilen erreichen:
+
+\begin{codebox}[Beispiel: Wirbelfeld ohne explizite Ortsangabe]
+\begin{minted}[linenos]{python3}
+import matplotlib.pyplot as plt
+
+width  = 10
+height = 15
+
+xPoints = [x / 10 for x in range(- width, + width)]
+yPoints = [y / 10 for y in range(-height, +height)]
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[]
+\begin{minted}[linenos, firstnumber=last]{python3}
+X = [xPoints for i in range(2 * height)]
+Y = [[y] * 2 * width for y in yPoints]
+
+dataX = []
+dataY = []
+
+for y in yPoints :
+    for x in xPoints :
+        dataX.append(-y)
+        dataY.append(+x)
+
+plt.quiver(X, Y, dataX, dataY)
+plt.show()
+\end{minted}
+\end{codebox}
+
+Für weitere Parameter, siehe \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.quiver.html}
 
 \subsubsection{Weitere Diagrammtypen}
 Unter \url{https://matplotlib.org/3.1.0/gallery/index.html} sind diverse Beispiele zum Umgang mit der MatPlotLib aufgeführt.
 
+Beachten Sie auch, dass verschiedene Plot-Typen miteinander vermischt werden können. Ein Balkendiagramm und eine Datenkurve können sich problemlos überlagern.
 
 \section{Multiplots}
-subplots
+Es ist auch möglich, in einem Fenster mehrere Plots darzustellen. Hierzu dienen die Befehle \texttt{subplot} und \texttt{subplots}. Mit \texttt{subplots} wird ein Gitter festgelegt, auf dem die einzelnen Plots im Fenster angeordnet werden. Übergeben werden muss dazu die Anzahl an Zeilen und Spalten, die dieses Gitter haben soll.
+\mint{python3}{plt.subplots(2, 4)}
+bereitet also ein Fenster vor, in dem insgesamt 8 Plots dargestellt werden können. Diese Plots sind dann in 2 Zeilen und 4 Spalten angeordnet.
+
+Der Befehl \texttt{subplot} wählt aus, an welchen Gitterpunkt der nächste Plot platziert wird. Hierzu ist nochmal die Höhe und Breite des Gitters notwendig; zusätzlich muss auch die \enquote{Nummer des Gitterpunkts} angegeben werden, an die der Plot platziert werden soll. Diese Nummer beginnt bei 1 und wird von links nach rechts und von oben nach unten durchgezählt.
+Im oben angelegten 2x4-Gitter wählt also
+\mint{python3}{plt.subplot(2, 4, 5)}
+den Rasterpunkt in der zweiten Zeile, erste Spalte aus.
+
+Sofern Höhe, Breite und Gitterpunkt-Nummer nur einstellige Ziffern sind, können diese auch zu einer dreistelligen Zahl zusammengefasst werden.
+\mint{python3}{plt.subplot(245)}
+hat also denselben Effekt, wählt ebenfalls den Rasterpunkt in der zweiten Zeile, erste Spalte aus.
+
+Weiter kann dem Befehl \texttt{subplot} noch über das Keyword-Argument \texttt{polar} ein \inPy{bool}ean mitgegeben werden, der eine Auftragung in Polarkoordinaten verursacht.
+
+\begin{codebox}[Beispiel: Lissajous-Figuren, width=.55\linewidth, nobeforeafter, equal height group = grpXmpLissajous]
+\begin{minted}[linenos]{python3}
+import math
+import matplotlib.pyplot as plt
+
+X = [x / 100 for x in range(628)]
+Y = [math.sin(3 * x) for x in X]
+
+plt.subplots(1, 2)
+plt.suptitle("Lissajous-Figuren")
+
+plt.subplot(121)
+plt.title("Kartesisch")
+plt.plot(X, Y)
+
+plt.subplot(122, polar=True)
+plt.title("Polarkoordinaten")
+plt.plot(X, Y)
+
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Lissajous-Figuren, width=.45\linewidth, nobeforeafter, equal height group = grpXmpLissajous]
+	\includegraphics[width=\linewidth]{./gfx/plt-Lissajous}
+	\captionof{figure}{Zwei Plots im selben Fenster}
+\end{tcolorbox}
+
+Siehe \url{https://matplotlib.org/3.3.3/api/_as_gen/matplotlib.pyplot.subplots.html} und \url{https://matplotlib.org/3.3.3/api/_as_gen/matplotlib.pyplot.subplot.html} für weitere Details.
 
 \section{Plot-Objekte}
 
+
+\section{3D-Plots}
+
+
 \section{Ausgabe in Dateien}
-
-
-
-
-
+hintbox on data usage
 %https://matplotlib.org/api/pyplot_api.html
 
-
-save files, hintbox on data usage
