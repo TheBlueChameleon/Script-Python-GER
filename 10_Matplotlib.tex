@@ -849,7 +849,7 @@ hat also denselben Effekt, wählt ebenfalls den Rasterpunkt in der zweiten Zeile
 
 Weiter kann dem Befehl \texttt{subplot} noch über das Keyword-Argument \texttt{polar} ein \inPy{bool}ean mitgegeben werden, der eine Auftragung in Polarkoordinaten verursacht.
 
-\begin{codebox}[Beispiel: Lissajous-Figuren, width=.55\linewidth, nobeforeafter, equal height group = grpXmpLissajous]
+\begin{codebox}[Beispiel: Lissajous-Figuren]%, width=.55\linewidth, nobeforeafter, equal height group = grpXmpLissajous]
 \begin{minted}[linenos]{python3}
 import math
 import matplotlib.pyplot as plt
@@ -872,20 +872,73 @@ plt.show()
 \end{minted}
 \end{codebox}
 %
-\begin{tcolorbox}[title=Ausgabe: Lissajous-Figuren, width=.45\linewidth, nobeforeafter, equal height group = grpXmpLissajous]
+\begin{tcolorbox}[title=Ausgabe: Lissajous-Figuren]%, width=.45\linewidth, nobeforeafter, equal height group = grpXmpLissajous]
+\begin{center}
 	\includegraphics[width=\linewidth]{./gfx/plt-Lissajous}
 	\captionof{figure}{Zwei Plots im selben Fenster}
+	\label{fig:plt-Lissajous}
+\end{center}
 \end{tcolorbox}
 
 Siehe \url{https://matplotlib.org/3.3.3/api/_as_gen/matplotlib.pyplot.subplots.html} und \url{https://matplotlib.org/3.3.3/api/_as_gen/matplotlib.pyplot.subplot.html} für weitere Details.
 
 \section{Plot-Objekte}
- 
+Es ist auch möglich, mehrere Plot-Fenster gleichzeitig zu steuern. Außerdem kann Python Code \emph{parallel zum Fenster} ausgeführt werden: normalerweise wird die Code-Ausführung mit \texttt{plt.show()} angehalten, bis das Plot-Fenster geschlossen wird. Im folgenden zeige ich, wie man Python-Code dazu bringt, gleichzeitig zum Betreiben des/der Plot-Fenster(s) weiter den Code auszuführen.
+
+Bisher haben wir alle Befehle der MatPlotLib direkt über den Alias \texttt{plt} aufgerufen. Tatsächlich handelt es sich dabei aber um Methoden von Klassen, die im Hintergrund der MatPlotLib agieren. Besondere Bedeutung haben dabei die Klassen \texttt{Figure} und \texttt{AxesSubplot}.
+
+Eine \texttt{Figure} stellt ein Plot-Fenster dar. Wir erhalten ein \emph{Handle auf ein neues Fenster} über den Befehl \texttt{figure}:
+\mint{python3}{fig = plt.figure()}
+Aktionen, die \emph{das Fenster als Ganzes} betreffen, sollten über dieses Handle geschehen.
+\mint{python3}{fig.suptitle("Überschrift")}
+ändert beispielsweise die Titelzeile des Fensters.
+
+Der Befehl \texttt{figure} hat eine Reihe von Keyword-Parametern, von denen hier nur \texttt{figsize} vorgestellt werden soll. \texttt{figsize} erwartet einen Tupel aus zwei Werten, die die Breite und Höhe des Plots repräsentieren. Für weitere Details, siehe \url{https://matplotlib.org/3.3.3/api/_as_gen/matplotlib.pyplot.figure.html}.
+
+\texttt{AxesSubplot}s repräsentieren die eigentlichen Graphen. Wir erhalten ein Handle auf ein solches Objekt über verschiedene Methoden von \texttt{figure}. Am geläufigsten ist die Methode \texttt{add\_subplot}, die sich im Wesentlichen wie der Befehl \texttt{subplot} verhält:
+\mint{python3}{pol = fig.add_subplot(1, 2, 2, projection="polar")}
+erzeugt einen Subplot in Polarkoordinaten in der ersten Zeile, zweite Spalte von \texttt{fig}. 
+Siehe \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.figure.Figure.html?highlight=add_subplot#matplotlib.figure.Figure.add_subplot} für weitere Details.
+
+Die obige Ausgabe von Abb. \ref{fig:plt-Lissajous} kann so auch mit dem folgenden Code erreicht werden:
+\begin{codebox}[Beispiel: Lissajous-Figuren]
+\begin{minted}[linenos]{python3}
+import math
+import matplotlib.pyplot as plt
+
+X = [x / 100 for x in range(628)]
+Y = [math.sin(3 * x) for x in X]
+
+fig = plt.figure(figsize=(8,4))
+fig.suptitle("Lissajous-Figuren")
+
+crt = fig.add_subplot(1, 2, 1)
+crt.set_title("Kartesisch")
+crt.plot(X, Y)
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[]
+\begin{minted}[linenos, firstnumber=last]{python3}
+
+pol = fig.add_subplot(1, 2, 2, projection="polar")
+pol.set_title("Polarkoordinaten")
+pol.plot(X, Y)
+
+fig.show()
+
+print("Ausgabe noch während der Plot dargestellt wird")
+input()
+\end{minted}
+\end{codebox}
+
+Hier erfolgt die Ausgabe von Zeile 19 schon während der Plot dargestellt wird, und nicht erst, nachdem das Plot-Fenster geschlossen wird. Aus demselben Grund ist auch Zeile 20 notwendig: Der Code läuft nach \texttt{fig.show()} weiter, bis die letzte Zeile ausgeführt wurde; danach beendet Python alle Prozesse, die mit dem Code zu tun hatten, einschließlich der Darstellung des Plots. Mit \inPy{input} zwingen wir Python dazu, auf eine Usereingabe zu warten.
+
+hintbox on data usage
 
 \section{3D-Plots}
 
 
 \section{Ausgabe in Dateien}
-hintbox on data usage
 %https://matplotlib.org/api/pyplot_api.html
 
