@@ -291,7 +291,9 @@ Wie Sie sich denken können, sind Handles nur Instanzen einer Klasse, nämlich \
 
 Das Verhalten, das über \inPy{with} erreicht wird, realisiert der Python-Interpreter durch aufruf zweier Dunders erreicht:
 
-Die Methode \inPy{__enter__(self)} wird mit Beginn des \inPy{with}-Blocks aufgerufen. Der Parameter \inPy{self} ist dabei gleich dem Objekt, das hinter \inPy{with} steht. In der Zeile \inPy{with open("output.txt", "w") as handle} erhält \inPy{self} also den Rückgabewert von \inPy{open}. Der Rückgabewert sollte das Objekt \inPy{self} einfach durchreichen.
+Die Methode \inPy{__enter__(self)} wird mit Beginn des \inPy{with}-Blocks aufgerufen. Der Parameter \inPy{self} ist dabei gleich dem Objekt, das hinter \inPy{with} steht. In der Zeile\\
+\inPy{with open("output.txt", "w") as handle}\\
+erhält \inPy{self} also den Rückgabewert von \inPy{open}. Der Rückgabewert sollte das Objekt \inPy{self} einfach durchreichen.
 
 Die Methode \inPy{__exit__(self, exc_type, exc_value, exc_traceback)} wird aufgerufen, sobald der \inPy{with}-Block verlassen werden soll. Dies kann entweder sein, weil sein Ende erreicht wurde, oder weil im Code des \inPy{with}-Blocks ein Fehler aufgetreten ist. Die Fehlerbeschreibung ist dann in den Variablen \inPy{exc_...} enthalten. Hierauf soll in Kapitel \ref{chp:Exceptions} näher eingegangen werden.
 \end{hintbox}
@@ -484,7 +486,7 @@ with open("archive.json", "r") as handle :
 readComplex = complex(jsonObjects["real"], jsonObjects["imag"])
 
 print(readComplex)
-print(jsonObjects["dict"])
+print(jsonObjects["dict"])*
 \end{minted}
 \end{codebox}
 
@@ -502,3 +504,99 @@ print(jsonObjects["dict"])
 \end{cmdbox}
 
 Unter \url{https://www.w3schools.com/python/python_json.asp} finden Sie noch einige weitere Erläuterungen sowie zusätzliche Features, die hier nicht besprochen werden sollen.
+
+\section{CSV-Dateien}
+CSV steht für \emph{comma separated values} und ist ein Datenformat, das sich besonders für Tabellen eignet. Wie es der Name suggeriert, werden die einzelnen Spalten der Tabelle durch Trennzeichen voneinander abgesetzt. In der Regel sind diese Trennzeichen Kommata; jedes beliebige andere Zeichen kann jedoch auch als Trennzeichen verwendet werden. CSV-Dateien werden von vielen Programmen als Ausgabeformat unterstützt; unter anderem erlauben es Tabellenkalkulationsprogramme wie Microsoft Excel, Daten im CSV-Format auszugeben.
+
+\begin{tcolorbox}[title=Beispiel CSV-Dateien]
+Die folgende Tabelle:
+
+\begin{tabular}{lll}
+	Name     & Superkraft                       & Codenummer \\
+	Victoria & hat einen Eigenwert              & 80085 \\
+	Lea      & verwandelt sich in ein Chamäleon & 1337 \\
+	Martina  & ist eigentlich Legolas           & 8453
+\end{tabular}
+
+\vspace{6pt}
+kann als CSV-Datei abgebildet werden. Das Datei-Abbild könnte dann folgendermaßen aussehen:
+\begin{cmdbox}[Datei: \texttt{superheroines.txt}]
+\begin{minted}{text}
+"Name","Superkraft","Codenummer"
+"Victoria","hat einen Eigenwert",80085
+"Lea","verwandelt sich in ein Chamäleon",1337
+"Martina","ist eigentlich Legolas",8453
+\end{minted}
+\end{cmdbox}
+
+Wie Sie sehen, werden Texte auch in Anführungszeichen eingerahmt; Zahlen bleiben ohne Sonderzeichen. Während dies eine häufige Wahl bei CSV-Dateien ist, können auch andere Formatierungen gewählt werden.
+
+Im weiteren wollen wir davon ausgehen, dass die gezeigte Datei unter dem Dateinamen \texttt{superheroines.txt} im aktuellen Arbeitsverzeichnis liegt.
+\end{tcolorbox}
+
+Das Python-Modul \texttt{csv} erlaubt es, genau solche Date-n strukturiert einzuladen. Zentrales Element ist die Klasse \texttt{csv.reader}, die auf einen bestimmten \emph{Dialekt} von CSV-Formaten eingestellt werden kann (\eg Trennzeichen zwischen Spalten, Anführungszeichen bei Texten, etc.), und die anhand dieser Einstellungen eine Datei in den Arbeitsspeicher liest und in Spalten zerteilt.
+
+Um eine Instanz der Klasse \texttt{csv.reader} zu erhalten, wird ihr Konstruktor aufgerufen. Diesem muss ein Dateihandle im Text-Lesemodus mitgegeben werden. Das Trennzeichen für Spalten über das optionale Schlüsselwort \texttt{delimiter} festgelegt werden:
+
+\begin{codebox}[Beispiel: Datei mit CSV-Reader lesen]
+\begin{minted}[linenos]{python3}
+import csv
+with open("superheroines.txt", "r") as file :
+    rdr = csv.reader(file, delimiter=",")
+\end{minted}
+\end{codebox}
+
+Dieser Reader kann nun benutzt werden, um die Datei Zeilenweise einzulesen. Am leichtesten geht dies über eine \inPy{for}-Schleife:
+\begin{codebox}[Beispiel: Datei mit CSV-Reader lesen (Fortsetzung)]
+\begin{minted}[linenos, firstnumber=last]{python3}
+    for line in rdr :
+        print(line)
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Datei mit CSV-Reader lesen]
+\begin{minted}{text}
+['Name', 'Superkraft', 'Codenummer']
+['Victoria', 'hat einen Eigenwert', '80085']
+['Lea', 'verwandelt sich in ein Chamäleon', '1337']
+['Martina', 'ist eigentlich Legolas', '8453']
+\end{minted}
+\end{cmdbox}
+
+Die Datei wird also Zeile für Zeile eingelesen und in der \inPy{list line} gespeichert. Alle Werte in der zweiten Spalte sind somit \eg über \inPy{line[1]} zugänglich. Wie Sie auch sehen, werden \emph{alle} Werte als Strings eingelesen -- selbst die, die als Zahl in der CSV-Datei gespeichert waren.
+
+Oft -- wie auch im gezeigten Beispiel -- enthält die erste Zeile einer Datei die Spaltenüberschriften. Um eine einzelne Zeile einzulesen, ohne über die gesamte Datei zu iterieren, kann das Schlüsselwort \inPy{next} benutzt werden. \inPy{next} erwartet ein \emph{Iterable}, \ie eine Variable, die über die mit \inPy{for} iteriert werden kann. Mit \inPy{next(Iterable)} wird ein einzelner \inPy{for}-Durchlauf ausgeführt. Der Wert aus \texttt{Iterable}, der hierbei normal erhalten würde, ist nun der Rückgabewert von \inPy{next}. In Kapitel \ref{chp:Classes2} wird dies noch genauer besprochen.
+
+Mit \inPy{next} kann die Datei auch wie folgt ausgegeben werden:
+\begin{codebox}[Beispiel: Datei Spaltenweise ausgeben]
+\begin{minted}[linenos]{python3}
+import csv
+with open("superheroines.txt", "r") as file :
+    rdr = csv.reader(file, delimiter=",")
+    heads = next(rdr)
+    
+    for line in rdr :
+        for i in range(len(heads)) :
+            print(heads[i] + ":", line[i])
+        print()
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: Datei Spaltenweise ausgeben]
+\begin{minted}{text}
+Name: Victoria
+Superkraft: hat einen Eigenwert
+Codenummer: 80085
+
+Name: Lea
+Superkraft: verwandelt sich in ein Chamäleon
+Codenummer: 1337
+
+Name: Martina
+Superkraft: ist eigentlich Legolas
+Codenummer: 8453
+
+\end{minted}
+\end{cmdbox}
+
+Für weitere Details siehe auch die offizielle Dokumentation des Moduls unter \url{https://docs.python.org/3/library/csv.html}.

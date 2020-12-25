@@ -27,10 +27,10 @@ plt.show()
 %
 \begin{tcolorbox}[title=Ausgabe: Einfacher Plot, width=.45\linewidth, nobeforeafter, equal height group = grpXmpSimplePlot]
 	\includegraphics[width=\linewidth]{./gfx/plt-sin}
-	\captionof{figure}{Einfacher Plot der matplotlib}
+	\captionof{figure}{Einfacher Plot der MatPlotLib}
 \end{tcolorbox}
 
-In den Zeilen 1 und 2 laden wir Module -- zum einen das Modul \inPy{math}, mit dem wir die Daten generieren, die auf unserem Plot erscheinen sollen, und zum anderen die Matplotlib. Tatsächlich handelt es sich dabei um ein extrem umfangreiches Paket, weswegen wir nur einen Teil davon in unser Projekt integrieren: Das Untermodul \inPy{pyplot}\footnote{Die Matplotlib enthält Code zum Fenstermanagement, zur Interpolation von Kurven, Umgang mit Dateien, ... Alle diese Features bilden den Unterbau von \inPy{pyplot}, müssen aber nicht \enquote{offengelegt} werden, um für uns nützlich zu sein. Während \inPy{pyplot} intern alle diese Objekte und Funktionen benutzt und korrekt verwaltet, können wir uns auf das \emph{Interface} konzentrieren, das uns \inPy{pyplot} auf all diese Features bietet.}. Da dieser Modulname \inPy{matplotlib.pyplot} eher unhandlich ist, hat es sich eingebürgert, \inPy{plt} als Kurzname hierfür zu verwenden.
+In den Zeilen 1 und 2 laden wir Module -- zum einen das Modul \inPy{math}, mit dem wir die Daten generieren, die auf unserem Plot erscheinen sollen, und zum anderen die MatPlotLib. Tatsächlich handelt es sich dabei um ein extrem umfangreiches Paket, weswegen wir nur einen Teil davon in unser Projekt integrieren: Das Untermodul \inPy{pyplot}\footnote{Die MatPlotLib enthält Code zum Fenstermanagement, zur Interpolation von Kurven, Umgang mit Dateien, ... Alle diese Features bilden den Unterbau von \inPy{pyplot}, müssen aber nicht \enquote{offengelegt} werden, um für uns nützlich zu sein. Während \inPy{pyplot} intern alle diese Objekte und Funktionen benutzt und korrekt verwaltet, können wir uns auf das \emph{Interface} konzentrieren, das uns \inPy{pyplot} auf all diese Features bietet.}. Da dieser Modulname \inPy{matplotlib.pyplot} eher unhandlich ist, hat es sich eingebürgert, \inPy{plt} als Kurzname hierfür zu verwenden.
 
 In den kommenden drei Zeilen generieren wir Werte, die schließlich geplottet werden sollen. \inPy{X} und \inPy{Y} sind jeweils Listen mit \inPy{N = 100} Elementen. Die Werte in \inPy{X} sind einfach gleichverteilte Werte im Abstand von \texttt{0.1}, rund um die \texttt{0} herum. Die Werte in \inPy{Y} enthalten jeweils den Sinus dieser \inPy{X}-Werte. Bis hierhin also haben wir noch nichts Neues gesehen.
 
@@ -242,6 +242,8 @@ plt.show()
 	\captionof{figure}{Plot mit Titel und Achsenbeschriftungen}
 \end{tcolorbox}
 
+Siehe \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.legend.html#matplotlib.axes.Axes.legend} für weitere Optionen zum Befehl \texttt{legend}.
+
 \subsection{Skalierung der Achsen -- \texttt{xscale}, \texttt{yscale} und \texttt{xlim}, \texttt{ylim}}
 Wenn Plots einen großen Wertebereich abdecken, kann es sinnvoll sein, die Werte \emph{logarithmisch} aufzutragen. Eine oder mehrere Achsen werden dabei verzerrt, um über mehrere Größenordnungen hinweg Änderungen gut zu verfolgen. Hierzu dienen die Befehle \texttt{xscale} und \texttt{yscale}.
 
@@ -448,7 +450,7 @@ Eine Auswahl an optionalen Argumenten für den Befehl \texttt{pie} ist in Tabell
 			berührt den Mittelpunkt; 1 bedeutet: Kuchenstück-Spitze würde den Rand des Kreises berühren) \\
 		autopct &
 			String oder Funktion &
-			Wenn hier ein String übergeben wird, interpretiert die MatplotLib diesen als Format-String (siehe Abschnitt \ref{sec:FormatStringsTable}).
+			Wenn hier ein String übergeben wird, interpretiert die MatPlotLib diesen als Format-String (siehe Abschnitt \ref{sec:FormatStringsTable}).
 			Bei einer Funktion dagegen wird erwartet, dass die Funktion eine Zahl zwischen 0 und 100 als Argument akzeptiert, und einen String zurückgibt, der eine
 			Textentsprechung dieser Zahl enthält.
 	\end{tabularx}
@@ -794,7 +796,8 @@ plt.show()
 \end{center}
 \end{tcolorbox}
 
-Wie schon zuvor nimmt die MatPlotLib hierzu an, dass die Punkte einen Abstand von 1 zueinander haben, sowohl in X- als auch Y-Richtung. Wo dies nicht der Fall ist, können auch zwei Listen \texttt{X, Y} mit übergeben werden, die jeweils die X- bzw. Y-Koordinate zum \texttt{i}-ten Datenpunkt. In diesem Fall dürfen die Listen mit den Pfeil-Daten auch als \emph{eindimensionale} Liste übergeben werden, \ie ihr Index weist ihnen schon ihre Position im Raum zu. Den obigen Plot kann man daher auch mit diesen Zeilen erreichen:
+\label{ssc:vecFields}
+Wie schon zuvor nimmt die MatPlotLib hierzu an, dass die Punkte einen Abstand von 1 zueinander haben, sowohl in X- als auch Y-Richtung. Wo dies nicht der Fall ist, können auch zwei Listen \texttt{X, Y} mit übergeben werden, die jeweils die X- bzw. Y-Koordinate zum \texttt{i}-ten Datenpunkt\footnote{solche Koordinatenlisten können sehr bequem mit der Funktion \texttt{meshgrid} aus dem Modul \texttt{numpy} erstellt werden. Siehe dazu Kapitel \ref{chp:Numpy}}. In diesem Fall dürfen die Listen mit den Pfeil-Daten auch als \emph{eindimensionale} Liste übergeben werden, \ie ihr Index weist ihnen schon ihre Position im Raum zu. Den obigen Plot kann man daher auch mit diesen Zeilen erreichen:
 
 \begin{codebox}[Beispiel: Wirbelfeld ohne explizite Ortsangabe]
 \begin{minted}[linenos]{python3}
@@ -802,7 +805,6 @@ import matplotlib.pyplot as plt
 
 width  = 10
 height = 15
-
 xPoints = [x / 10 for x in range(- width, + width)]
 yPoints = [y / 10 for y in range(-height, +height)]
 \end{minted}
@@ -849,7 +851,7 @@ hat also denselben Effekt, wählt ebenfalls den Rasterpunkt in der zweiten Zeile
 
 Weiter kann dem Befehl \texttt{subplot} noch über das Keyword-Argument \texttt{polar} ein \inPy{bool}ean mitgegeben werden, der eine Auftragung in Polarkoordinaten verursacht.
 
-\begin{codebox}[Beispiel: Lissajous-Figuren]%, width=.55\linewidth, nobeforeafter, equal height group = grpXmpLissajous]
+\begin{codebox}[Beispiel: Lissajous-Figuren]
 \begin{minted}[linenos]{python3}
 import math
 import matplotlib.pyplot as plt
@@ -872,7 +874,7 @@ plt.show()
 \end{minted}
 \end{codebox}
 %
-\begin{tcolorbox}[title=Ausgabe: Lissajous-Figuren]%, width=.45\linewidth, nobeforeafter, equal height group = grpXmpLissajous]
+\begin{tcolorbox}[title=Ausgabe: Lissajous-Figuren]
 \begin{center}
 	\includegraphics[width=\linewidth]{./gfx/plt-Lissajous}
 	\captionof{figure}{Zwei Plots im selben Fenster}
@@ -883,9 +885,12 @@ plt.show()
 Siehe \url{https://matplotlib.org/3.3.3/api/_as_gen/matplotlib.pyplot.subplots.html} und \url{https://matplotlib.org/3.3.3/api/_as_gen/matplotlib.pyplot.subplot.html} für weitere Details.
 
 \section{Plot-Objekte}
-Es ist auch möglich, mehrere Plot-Fenster gleichzeitig zu steuern. Außerdem kann Python Code \emph{parallel zum Fenster} ausgeführt werden: normalerweise wird die Code-Ausführung mit \texttt{plt.show()} angehalten, bis das Plot-Fenster geschlossen wird. Im folgenden zeige ich, wie man Python-Code dazu bringt, gleichzeitig zum Betreiben des/der Plot-Fenster(s) weiter den Code auszuführen.
+Wir haben bisher Befehle kennengelernt, die Plots verschiedener Art erstellen und deren Eigenschaften steuern. Im Hintergrund werden hierzu Instanzen von verschiedenen Klassen angelegt. Uns als EntwicklerInnen steht ein solches \emph{objektorientiertes} Herangehen an die Plots auch zur Verfügung: wir können mithilfe der MatPlotLib Objekte erstellen, die die verschiedenen Elemente eines Plots (Fenster, Achsen, Kurven, ...) repräsentieren, und diese Elemente dann über \emph{Methoden} verändern. Dieses Herangehen verlangt eine etwas andere Denkweise, die vielen als natürlicher vorkommt.
 
-Bisher haben wir alle Befehle der MatPlotLib direkt über den Alias \texttt{plt} aufgerufen. Tatsächlich handelt es sich dabei aber um Methoden von Klassen, die im Hintergrund der MatPlotLib agieren. Besondere Bedeutung haben dabei die Klassen \texttt{Figure} und \texttt{AxesSubplot}.
+Neben diesem Paradigmenwechsel ist es durch die objektorientierte Formulierung von Plots auch möglich, mehrere Plot-Fenster gleichzeitig zu steuern. Außerdem kann Python Code \emph{parallel zum Fenster} ausgeführt werden: normalerweise wird die Code-Ausführung mit \texttt{plt.show()} angehalten, bis das Plot-Fenster geschlossen wird. Im folgenden zeige ich, wie man Python-Code dazu bringt, gleichzeitig zum Betreiben des/der Plot-Fenster(s) weiter den Code auszuführen.
+
+\subsection{Plot-Fenster und \texttt{AxesSubplot}-Objekte}
+Bisher haben wir alle Befehle der MatPlotLib direkt über den Alias \texttt{plt} aufgerufen. Tatsächlich werden hierbei verschiedene Instanzen von Klassen angelegt und von der MatPlotLib im Hintergrund verwaltet. Besondere Bedeutung haben dabei die Klassen \texttt{Figure} und \texttt{AxesSubplot}.
 
 Eine \texttt{Figure} stellt ein Plot-Fenster dar. Wir erhalten ein \emph{Handle auf ein neues Fenster} über den Befehl \texttt{figure}:
 \mint{python3}{fig = plt.figure()}
@@ -901,7 +906,7 @@ erzeugt einen Subplot in Polarkoordinaten in der ersten Zeile, zweite Spalte von
 Siehe \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.figure.Figure.html?highlight=add_subplot#matplotlib.figure.Figure.add_subplot} für weitere Details.
 
 Die obige Ausgabe von Abb. \ref{fig:plt-Lissajous} kann so auch mit dem folgenden Code erreicht werden:
-\begin{codebox}[Beispiel: Lissajous-Figuren]
+\begin{codebox}[Beispiel: Lissajous-Figuren{,} Objektorientiert]
 \begin{minted}[linenos]{python3}
 import math
 import matplotlib.pyplot as plt
@@ -915,11 +920,6 @@ fig.suptitle("Lissajous-Figuren")
 crt = fig.add_subplot(1, 2, 1)
 crt.set_title("Kartesisch")
 crt.plot(X, Y)
-\end{minted}
-\end{codebox}
-%
-\begin{codebox}[]
-\begin{minted}[linenos, firstnumber=last]{python3}
 
 pol = fig.add_subplot(1, 2, 2, projection="polar")
 pol.set_title("Polarkoordinaten")
@@ -932,13 +932,689 @@ input()
 \end{minted}
 \end{codebox}
 
-Hier erfolgt die Ausgabe von Zeile 19 schon während der Plot dargestellt wird, und nicht erst, nachdem das Plot-Fenster geschlossen wird. Aus demselben Grund ist auch Zeile 20 notwendig: Der Code läuft nach \texttt{fig.show()} weiter, bis die letzte Zeile ausgeführt wurde; danach beendet Python alle Prozesse, die mit dem Code zu tun hatten, einschließlich der Darstellung des Plots. Mit \inPy{input} zwingen wir Python dazu, auf eine Usereingabe zu warten.
+Hier erfolgt die Ausgabe von Zeile 20 schon während der Plot dargestellt wird, und nicht erst, nachdem das Plot-Fenster geschlossen wird. Aus demselben Grund ist auch Zeile 21 notwendig: Der Code läuft nach \texttt{fig.show()} weiter, bis die letzte Zeile ausgeführt wurde; danach beendet Python alle Prozesse, die mit dem Code zu tun hatten, einschließlich der Darstellung des Plots. Mit \inPy{input} zwingen wir Python dazu, auf eine Usereingabe zu warten.
 
-hintbox on data usage
+\subsection{Gridspecs}
+Erweiterte Kontrolle darüber, wie die Graphen im Plot-Fenster platziert werden, erhalten wir über das \texttt{GridSpec}-Objekt. Dieses ist eine Representation des Gitters, in das die Plots eingetragen werden. Dieses Gitter wird auf das Fenster gelegt, welches wir mit \texttt{plt.figure} angelegt haben; daher auch erhalten wir ein \texttt{GridSpec}-Objekt über eine Methode der Klasse \texttt{figure}. Diese Methode heißt \texttt{add\_gridspec} und erwartet zwei \inPy{int}-Werte, die die Anzahl der Zeilen und Spalten im Gitter darstellen -- also dieselben Werte, wie wir sie schon von \texttt{subplots} bzw. \texttt{subplot} kennen.
+
+Der Rückgabewert von \texttt{add\_gridspec} ist ein Array-artiges Objekt, \ie wir können die einzelenen Zellen des Gitters über Indices in eckigen Klammern ansprechen. Auch Slicing ist möglich, um zusammenhängende Bereiche auszuzeichnen. Wenn \texttt{gs} das \texttt{GridSpec}-Objekt ist, dann ist \texttt{gs[1, 0]} die Zelle in der zweiten Zeile, erste Spalte; \texttt{gs[:, 2]} stellt die \emph{gesamte} dritte Spalte dar.
+
+Dieses \texttt{GridSpec}-Objekt kann auch an \texttt{add\_subplot} übergeben werden, und legt wieder fest, wo im Fenster as zugehörige \texttt{AxisSubplot}-Objekt platziert werden soll.
+
+Wenn zwei Graphen \enquote{verwandte} Daten darstellen sollen, wollen Sie vielleicht auch, dass die Skalierung der Achsen in beiden Graphen gleich sind. Dies erreichen Sie durch die Keyword-Arguments \texttt{sharex} und \texttt{sharey} in \texttt{add\_subplot}. Diesen wird jeweils das \texttt{AxisSubplot}-Objekt übergeben, an das die X- bzw. Y-Achse gekoppelt werden soll.
+
+Das folgende Beispiel nutzt ein \texttt{GridSpec}-Objekt, um einen großen Plot und zwei kleinere Plots anzuordnen. Nicht alle hierin verwendeten Methoden der MatPlotLib wurden bereits besprochen; sicher aber können Sie sich aus dem Kontext erschließen, welchen Zweck diese Stellen erfüllen\footnote{Die MatPlotLib bringt eine gewaltige Fülle an Funktionen mit, die kaum zu überblicken oder im Kopf zu behalten ist. In der Praxis heißt die Arbeit mit de MatPlotLib oft, im Internet nach Beispieln zu suchen, und aus den dort gezeigten Code-Schnipseln die Stellen zu isolieren, die das gesuchte Feature aktivieren. Sie üben hier also eine Kernkompetenz des Programmierens: unbekannten Code zu interpretieren. Kopieren Sie den Code und experimentieren Sie mit den Einstellungen, um tiefere Einblicke zu gewinnen! Sie können auch immer die QuickSearch-Funktion auf \url{https://matplotlib.org/3.1.1/index.html} zur Hilfe nehmen.}.
+
+\begin{codebox}[Beispiel: 2D-Normalverteilung]
+\begin{minted}[linenos]{python3}
+import random
+import matplotlib.pyplot as plt
+
+N      = 1000
+X      =   50
+Y      =   40
+sigmaX =    5
+sigmaY =   10
+
+dataX = [random.gauss(X, sigmaX) for _ in range(N)]
+dataY = [random.gauss(Y, sigmaY) for _ in range(N)]
+
+fig = plt.figure(figsize=(8,8))
+gs  = fig.add_gridspec(3, 3)
+
+fig.suptitle("2D-Normalverteilung")
+fig.subplots_adjust(wspace=0.2, hspace=0.3)
+
+axScatter = fig.add_subplot(gs[0:2, 0:2])
+axScatter.set_xlim(0, 100)
+axScatter.set_ylim(0, 100)
+axScatter.set_xlabel("x")
+
+axHistX   = fig.add_subplot(gs[ 2 , 0:2], sharex=axScatter)
+axHistY   = fig.add_subplot(gs[0:2,  2 ], sharey=axScatter)
+
+axScatter.scatter(dataX, dataY, marker=".")
+axHistX.hist(dataX, orientation='vertical'  , bins=20)
+axHistY.hist(dataY, orientation='horizontal', bins=20)
+
+fig.show()
+input()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: 2D-Normalverteilung]
+\begin{center}
+	\includegraphics[width=.7\linewidth]{./gfx/plt-gauss2D}
+	\captionof{figure}{Komplexere Anordnung von Plots: 2D-Normalverteilung}
+\end{center}
+\end{tcolorbox}
+
+
+\subsection{Manipulation des \texttt{AxisSubplot}-Objekts}
+Wie Sie sich schon aus dem letzten Beispiel erschlossen haben, können mit \texttt{set\_xlim}, \texttt{set\_ylim} die Grenzen festgelegt werden, auf die die X- bzw. Y-Achse skaliert werden. In ähnlicher Weise dienen die Befehle \texttt{set\_title}, \texttt{set\_xlabel}, \texttt{set\_ylabel}, \texttt{set\_xscale} und \texttt{set\_yscale} dazu, Überschrift des Graphen, Achsenbeschriftung und Auftragung (linear, logarithmisch, ...) zu bestimmen. Alle diese Methoden können auf ein \texttt{AxisSubplot}-Objekt angewandt werden.
+
+\begin{hintbox}[Getter und Setter]
+Ebenso wie es mit \texttt{set\_XXX} möglich ist, den Wert \texttt{XXX} eines \texttt{AxisSubplot}-Objekts festzulegen, kann mit \texttt{get\_XXX} der aktuell eingespeicherte Wert abgefragt werden. Dies ist eine gängige Praxis in der objektorientierten Programmierung: Wenn eine Klasse ein Attribut \texttt{XXX} hat, so sollte es hierzu auch die Methoden \texttt{get\_XXX} und \texttt{set\_XXX} geben.
+
+Wir werden auf solche Design-Pattern in Kaptiel \ref{chp:Classes2} nochmals eingehen.
+\end{hintbox}
+
+Die Bemaßung eines \texttt{AxisSubplot}-Objekts \texttt{ax} kann auch mit \texttt{ax.axis} gesetzt bzw. abgefragt werden.
+\begin{tabular}{p{.4\linewidth}p{.1\linewidth}c}
+\inPy{xmin, xmax = ax.get_xlim()} & \multirow{2}{*}{bzw.}  & \inPy{ax.set_xlim(xmin, xmax)} \\
+\inPy{ymin, ymax = ax.get_ylim()} &      & \inPy{ax.set_ylim(ymin, ymax)}
+\end{tabular}
+
+sind also äquivalent zu\\
+\begin{tabular}{p{.4\linewidth}p{.1\linewidth}c}
+\inPy{xmin, xmax, ymin, ymax = ax.axis()} & bzw. & \inPy{ax.axis(xmin, xmax, ymin, ymax)}
+\end{tabular}.
+
+Zusätzlich erlaubt die Methode \texttt{axis} auch, die Achsen eines Graphen komplett zu verbergen (\inPy{ax.axis("off")}), so zu skalieren dass gleiche Abstände in X- und Y-Richtung auch gleichen Skalenschritten entsprechen (\inPy{ax.axis("equal")}), oder dass die Graphen-Fläche zu einem Quadrat verzerrt wird (\inPy{ax.axis("square")}). Siehe hierzu auch \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.axis.html#matplotlib.axes.Axes.axis}.
+
+Über \texttt{set\_xtics} und \texttt{set\_ytics} lässt sich einstellen, an welchen Punkten die X- bzw. Y-Achse unterteilt werden sollen. Wir unterscheiden hierbei \emph{major ticks} (größere Abstände und längere Striche, \idR mit Zahlenwert) und \emph{minor ticks} (kleinere Abstände, kurzere Striche, \idR ohne Zahlenwert). Übergeben werden hierfür verpflichtend eine \inPy{list} mit den Zahlenwerten, an denen Ticks gesetzt werden sollen. Das Optionale Schlüsselwort \texttt{minor} kann entweder auf \inPy{True} oder \inPy{False} gesetzt werden; entsprechend gilt die Liste der Ticks dann auch für die \emph{minor} oder \emph{major} Ticks.
+
+\begin{codebox}[Beispiel: Major- und Minor Ticks, width=.55\linewidth, nobeforeafter, equal height group = grpXmpSimpleTicks]
+\begin{minted}[linenos]{python3}
+import matplotlib.pyplot as plt
+
+fig = plt.figure(figsize=(6,2))
+gfx = fig.subplots()
+
+xMajor = [10 / x    for x in range(1,  5)]
+xMinor = [5 + x / 2 for x in range(1, 10)]
+
+gfx.set_xticks(xMajor)
+gfx.set_xticks(xMinor, True)
+
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Major- und Minor Ticks, width=.45\linewidth, nobeforeafter, equal height group = grpXmpSimpleTicks]
+	\includegraphics[width=\linewidth]{./gfx/plt-ticks}
+	\captionof{figure}{Major- und Minor Ticks}
+	Man beachte die kleinen Unterteilungen zwischen 5.0 und 10.0 (minor ticks)
+\end{tcolorbox}
+
+Siehe auch \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.grid.html#matplotlib.axes.Axes.grid} für Methoden zur Beeinflussung der Gitternetzlinien.
+
+\subsection{Ticker}
+Wir können nicht nur beeinflussen, welche Werte an den Achsen durch Ticks markiert sein sollen, sondern auch, welche Beschriftungen dort stehen sollen. Im einfachsten Fall können wir einfach direkt eine Liste von Texten vorgeben. Hierzu dienen die Befehle \texttt{set\_xticklabels} und \texttt{set\_yticklabels}. \emph{Verpflichtend} muss eine \inPy{list} von Strings übergeben werden, die nacheinander an der X- bzw. Y-Achse angetragen werden sollen. Der erste Wert der Liste wird an den ersten Tick gesetzt, der Zweite an den Zweiten, etc.
+
+Weiter gibt es die optionalen Keyword-Arguments \texttt{minor} und \texttt{fontdict}. Wie schon bei \texttt{set\_xtics} / \texttt{set\_ytics} ist \texttt{minor} ein \inPy{bool} und dient der Zuordnung zu den Major- oder Minor Ticks. Standardmäßig ist dieses Argument \inPy{False}, \ie man beschreibt die Major Ticks.
+
+Wie es der Name vermuten lässt, ist \texttt{fontdict} ein \inPy{dict}, in dem Einstellungen zur Schriftart enthalten sind.
+
+Beispiel:
+\begin{minted}{python3}
+ax.set_xticklabels(
+    ['Bill', 'Fred', 'Mary', 'Sue'],
+    fontdict={'fontsize' :15, 'fontweight' : 'bold'}
+)
+\end{minted}
+weist der X-Achse die vier Labels \texttt{'Bill'}, \texttt{'Fred'}, \texttt{'Mary'} und \texttt{'Sue'} zu. Diese werden In Schriftgröße 15 in Fettdruck gerendert.
+
+Siehe \url{https://matplotlib.org/3.3.3/api/_as_gen/matplotlib.axes.Axes.set_xticklabels.html} für weitere Details.
+
+Wo mehr Flexibilität nötig ist, kann das Modul \texttt{matplotlib.ticker} verwendet werden. Dieses stellt mehrere Methoden zur Verfügung, wie automatisiert Beschriftungen aus den Achsenwerten generiert werden können. Besonders praktisch ist hierbei die Idee eines \emph{FuncFormatters}: Hierbei handelt es sich um eine benutzerdefinierte Funktion, die aus dem Achsenwert eine vollständige Beschreibung (Text, Schriftart, Position, ...) der Beschriftung generiert. Einen solcher FuncFormatter erhalten wir, indem wir
+\begin{itemize}
+\item eine Funktion schreiben, die aus einem Zahlenwert den Text für die Beschriftung erzeugt.
+	\begin{itemize}
+	\item Die Funktion muss zwei Parameter annehmen: Wert auf der Achse und Tick-Nummer
+	\item Der Rückgabetyp der Funktion muss ein String sein.
+	\end{itemize}
+\item diese Funktion an \texttt{matplotlib.ticker.FuncFormatter} übergeben.
+\end{itemize}
+Ein solches \texttt{FuncFormatter}-Objekt kann dann an \texttt{ax.xaxis.set\_major\_formatter}, \texttt{ax.xaxis.set\_minor\_formatter}, \texttt{ax.yaxis.set\_major\_formatter} oder  \texttt{ax.yaxis.set\_minor\_formatter} übergeben werden.
+
+
+\begin{codebox}[Beispiel: FuncFormatter für Y-Ticks]
+\begin{minted}[linenos]{python3}
+from matplotlib.ticker import FuncFormatter
+import matplotlib.pyplot as plt
+
+x = list(range(4))
+money = [1.5e5, 2.5e6, 5.5e6, 2.0e7]
+
+# Der Plot selbst
+fig = plt.figure(figsize=(7,4))
+ax = fig.subplots()
+ax.bar(x, money)
+
+# Beschriftung der X-Achse
+ax.set_xticks(x)
+ax.set_xticklabels(
+  ['Bill', 'Fred', 'Mary', 'Sue'],
+  fontdict={'fontsize' :15, 'fontweight' : 'bold'}
+)
+
+# Beschriftung der Y-Achse
+def myTicks(x, pos):
+    return f"{(x * 1e-6):1.1f}M, #{pos}"
+
+
+formatter = FuncFormatter(myTicks)
+print(formatter)
+ax.yaxis.set_major_formatter(formatter)
+
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: FuncFormatter für Y-Ticks]
+\begin{center}
+	\includegraphics[width=.7\linewidth]{./gfx/plt-TicksFormatter}
+	\captionof{figure}{Major- und Minor Ticks}
+\end{center}
+\end{tcolorbox}
+
+Siehe hierzu auch \url{https://matplotlib.org/3.1.1/gallery/ticks_and_spines/tick-formatters.html} für Beispiele.
+
+
+\subsection{\LaTeX-Elemente in Plots}
+Python enthält ein eigenständiges \LaTeX-Modul, das zur Darstellung von einfachen mathematischen Gleichungen geeignet ist. Um Teile eines Strings als \LaTeX-Code zu interpretieren, können diese einfach durch Dollarzeichen \texttt{\$} eingerahmt werden. So führt beispielsweise
+\begin{center}
+\inPy{plt.title(r"$\frac{\pi}{2} \approx$ 3.1415")}
+\end{center}
+zu der Ausgabe
+\[ \scriptstyle \frac{\pi}{2} \approx \text{3.1415} \]
+
+\begin{hintbox}[Escaping Unterbinden: R-Strings]
+Befehle in \LaTeX beginnen mit einem Backslash (\textbackslash). In Python wird der Backslash in Strings als Escape-Zeichen interpretiert, \ie nachfolgende Zeichen werden anders interpretiert, \eg \texttt{\textbackslash n} für einen Zeilenumbruch. Um dies zu unterbinden kann einem String ein \texttt{r} vorangestellt werden, wie im obigen Beispiel gezeigt.
+\end{hintbox}
+
+Die MatPlotLib verwaltet eine ganze Reihe von Standard-Einstellungen. Diese sind in einem \inPy{dict} namens \texttt{matplotlib.rcparams} gespeichert und können zu jeder Zeit geändert werden. Die Schlüssel des \inPy{dict}s sind einfache Strings. Soll für aufwändigere \LaTeX-Elemente nicht das Python-Backend für \LaTeX benutzt werden sondern ein bereits auf dem Rechner vorliegender \LaTeX-Compiler genutzt werden, so kann dies über den \inPy{dict}-Eintrag \texttt{text.usetex} geschehen. Zugeordnet ist ein \inPy{bool}, der festlegt, ob Labeltexte generell als \LaTeX-Code Interpretiert werden sollen. 
+
+Indem wir also die Zeilen
+\begin{minted}{python3}
+import matplotlib
+matplotlib.rcParams['text.usetex'] = True
+\end{minted}
+zu unserem Plot hinzufügen, können wir sehr einfach professionell aussehende Labels erzeugen und auch Formel-Elemente einfügen:
+
+\begin{codebox}[Beispiel: Mathematisches Pendel mit \LaTeX-Elementen]
+\begin{minted}[linenos]{python3}
+import math
+import matplotlib
+matplotlib.rcParams['text.usetex'] = True
+import matplotlib.pyplot as plt
+
+T = [x / 100 for x in range(100)]
+S = [math.cos(4 * math.pi * t) + 2 for t in T]
+
+plt.plot(T, S)
+plt.xlabel(r'\textbf{time (s)}')
+plt.ylabel('\\textit{Velocity (\N{DEGREE SIGN}/sec)}', fontsize=16)
+plt.title (r'\TeX\ is Number $\displaystyle\sum_{n=1}^\infty'
+           r'\frac{-e^{i\pi}}{2^n}$!', fontsize=16, color='r')
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Mathematisches Pendel mit \LaTeX-Elementen]
+\begin{center}
+	\includegraphics[width=.7\linewidth]{./gfx/plt-tex}
+	\captionof{figure}{\LaTeX-Elemente im Plot}
+\end{center}
+\end{tcolorbox}
+
+\begin{hintbox}[Fehlende Komponenten Nachinstallieren]
+Wenn Sie die Beispiele aus diesem Abschnitt ausführen, erhalten Sie möglicherweise die Fehlermeldung\\
+\emph{RuntimeError: Failed to process string with tex because dvipng could not be found}\\
+oder ähnliche Hinweise auf fehlende Komponenten.
+
+Bei der empfohlenen Anaconda-Installation kann das Python-eigene LaTeX-Modul aus der Anacona-Konsole heraus nachinstalliert werden mit:\\
+\texttt{pip install latex}\\
+Linux-UserInnen geben diesen Befehl in die normale Konsole ein (ggf. mit \texttt{sudo}).
+
+Für das Beispiel \emph{Mathematisches Pendel mit \LaTeX-Elementen} muss ein \LaTeX-Compiler installiert sein. Als Linux-UserIn können Sie die Komponenten nachinstallieren mit dem Konsolen-Befehl:\\
+\texttt{sudo apt install texlive texlive-latex-extra texlive-fonts-recommended dvipng}\\
+Beachten Sie, dass die Installation lange dauern kann und nennenswert Festplattenspeicher beansprucht.
+
+Windows- und Mac-UserInnen halten sich hierfür am besten an die Standard-Installation, wie von der TeX Live Website \url{https://www.tug.org/texlive/} angeboten.
+\end{hintbox}
+
+Siehe auch \url{https://matplotlib.org/3.3.3/tutorials/introductory/customizing.html?highlight=text.usetex#matplotlib-rcparams} und \url{https://matplotlib.org/3.3.3/gallery/text_labels_and_annotations/tex_demo.html#sphx-glr-gallery-text-labels-and-annotations-tex-demo-py} für weitere Details.
+
+\subsection{Rückgabewerte der Plot-Funktionen}
+Bei den Histogrammen haben wir schon gesehen, dass auch die Plot-Befehle selbst (\texttt{plot}, \texttt{bar}, \texttt{hist}, ...) Rückgabewerte haben können. Die Rückgabeobjekte sind im Detail jeweils verschieden; allen gemein ist jedoch, dass sie die Gesamtheit der gezeichneten Objekte repräsentieren.
+
+Wir wollen hier zumindest auf den Rückgabewert von \texttt{plot} näher eingehen; von hier können Sie hoffentlich Analogien auf die anderen Objekte bilden, die Ihnen bei der Arbeit mit der MatPlotLib begegnen können.
+
+Beginnen wir mit einem Code zur Analyse:
+\begin{codebox}[Beispiel: Rückgabewerte von \texttt{plt.plot}]
+\begin{minted}[linenos]{python3}
+import math
+import matplotlib.pyplot as plt
+
+X = [x / 100 for x in range(0, 628, 5)]
+Y = [math.sin(2 * t) + 2 for t in X]
+
+p = plt.plot(X, Y, "y-", label="foo")
+q = plt.plot(X, Y, "r.", label="bar")
+
+print(type(p), p[0], type(p[0]))
+print(type(q), q[0], type(q[0]))
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe: Rückgabewerte von \texttt{plt.plot}]
+\begin{minted}{text}
+<class 'list'> Line2D(foo) <class 'matplotlib.lines.Line2D'>
+<class 'list'> Line2D(bar) <class 'matplotlib.lines.Line2D'>
+\end{minted}
+\end{cmdbox}
+
+Wir sehen, dass der Rückgabewert von \texttt{plot} eine \inPy{list} von Instanzen der Klasse \texttt{matplotlib.lines.Line2D} ist. Jede solche Instanz repräsentiert nun wie erwähnt eine Linie des Graphen, \ie enthält die Werte der Datenpunkte sowie die von uns explizit und implizit zugewiesenen Formatierungen (\eg Name der Datenreihe \texttt{foo} bzw. \texttt{bar}, oder \emph{Linienfarbe blau}). Wenn wir nun die zugehörige Seite der Dokumentation der MatPlotLib aufrufen (\url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.lines.Line2D.html}), finden wir eine große Zahl von Methoden, die auf dieses Objekt angewandt werden können, sowie eine kurze Erläuterung, welchen Zweck diese Methoden erfüllen, und welche Parameter erwartet werden.
+
+Ein Anwendungszweck ist die Nutzung mit \texttt{legend}. Wie Sie wissen, sorgt \texttt{legend} dafür, dass die Legende zu einem Plot angezeigt wird. Im obigen Beispiel wird ein Plot vorbereitet, bei dem derselbe Datensatz einmal mit einer gelben Linie und einemal mit roten Punkten dargestellt wird. Würden wir hier direkt mit \texttt{plt.legend()} eine Legende erzeugen, so hätte diese auch zwei Einträge.
+
+Um in einem solchen Fall den unnötigen Legendeneintrag zu unterdrücken, können wir dem Befehl \texttt{legend} zwei \inPy{list}s mitgeben. Die erste solche \inPy{list} enthält alle Handles auf darzustellende Linien (also alle \texttt{matplotlib.lines.Line2D}-Objekte); in die zweite \inPy{list} schreiben wir alle Legendeneinträge.
+
+\begin{codebox}[Beispiel: Legendeneinträge unterdrücken, width=.55\linewidth, nobeforeafter, equal height group = grpXmpLegendSelect]
+\begin{minted}[linenos]{python3}
+import math
+import matplotlib.pyplot as plt
+
+X = [x / 100 for x in range(0, 628, 5)]
+Y = [math.sin(2 * t) + 2 for t in X]
+
+fig = plt.figure()
+drw = fig.subplots()
+
+p = drw.plot(X, Y, "y-", label="foo")
+q = drw.plot(X, Y, "r.", label="bar")
+
+drw.legend(p, ["FOOBAR"])
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Legendeneinträge unterdrücken, width=.45\linewidth, nobeforeafter, equal height group = grpXmpLegendSelect]
+\begin{center}
+	\includegraphics[width=\linewidth]{./gfx/plt-legend-select}
+	\captionof{figure}{Legendeneinträge unterdrücken}
+\end{center}
+\end{tcolorbox}
+
+\subsection{Text und Overlays}
+In ein Plotfenster können beliebige Zeichen- und Textelemente hinzugefügt werden. Hier soll nur gezeigt werden, wie Sie Textanmerkungen und Pfeile auf einem Plot anbringen. Für andere Elemente, siehe \url{https://matplotlib.org/3.1.1/gallery/text_labels_and_annotations/annotation_demo.html#sphx-glr-gallery-text-labels-and-annotations-annotation-demo-py}
+
+Texte platzieren Sie in Ihrem Plot mit dem Befehl \texttt{annotate}. Hierzu müssen Sie angeben welcher Text geschrieben werden soll und an welchen Koordinaten er im Plot erscheinen soll; letzteres wird über den Schlüsselwort-Parameter \texttt{xy} als \inPy{tuple} angegeben. In seiner Minimalform lautet der Befehl dann also:
+\mint{python3}{ax.annotate("text", xy=(x, y))}
+wobei \texttt{x, y} im Koordinatensystem des Plots sind.
+
+\begin{codebox}[Beispiel: Plot mit Text-Overlay, width=.55\linewidth, nobeforeafter, equal height group = grpXmpSimpleOverlay]
+\begin{minted}[linenos]{python3}
+import math
+import matplotlib.pyplot as plt
+
+X = [x / 100 for x in range(0, 628, 5)]
+Y = [math.sin(t) for t in X]
+
+fig = plt.figure()
+drw = fig.subplots()
+
+drw.plot(X, Y)
+
+drw.annotate("Die Sinus-Funktion,\n"     +
+             "wie von der math-library\n"+
+             "zur Verfügung gestellt",
+             xy=(3.5, 0.5)
+)
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Plot mit Text-Overlay, width=.45\linewidth, nobeforeafter, equal height group = grpXmpSimpleOverlay]
+	\includegraphics[width=\linewidth]{./gfx/plt-overlay-simple}
+	\captionof{figure}{Plot mit Text-Overlay}
+\end{tcolorbox}
+
+Manchmal ist es günstiger, die Koordinaten des Textfeldes nicht bezüglich des Plotfensters anzugeben, sondern ein anderes Koordinatensystem zu wählen. Andere mögliche Referenzpunkte können über den optionalen Paremeter \texttt{xycoords} festgelegt werden. Diesem wird einer der folgenden Strings zugewiesen:
+\begin{center}
+\begin{tabular}{m{0.3\linewidth}m{0.6\linewidth}}
+	\textbf{String}          & \textbf{Wirkung} \tabcrlf
+	\inPy{'figure points'}   & Abstand vom linken oberen Rand des Plot-Fenstes in Punkten \\
+	\inPy{'figure pixels'}   & Abstand vom linken oberen Rand des Plot-Fenstes in Pixeln \\
+	\inPy{'figure fraction'} & Abstand vom linken oberen Rand des Plot-Fenstes als Bruch der Gesamtbreite, 
+	                           \ie \inPy{(0,0)} steht für die linke untere Ecke und \inPy{(1,1)} für doe rechte obere Ecke\\
+	\inPy{'axes points'}     & Abstand vom Koordinatenursprung des Plots in Punkten\\
+	\inPy{'axes pixels'}     & Abstand vom Koordinatenursprung des Plots in Pixeln\\
+	\inPy{'data'}            & Koordinaten wie durch den Graphen definiert (default)\\
+\end{tabular}
+\captionof{table}{Mögliche Koordinatenursprünge für \texttt{xycoords} in \texttt{ax.annotate}}
+\label{tab:plt.annotate.xycoords}
+\end{center}
+
+Die Orientierung des Texts bezüglich des angegebenen Punkts kann weiter mit den optionalen Parametern \texttt{horizontalalignment} und \texttt{verticalalignment} gesteuert werden:
+\begin{center}
+\begin{tabular}{cc}
+	\textbf{Parameter}           & \textbf{erlaubte Werte} \tabcrlf
+	\texttt{horizontalalignment} & \inPy{'left'}, \inPy{'center'}, \inPy{'right'} \\
+	\texttt{verticalalignment}   & \inPy{'top'}, \inPy{'center'}, \inPy{'bottom'}
+\end{tabular}
+\captionof{table}{Mögliche Alignments für \texttt{ax.annotate}}
+\end{center}
+
+Schließlich ist es auch möglich, mit dem Text auf einen bestimmten Aspekt im Plot hinzuweisen. Hierzu benutzen wir die optionalen Parameter \texttt{arrowprops}, \texttt{textxy} und \texttt{textcoords}.
+
+Da wir nun zwei Dinge platzieren müssen -- Text und Pfeilspitze -- haben wir ein zusätzliches Koordinatenpaar \texttt{textxy}, das an die Stelle von \texttt{xy} im einfachen Fall tritt. D.\;h. die Pfeilspitze wird durch \texttt{xy} ausgezeichnet, während die Text-Koordinaten durch \texttt{textxy} beschrieben werden. Für \texttt{textcoords} gilt dasselbe, was schon zu \texttt{xycoords} gesagt wurde, \ie es handelt sich um Werte aus Tabelle \ref{tab:plt.annotate.xycoords}. Zusätzlich sind auch noch diese Werte möglich:
+\begin{center}
+\begin{tabular}{m{0.3\linewidth}m{0.6\linewidth}}
+	\textbf{String}          & \textbf{Wirkung} \tabcrlf
+	\inPy{'offset points'}   & Koordinaten relativ zu \texttt{xy} in Punkten\\
+	\inPy{'offset pixels'}   & Koordinaten relativ zu \texttt{xy} in Pixeln\\
+\end{tabular}
+\captionof{table}{Zusätzlich mögliche Koordinatenursprünge für \texttt{textcoords} in \texttt{ax.annotate}}
+\end{center}
+Weiterhin beziehen sich \texttt{horizontalalignment} und \texttt{verticalalignment} auf die Ausrichtung des Texts.
+
+Schließlich legt \texttt{arrowprops} fest, wie der Pfeil aussehen soll. Es handelt sich um ein \inPy{dict}, in dem verschiedene Schlüssel-Wert-Paare den Pfeil beschreiben. Eine (unvollständige!) Auswahl von möglichen Paaren finden Sie hier:
+\begin{center}
+\begin{tabular}{m{.15\linewidth}m{.15\linewidth}m{.4\linewidth}m{.15\linewidth}}
+	\textbf{Schlüssel} & \textbf{Wert}                     & \textbf{Wirkung}        & \textbf{Default} \tabcrlf
+	\inPy{'facecolor'} & (ein Farbwert) oder \inPy{'none'} & Füllfarbe des Pfeils    & Standard-Blau    \\
+	\inPy{'edgecolor'} & (ein Farbwert) oder \inPy{'none'} & Randfarbe des Pfeils    & \inPy{'black'}   \\
+	\inPy{'color'}     & (ein Farbwert)                    & Rand- und Füllfarbe des
+	                                                         Strings (überschreibt
+	                                                         \texttt{facecolor} und
+	                                                         \texttt{edgecolor})     & (nicht gesetzt)  \\
+	\inPy{'shrink'}   & (Zahl zwischen 0 und 1)            & Verkürzt den Pfeil um 
+	                                                         angegebenen Faktor      & 1                \\
+  \inPy{'width'}    & (Zahl)                             & Breite des Pfeils in 
+                                                           Punkten                 & 4                \\
+  \inPy{'frac'}\\
+  \inPy{'headwidth'}& (Zahl)                             & Breite der Pfeilspitze
+                                                           in Punkte               & 10
+\end{tabular}
+\captionof{table}{Mögliche Schlüssel-Wert-Paare für \texttt{arrowprops} in \texttt{ax.annotate}}
+\end{center}
+
+Die Beispiele auf \url{https://matplotlib.org/3.1.1/gallery/text_labels_and_annotations/annotation_demo.html#sphx-glr-gallery-text-labels-and-annotations-annotation-demo-py} zeigen Ihnen weitere Einstellmöglichkeiten. Siehe auch \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.annotate.html#matplotlib.axes.Axes.annotate} für weitere Details.
 
 \section{3D-Plots}
+Auf einem zweidimensionalen Bildschirm (oder Ausdruck) kann natürlich nur eine zweidimensionale Projektion eines dreidimensionalen Objekts dargestellt werden. Dies schränkt die \emph{Lesbarkeit} bzw. wissenschaftliche Verwertbarkeit von Visualisierungen von Daten ein; dafür erlauben Sie eine sehr viel intuitivere Wahrnehmung eines Sachverhalts. Und nicht zuletzt, 3D-Bilder sehen einfach \emph{cool} aus.
 
+Die MatPlotLib hält natürlich auch hierzu Methoden bereit. Wir wollen hier also auch einige Features der MatPlotLib ansprechen. Ein ausführlicheres Tutorial finden Sie unter \url{https://matplotlib.org/mpl_toolkits/mplot3d/tutorial.html}.
+
+\subsection{Das \texttt{Axes3D}-Objekt}
+\begin{minipage}{\linewidth}
+Die Darstellung von 3D-Daten wird von einem eigenen Teil der MatPlotLib-Library geleistet, der zuerst in unser Projekt geladen werden muss. Dies geschieht über die Zeile:
+\vspace{-6pt}
+\begin{center}
+	\inPy{from mpl_toolkits.mplot3d import Axes3D}
+\end{center}
+\end{minipage}
+
+Mit dieser Ergänzung können wir ein \texttt{Axes3D}-Objekt erzeugen, auf dem unsere 3D-Ausgaben erfolgen. Dieses Objekt erhalten wir über die Methode \texttt{add\_subplot}, die wir bereits kennengelernt haben. Zusätzlich zu den früheren Aufrufen können wir jetzt den optionalen Parameter \inPy{projection='3d'} übergeben.
+
+\begin{codebox}[Beispiel: Leerer 3D-Plot, width=.55\linewidth, nobeforeafter, equal height group = grpXmpEmpty3D]
+\begin{minted}[linenos]{python3}
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+fig = plt.figure()
+drw = fig.add_subplot(projection='3d')
+
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Leerer 3D-Plot, width=.45\linewidth, nobeforeafter, equal height group = grpXmpEmpty3D]
+	\includegraphics[width=\linewidth]{./gfx/plt-axes3D}
+	\captionof{figure}{Leerer 3D-Plot}
+\end{tcolorbox}
+
+Auf dieses \texttt{Axes3D}-Objekt können nun die bereits bekannten Methoden zum erstellen von Plots angewandt werden. Natürlich erwarten diese jetzt nicht nur Listen von X- und Y-Koordinaten, sondern auch die zugehörigen Z-Koordinaten. Grundsätzlich aber bleibt das Herangehen das Ihnen bereits bekannte. Im weiteren soll dies an zwei Beispielen genauer gezeigt werden.
+
+\subsection{Kurven im Raum}
+Sobald ein \texttt{Axes3D}-Objekt initialisiert wurde, kann die Methode \texttt{plot} wie gewohnt eingesetzt werden. Verlangt werden jetzt \emph{3} Parameter, die die X- Y- und Z-Koordinaten enthalten. Ansonsten gelten die oben besprochenen Techniken weiter.
+
+Einstellungen, die die dritte Achse betreffen, können über dieselben Methoden geleistet werden, die die ersten beiden Achsen betreffen, indem das \texttt{x} bzw. \texttt{y} durch ein \texttt{z} ersetzt wird. Die Achsenbeschriftung können wir beispielsweise durch \texttt{set\_zlabel} ändern.
+
+Um die Ansicht zu drehen kann der Befehl \texttt{view\_init} benutzt werden. Dieser erwartet zwei Zahlen, die die Raumwinkel darstellen, in dem der Plot betrachtet wird. Die erste Zahl ist hierbei die \emph{Inklination}, also wie steil \enquote{die Kamera} auf den Plot gerichtet ist; die zweite Zahl dagegen ist die \emph{Deklination}, also die Drehung in der X-Y-Ebene. Experimentieren Sie im Zweifel herum, um die für Sie geeigneten Einstellungen zu finden.
+
+\begin{codebox}[Beispiel: 3D-Kurve]
+\begin{minted}[linenos]{python3}
+import math
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+fig = plt.figure()
+drw = fig.add_subplot(projection='3d')
+
+T = [math.pi * t / 100 for t in range(1000)]
+X = [math.exp(-0.05 * t) * math.cos(t) for t in T]
+Y = [math.exp(-0.05 * t) * math.sin(t) for t in T]
+
+drw.set_xlabel("x")
+drw.set_ylabel("y")
+drw.set_zlabel("time t")
+drw.set_title("decaying orbit")
+drw.view_init(80, 10)
+drw.plot(X, Y, T)
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: 3D-Kurve]
+\begin{center}
+	\includegraphics[width=.7\linewidth]{./gfx/plt-orbit3D}
+	\captionof{figure}{3D-Kurve}
+\end{center}
+\end{tcolorbox}
+
+
+\subsection{Plots von Flächen}
+Für die Darstellung von Flächen im Dreidimensionalen muss die Zuordnung von X-Y-Koordinaten zur Z-Koordinate derselben Logik folgen wie bei den Vektorfeldern (siehe Seite \pageref{ssc:vecFields}): Wir brauchen zwei \emph{zweidimensionale Arrays} \texttt{X, Y}, die so das \emph{Meshgrid} aufspannen. \texttt{X[i][j]} enthält dann die X-Koordinate des \texttt{i}-ten Punkts in Zeilenrichtung und des \texttt{j}-ten Punkts in Spaltenrichtung. Gleiches gilt für \texttt{Y} bezüglich der Y-Koordinaten.
+
+Die zugeordneten Daten \texttt{Z} müssen als \emph{zweidimensionales numpy-Array} vorliegen. Im Detail wird das Modul \texttt{numpy} erst in Kapitel \ref{chp:Numpy} besprochen; es kann jedoch direkt aus einer \emph{zweidimensionalen} \inPy{list} über den Konstruktor von \texttt{numpy.array} erzeugt werden.
+
+Der folgende Code erzeugt die Daten, die wir in den weiteren Beispielen für die Plots verwenden werden:
+\begin{codebox}[Beispiel: Datenerzeugung: Sattelfläche]
+\begin{minted}[linenos]{python3}
+import numpy as np
+
+W = 20
+H = 30
+
+func = lambda x, y : x**2 - y**2
+
+X = [[j/10 - 1.0 for j in range(W)] for i in range(H)]
+Y = [[i/10 - 1.5 for j in range(W)] for i in range(H)]
+Z = [[None for i in range(W)] for j in range(H)]
+
+for   i in range(H) :
+  for j in range(W) :
+    x = X[i][j]
+    y = Y[i][j]
+    Z[i][j] = func(x, y)
+
+Z=np.array(Z)
+\end{minted}
+\end{codebox}
+
+\begin{tcolorbox}[title=Sneak Preview: numpy]
+Die Plot-Daten können mit dem Modul \texttt{numpy} auch so erzeugt werden:
+
+\vspace{6pt}
+\begin{codebox}[Beispiel: Datenerzeugung: Sattelfläche mit \texttt{numpy}]
+\begin{minted}[linenos]{python3}
+import numpy as np
+
+X, Y = np.meshgrid(np.linspace(-1, 1, 20), np.linspace(-1.5, 1.5, 30))
+Z = X**2 - Y**2
+\end{minted}
+\end{codebox}
+
+In Kapitel \ref{chp:Numpy} wird dies im Detail besprochen.
+\end{tcolorbox}
+
+\subsubsection{Wireframes}
+Wireframes oder Drahtgittermodelle zeichnen Datenpunkte jeweils verbunden mit ihren nächsten Nachbarn. Die Flächen zwischen diesen Verbindungslinien bleiben transparent. Der Befehl zum Erstellen eines Drahtgittermodells ist \texttt{plot\_wireframe(X, Y, Z)}:
+
+\begin{codebox}[Beispiel: Drahtgittermodell, width=.55\linewidth, nobeforeafter, equal height group = grpXmpWireframe]
+\begin{minted}[linenos]{python3}
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+fig = plt.figure()
+drw = fig.add_subplot(
+    111,
+    projection='3d'
+)
+
+drw.plot_wireframe(X, Y, Z)
+
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Drahtgittermodell, width=.45\linewidth, nobeforeafter, equal height group = grpXmpWireframe]
+	\includegraphics[width=\linewidth]{./gfx/plt-wireframe}
+	\captionof{figure}{Drahtgittermodell}
+\end{tcolorbox}
+Siehe auch \url{https://matplotlib.org/3.1.1/api/_as_gen/mpl_toolkits.mplot3d.axes3d.Axes3D.html?highlight=plot_wireframe} für weitere Details.
+
+\subsubsection{Surface Plots}
+Surface Plots oder ausgefüllte Drahtgittermodelle erreichen sie, indem Sie den Befehl \texttt{plot\_wireframe} durch \texttt{plot\_surface} ersetzen. Er folgt denselben Regeln wie \texttt{plot\_wireframe}, unterstütz jedoch andere optionale Parameter, die Sie unter \url{https://matplotlib.org/api/_as_gen/mpl_toolkits.mplot3d.axes3d.Axes3D.html?highlight=plot_surface} nachschlagen können. Unterstützt werden auch Schattierungs und Transparenz-Effekte.
+
+\begin{codebox}[Beispiel: Ausgefülltes Drahtgittermodell, width=.55\linewidth, nobeforeafter, equal height group = grpXmpSurface3D]
+\begin{minted}[linenos]{python3}
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+fig = plt.figure()
+drw = fig.add_subplot(
+    111,
+    projection='3d'
+)
+
+drw.plot_wireframe(X, Y, Z)
+
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Ausgef. Drahtgittermodell, width=.45\linewidth, nobeforeafter, equal height group = grpXmpSurface3D]
+	\includegraphics[width=\linewidth]{./gfx/plt-surface3D}
+	\captionof{figure}{Ausgefülltes Drahtgittermodell}
+\end{tcolorbox}
+
+\subsubsection{Flache 3D-Darstellung mit Falschfarben und als Kontourplot}
+Wie schon angesprochen können 3D-Darstellungen oft schwerer zu lesen sein. Teile des Plots sind \enquote{hinter} anderen verborgen, und auf den schräg über die Zeichenebene verlaufenden Achsen sind Werte oft schwerer exakt abzulesen. Eine beliebte Alternative sind daher Falschfarben-Darstellungen und Konturlinien.
+
+Mit der Methode \texttt{pcolor} lässt sich eine einrache Falschfarbendarstellung dreidimensionaler Daten erreichen. Wie schon bei \texttt{plot\_wireframe} und \texttt{plot\_surface} müssen nur die X-, Y- und Z-Daten übergeben werden. Jeder Punkt in der X-Y-Ebene wird durch ein Rechteck in einer bestimmten Farbe dargestellt. Die Farbe richtet sich dabei nach dem Z-Wert. Der Rückgabewert von \texttt{pcolor} ist ein \texttt{matplotlib.collections.PolyCollection}-Objekt und kann \ua dazu genutzt werden, um eine Farblegende zu erstellen. Hierzu dient die Methode \texttt{colorbar}. Sie wirkt auf ein \texttt{Figure}-Objekt, und fügt eine Farblegende zum zuletzt auf dieser \texttt{Figure} gezeichneten Sublot eine Farbskala hinzu. Als Parameter wird dabei ein Objekt erwartet, aus dem diese Farbskala erzeugt werden kann -- beispielsweise eben der Rückgabewert von \texttt{pcolor}.
+
+Die Methode \texttt{contour} zeichnet aus den X- Y- und Z-Daten eine Karte von \enquote{Höhenlinien}, \ie Linien, entlang derer der Z-Wert konstant bleibt. \enquote{Zwischen} den Gitterpunkten wird interpoliert.
+
+Die Methode \texttt{contourf} schließlich erzeugt ebenfalls Höhenlinien, füllt aber die Flächen zwischen diesen Linien farbig aus. Lesen Sie diesen Befehl also am besten als \emph{contour-filled}. Auf diese Art lässt sich eine \enquote{glattere} Darstellung als mit \texttt{pcolor} erreichen. Natürlich ist dies nicht immer auch so erwünscht.
+
+Weitere Details zu den Methoden finden Sie unter
+\begin{itemize}
+\item \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.pcolor.html}
+\item \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contour.html}
+\item \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html}
+\end{itemize}
+
+\begin{codebox}[Beispiel: Darstellung in Falschfarben und als Kontourplot]
+\begin{minted}[linenos]{python3}
+import matplotlib.pyplot as plt
+
+fig = plt.figure(figsize=(12,4))
+grd = fig.add_gridspec(1, 7)
+
+drw = fig.add_subplot(grd[0,0:2])
+drw.set_title("pcolor")
+col = drw.pcolor(X, Y, Z)
+
+drw = fig.add_subplot(grd[0,2:4])
+drw.set_title("contour")
+drw.set_yticks([])
+drw.contour(X, Y, Z)
+
+drw = fig.add_subplot(grd[0,4:6])
+drw.set_title("contourf")
+drw.set_yticks([])
+drw.contourf(X, Y, Z)
+
+drw = fig.add_subplot(grd[0,6])
+drw.axis("off")
+fig.colorbar(col)
+
+plt.show()
+\end{minted}
+\end{codebox}
+%
+\begin{tcolorbox}[title=Ausgabe: Darstellung in Falschfarben und als Kontourplot]
+	\includegraphics[width=\linewidth]{./gfx/plt-falseColour}
+	\captionof{figure}{Darstellung in Falschfarben und als Kontourplot}
+\end{tcolorbox}
 
 \section{Ausgabe in Dateien}
-%https://matplotlib.org/api/pyplot_api.html
+Die Graphen, die Sie mit der MatPlotLib erzeugen, können Sie auch direkt als Grafik-Dateien abspeichern. Hierzu dient der Befehl \texttt{plt.savefig} bzw. die Methode \texttt{savefig}.
 
+Der Methode \emph{muss} ein Dateiname als erster Parameter übergeben werden. Eine Datei mit entsprechendem Namen wird angelegt, falls sie noch nicht existiert; sollte eine Datei mit dem angegebenen Namen bereits existieren, wird diese ohne weitere Nachfrage überschrieben.
+
+Optional kann auch mit dem Parameter \texttt{format} ein String übergeben werden, der das Dateiformat festlegt. Unterstützt werden die Formate eps, pdf, pgf, png, ps, raw, rgba, svg und svgz. Der Default-Wert ist \inPy{"png"}; jedoch versucht die MatPlotLib aber auch, aus dem Dateinamen ein geeignetes Format abzuleiten. Wird kein Format explizit angegeben, wird die Erweiterung des Dateinamens zur Bestimmung des Dateityps herangezogen. Beispielsweise führt \texttt{fig.savefig("filename.pdf")} eine PDF mit dem Namen \texttt{filename.pdf} erzeugen. Dagegen liefert \texttt{fig.savefig("filename.pdf", format="png")} dazu, dass eine PNG mit dem Dateinamen \texttt{filename.pdf} geschrieben wird.
+
+Sehen Sie sich auch die Dokumentation unter \url{https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.figure.Figure.html?highlight=savefig#matplotlib.figure.Figure.savefig} an für weitere Details.
+
+\begin{hintbox}[Speicherbedarf]
+In Python ist es sehr leicht, große Datenmengen zu generieren, und damit sogar zeitweise seinen Rechner komplett auszulasten. Dies sollte insbesondere bedacht werden, wenn mit Plots gearbeitet wird.
+
+Die MatPlotLib speichert intern keine Bilder, sondern wirklich die Rohdaten. Das bedeutet, dass zu jedem Punkt einer Kurve sowohl X- als auch Y-Koordinate gespeichert werden müssen. Da diese Informationen \idR als \inPy{float} vorliegen, sind dies also mindestens 16 Byte pro Datenpunkt. Ggf. kommen zusätzliche Daten für Formatierungen etc. hinzu. Eine Kurve mit \SI{1000000}{} Datenpunkten (nicht ungewöhnlich für wissenschaftliche Simulationen) belegt also bereits \SI{16}{MB} im Arbeitsspeicher, auch wenn das daraus errechnete Bild nur wenige \SI{100}{kB} belegt.
+\end{hintbox}
+%
+\begin{hintbox}[]
+Weiter liegen die Daten oft doppelt im Arbeitsspeicher vor. Betrachten Sie folgenden Code-Auszug:
+
+\begin{codebox}[Beispiel: Daten-Dopplung]
+\begin{minted}[]{python3}
+import matplotlib.pyplot as plt
+
+X = [x * .001 for x in range(1000000)]
+Y = [0]
+for x in X[1:] :
+    Y.append( (Y[-1] ** 2 - .0005 * x) % 2 )
+
+plt.plot(X, Y, ",")
+plt.show()
+\end{minted}
+\end{codebox}
+Die \inPy{list}s \texttt{X, Y} werden durch den Befehl \texttt{plot} tatsächlich in einen von der MatPlotLib verwalteten Speicherbereich \emph{kopiert}! Kurzfristig verbrauchen wir hier also \SI{32}{MB} an Arbeitsspeicher für eine einzige Kurve.
+
+Wenn wir verschiedene Parameter in unserer Simulation durchtesten, kann der Speicherbedarf schnell anwachsen. Anforderungen im Gigabyte-Bereich sind leicht erreicht.
+
+Um dieses Problem zu umgehen, können wir versuchen, unsere Simulation so aufzubauen, dass sie Daten nicht am Stück generiert, sondern jeweils in kleineren Batches. Aus diesen Batches wird nur eine Untermenge ausgewählt, die tatsächlich geplottet wird; der Rest dagegen wird wieder verworfen:
+
+\begin{codebox}[Beispiel: Batch-Weise Berechnung und reduziertes Plotten]
+\begin{minted}[]{python3}
+import matplotlib.pyplot as plt
+
+Y = [0]
+for batch in range(1000) :
+    X = [x * .001 for x in range(batch * 1000, (batch + 1) * 1000)]
+    for x in X[1:] :
+        Y.append( (Y[-1] ** 2 - .0005 * x) % 2 )
+    
+    plt.plot(X[::50], Y[::50], "b,")
+    
+    Y = [(Y[-1] ** 2 - .0005 * x) % 2]
+plt.show()
+\end{minted}
+\end{codebox}
+
+Im zweiten Beispiel sinkt der Speicherbedarf vom \SI{32}{MB} auf nur knapp über \SI{46}{kB}. Manchmal bringt ein solches Reduzieren der zu plottenden Datenmenge zusätzlich den Vorteil, dass die innere Struktur der Plots leichter erkennbar wird, wie die Gegenüberstellung der beiden Ausgaben zeigt:
+\end{hintbox}
+%
+\begin{hintbox}[]
+\begin{center}
+	\includegraphics[width=.9\linewidth]{./gfx/plt-chaos-reduced}
+	\captionof{figure}{Deterministisches Chaos: Voller Datensatz und Reduzierter Datensatz}
+\end{center}
+
+Das Beispiel ist lose angelehnt an die Erkenntnisse, die ich aus dem Kurs \emph{Chaos and Nonlinear Dynamics} an der Universität Regensburg gewonnen habe.
+\end{hintbox}

@@ -474,6 +474,7 @@ print("Instanz:\n", dir(myBrain), "\n")
 print("Klasse :\n", dir( Empty ), "\n")
 \end{minted}
 \end{codebox}
+
 \begin{cmdbox}[Ausgabe: \texttt{dir}]
 \begin{minted}{text}
 Instanz:
@@ -482,7 +483,11 @@ Instanz:
   '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', 
   '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', 
   '__str__', '__subclasshook__', '__weakref__', 'attribute'] 
-
+\end{minted}
+\end{cmdbox}
+%
+\begin{cmdbox}[]
+\begin{minted}{text}
 Klasse :
  ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', 
   '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', 
@@ -557,10 +562,7 @@ class Expartner :
         reVal += "  Downsides   : " + str(self.downsides)[1:-1] + "\n"
         reVal += "  Total Rating: " + str(self.rating())
         return reVal
-\end{minted}
-\end{codebox}
-\begin{codebox}[]
-\begin{minted}[linenos, firstnumber=last]{python3}
+
 ex = Expartner("Sönke" , 1.81, 
               {"intelligent", "quite handsome", "cheerful nature"},
               {"superficial", "racist"})
@@ -650,7 +652,11 @@ exbfs = [
     Expartner("Sönke", 1.81,
               {"intelligent", "quite handsome", "cheerful nature"},
               {"superficial", "racist"})]
-
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[]
+\begin{minted}[linenos, firstnumber=last]{python3}
 exgfs = [
     Expartner("Steffie", 1.65, 
               {"intelligent", "beautiful", "has a dog"},
@@ -675,7 +681,7 @@ for ex in allExes :
 \end{minted}
 \end{codebox}
 
-Beachten Sie zuerst Zeile 25: Wir vergleichen \emph{direkt} Instanzen der Klasse \inPy{Expartner}. Natürlich wäre es immer noch möglich, zu fragen ob \inPy{exbfs[0].rating() < exbfs[1].rating()}. Diese Bedingung hätte in Zeile 25 exakt denselben Effekt. Diese explizite Angabe können Sie sich von hier weg aber sparen. Durch die Implementation von \inPy{__eq__} etc \enquote{weiß} Python, nach welchen Regeln ein Vergleich stattzufinden hat. Natürlich hätte es wenig Sinn, diese sechs Methoden zu implementieren, wenn diese nur an einer einzigen Stelle verwendet werden (wie in diesem Beispiel). Im Allgemeinen aber werden Sie Klassen und Instanzen in sehr viel größeren Kontexten verwenden, und gewinnen so signifikant Komfort.
+Beachten Sie zuerst Zeile 25: Wir vergleichen \emph{direkt} Instanzen der Klasse \inPy{Expartner}. Natürlich wäre es immer noch möglich, zu fragen ob \inPy{exbfs[0].rating() < exbfs[1].rating()}. Diese Bedingung hätte in Zeile 25 exakt denselben Effekt. Diese explizite Angabe können Sie sich von hier weg aber sparen. Durch die Implementation von \inPy{__eq__} etc. \enquote{weiß} Python, nach welchen Regeln ein Vergleich stattzufinden hat. Natürlich hätte es wenig Sinn, diese sechs Methoden zu implementieren, wenn diese nur an einer einzigen Stelle verwendet werden (wie in diesem Beispiel). Im Allgemeinen aber werden Sie Klassen und Instanzen in sehr viel größeren Kontexten verwenden, und gewinnen so signifikant Komfort.
 
 Ein weiterer Vorteil der Verwendung dieser Duders liegt darin, dass viele Funktionen \enquote{in ihrem Inneren} Vergleiche durchführen, und damit natürlich nur anwendbar sind, wenn der notwendige Vergleich klar definiert ist. Dies gilt zum Beispiel für die Funktion \inPy{sorted}. Wie Sie sich aus Kapitel \ref{chp:Containers} erinnern (und wie der Name vermuten lässt), wird dieser Befehl benutzt, um Datencontainer zu sortieren. Um diese Aufgabe zu erledigen, führt \inPy{sorted} für Elemente \inPy{a, b} des Containers jeweils Vergleiche \inPy{a < b}, ... durch. Ohne die Dunders, die wir gerade besprechen, wäre das nicht möglich. Natürlich könnten wir immer noch ein Lambda übergeben, das das Ergebnis von \inPy{rating} als Sortierkriterium markiert (vgl. Hierzu Kapitel \ref{chp:Funcs}). Durch die hier gewählte Methode erhalten wir aber die Wahl des Sortierkriteriums automatisch.
 
@@ -1036,6 +1042,11 @@ A + A
 A * A
 [1, 4]
 [9, 16]
+\end{minted}
+\end{cmdbox}
+%
+\begin{cmdbox}[]
+\begin{minted}{text}
 A @ B
 [21, 18, 15]
 [51, 44, 37]
@@ -1240,7 +1251,7 @@ Reginald
 \end{minted}
 \end{cmdbox}
 
-Durch das \inPy{(Expartner)} in Zeile 3 werden alle Attribute und Methoden von \inPy{Expartner} kopiert. Wir können also auch neue Instanzen mit \inPy{ex = ExpartnerWithEyeColor(name, height)} und haben die Methode \inPy{rating} zur Verfügung. Vergleiche zwischen Instanzen von \inPy{ExpartnerWithEyeColor} oder sogar zwischen Instanzen von \inPy{ExpartnerWithEyeColor} und \inPy{Expartner} sind direkt möglich (denn unsere Vergleichsmethoden prüfen nicht den Datentyp ab, sondern verlangen nur, dass eine Methode \inPy{rating} existiert). Die Methode \inPy{__str__} dagegen wurde überschrieben, und listet nun auch die Augenfarbe mit auf.
+Durch das \inPy{(Expartner)} in Zeile 3 werden alle Attribute und Methoden von \inPy{Expartner} kopiert. Wir können also auch neue Instanzen mit \inPy{ex = ExpartnerWithEyeColor(name, height)} anlegen, und haben die Methode \inPy{rating} zur Verfügung. Vergleiche zwischen Instanzen von \inPy{ExpartnerWithEyeColor} oder sogar zwischen Instanzen von \inPy{ExpartnerWithEyeColor} und \inPy{Expartner} sind direkt möglich (denn unsere Vergleichsmethoden prüfen nicht den Datentyp ab, sondern verlangen nur, dass eine Methode \inPy{rating} existiert). Die Methode \inPy{__str__} dagegen wurde überschrieben, und listet nun auch die Augenfarbe mit auf.
 
 \subsection{Methoden der Basisklasse -- super()}
 Unsere Implementierung oben hat noch zwei kleine Schönheitsfehler:
@@ -1279,6 +1290,111 @@ Betrachten wir zuerst Zeile 12: Hier behandeln wir also die aktuelle Klasseninst
 
 Ähnlich lassen wir in Zeile 8 bereits alle Attribute ausfüllen, die schon in \inPy{Expartner} existiert haben. Insbesondere nutzen wir hier auch dieselbe Plausiblitätsprüfung: ExpartnerInnen mit negativer Körpergröße führen zu einer Fehlermeldung. Was danach noch übrig bleibt ist das Eintragen der Augenfarbe, was in Zeile 9 erledigt wird.
 
-\begin{hintbox}[Vererbungs-Tiefe klein halten]
+
+\subsection{Mehrfach-Vererbung}
+Es ist auch möglich, dass eine Klasse von \emph{mehreren} Basisklassen erbt. Das Ergebnis ist eine Klasse, die die \emph{Summe} aller Methoden und Attribute der Basisklasse implementiert. Dabei darf es nicht zu Namenskollisionen kommen: Sowohl die Basisklasse \texttt{A} als auch die Basisklasse \texttt{B} eine Methode \texttt{M} besitzen, wird die abgeleitete Klasse \inPy{class X(A, B)} nur die Methode \texttt{M} von \texttt{A} übernehmen. Einzige Ausnahme: Die Methode \inPy{__init__} wird von allen Basisklassen übernommen; \inPy{super().__init__()} ruft die Konstruktoren von \emph{allen} Basisklassen in der Reihenfolge auf, in der sie bei der Definition der abgeleiteten Klasse genannt wurden.
+
+Betrachten wir das folgende Klassendiagramm:
+\begin{tcolorbox}[title=Klassendiagramm]
+%
+\tikzstyle{class}=[rectangle, draw=black, rounded corners, fill=blue!40!black,
+        text centered, anchor=north, text=white, text width=4.5cm]
+\tikzstyle{instance}=[rectangle, draw=black, rounded corners, fill=green!40!white,
+        text centered, anchor=north, text=black, text width=4.5cm]
+                
+\tikzstyle{inherits}=[->, >=open triangle 90, thick]
+\tikzstyle{instantiates}=[->, >=open diamond, thick]
+
+\begin{tikzpicture}[node distance=1cm]
+	\node (Animal) [class]                  {\texttt{Animal}};
+	\node (Mammal) [class, below=of Animal] {\texttt{Mammal}};
+	
+	\node (AuxNode01) [          below=of Mammal   , text width=0.0cm] {};
+	\node (AuxNode02) [          right=of Animal   , text width=0.5cm] {};
+	\node (Klasse)    [class,    right=of AuxNode02, text width=3.0cm] {\texttt{Klasse}};
+	\node (Instanz)   [instance, below=of Klasse   , text width=3.0cm] {\texttt{Instanz}};
+	
+	\node (NonWingedMammal) [class, left =of AuxNode01] {\texttt{NonWingedMammal}};
+	\node (NonMarineMammal) [class, right=of AuxNode01] {\texttt{NonMarineMammal}};
+	
+	\node (Dog) [class, below=of AuxNode01] {\texttt{Dog}};
+	
+	\node (d)   [instance, below=of Dog] {\texttt{d}};
+	\node (bat) [instance, right=of d]   {\texttt{bat}};
+	
+	\draw[inherits] (Mammal.north) -| (Animal.south);
+	\draw[inherits] (NonWingedMammal.north) -- ++(0,0.36) -| (Mammal.south);
+	\draw[inherits] (NonMarineMammal.north) -- ++(0,0.40) -| (Mammal.south);
+	\draw[inherits] (Dog.north) -- ++(0,0.40) -| (NonMarineMammal.south);
+	\draw[inherits] (Dog.north) -- ++(0,0.40) -| (NonWingedMammal.south);
+	
+	\draw[instantiates] (d.north)   -- ++(0,0.40) -| (Dog.south);
+	\draw[instantiates] (bat.north) -- ++(0,1.20) -| ([xshift=0.8cm] NonMarineMammal.south);
+\end{tikzpicture}
+(Quelle: \url{https://www.programiz.com/python-programming/methods/built-in/super})
+\end{tcolorbox}
+
+dies lässt sich durch den folgenden Code umsetzen:
+
+\begin{codebox}[Beispiel: Multi-Vererbung]
+\begin{minted}[linenos]{python3}
+class Animal :
+  def __init__(self, Animal) :
+    print(Animal, 'is an animal.')
+    
+class Mammal(Animal) :
+  def __init__(self, mammalName) :
+    print(mammalName, 
+          'is a warm-blooded animal.')
+    super().__init__(mammalName)
+
+class NonWingedMammal(Mammal) :
+  def __init__(self, NonWingedMammal) :
+    print(NonWingedMammal, "can't fly.")
+    super().__init__(NonWingedMammal)
+
+class NonMarineMammal(Mammal) :
+  def __init__(self, NonMarineMammal) :
+    print(NonMarineMammal, 
+          "can't swim.")
+    super().__init__(NonMarineMammal)
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[]
+\begin{minted}[linenos, firstnumber=last]{python3}
+    
+class Dog(NonMarineMammal,
+          NonWingedMammal) :
+  def __init__(self) :
+    print('Dog has 4 legs.')
+    super().__init__('Dog')
+
+d = Dog()
+print('')
+bat = NonMarineMammal('Bat')
+\end{minted}
+\end{codebox}
+
+und erzeugt die Ausgabe:
+
+\begin{cmdbox}[Ausgabe: Multi-Vererbung]
+\begin{minted}{text}
+Dog has 4 legs.
+Dog can't swim.
+Dog can't fly.
+Dog is a warm-blooded animal.
+Dog is an animal.
+
+Bat can't swim.
+Bat is a warm-blooded animal.
+Bat is an animal.
+\end{minted}
+\end{cmdbox}
+
+
+\begin{hintbox}[Klassenbeziehungen einfach halten]
 Die Technik \emph{Vererbung} ist zweifellos sehr nützlich, kann aber schnell unerwartete Nebeneffekte ansammeln. Über mehrere Ebenen hinweg geht der Überblick leicht verloren. Versuchen Sie daher nach Möglichkeit, abgeleitete Klassen nicht als Basisklasse anderer Klassen zu benutzen.
+
+Auch von Mehrfach-Vererbung wird im Allgemeinen abgeraten. Zu bevorzugen sind einfachere Code-Strukturen mit weniger verschränkten Abhängigkeiten.
 \end{hintbox}
