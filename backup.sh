@@ -59,8 +59,9 @@ if [ ! -d ./.git ]; then
 fi
 
 
-git config credential.helper store
-git config --global credential.helper 'cache --timeout 7200'
+# old method using Username and Password -- deprecated; now use SSH key
+# git config credential.helper store
+# git config --global credential.helper 'cache --timeout 7200'
 
 for FILE in $FILE_PATTERNS
 do
