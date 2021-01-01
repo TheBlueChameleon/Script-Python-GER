@@ -639,7 +639,7 @@ finden wir die folgende Häufigkeit der Zahlen:
 Eine solche Aufschlüsselung nennt sich \emph{Histogramm}. In der Regel führen wir dann \emph{bins} ein, \ie Wertebereiche, die als eine Klasse gezählt werden sollen. Wollen wir also jeweils zwei aufeinanderfolgende Zahlen als eine Klasse zählen, so erhalten wir folgende Aufschlüsselung:
 \mint{python3}{{1:4, 3:1, 5:3, 7:1}}
 
-Mit der MatPlotLib können solche Histogramme automatisch erstellt\footnote{Tatsächlich erfolgt die Datenanalyse im Hintergrund mit dem Modul numpy, das in Kapitel \ref{chp:Numpy} besprochen wird. Aus didaktischen Gründen wollen wir hier zuerst die MatPlotLib besprechen.} und als Plot dargestellt werden. Hierzu dient der Befehl \texttt{hist}. Als Parameter wird eine Liste von Ergebnissen übergeben, aus der automatisch das Histogramm berechnet und daraus ein Balkendiagramm erstellt. Rückgabewert von \texttt{hist} ist ein Tupel bestehend aus den \inPy{list}s\footnote{Eigentlich numpy-Arrays; diese verhalten sich aber im Wesentlichen wie \inPy{list}s. Siehe Kapitel \ref{chp:Numpy} für Details.} \texttt{count} und \texttt{bins} sowie einem \texttt{Patch}-Objekt. In \texttt{count[i]} ist gespeichert, wie viele Ergebnisse jeweils in die \texttt{i}-te Klasse fallen; \texttt{bins[i]} gibt an, bei welchem Wert die \texttt{i}-te Klasse beginnt. Auf das \texttt{Patch}-Objekt kann hier nicht näher eingegangen werden.
+Mit der MatPlotLib können solche Histogramme automatisch erstellt\footnote{Tatsächlich erfolgt die Datenanalyse im Hintergrund mit dem Modul NumPy, das in Kapitel \ref{chp:Numpy} besprochen wird. Aus didaktischen Gründen wollen wir hier zuerst die MatPlotLib besprechen.} und als Plot dargestellt werden. Hierzu dient der Befehl \texttt{hist}. Als Parameter wird eine Liste von Ergebnissen übergeben, aus der automatisch das Histogramm berechnet und daraus ein Balkendiagramm erstellt. Rückgabewert von \texttt{hist} ist ein Tupel bestehend aus den \inPy{list}s\footnote{Eigentlich NumPy-Arrays; diese verhalten sich aber im Wesentlichen wie \inPy{list}s. Siehe Kapitel \ref{chp:Numpy} für Details.} \texttt{count} und \texttt{bins} sowie einem \texttt{Patch}-Objekt. In \texttt{count[i]} ist gespeichert, wie viele Ergebnisse jeweils in die \texttt{i}-te Klasse fallen; \texttt{bins[i]} gibt an, bei welchem Wert die \texttt{i}-te Klasse beginnt. Auf das \texttt{Patch}-Objekt kann hier nicht näher eingegangen werden.
 
 \begin{codebox}[Beispiel: Einfaches Histogramm]
 \begin{minted}[linenos]{python3}
@@ -1410,7 +1410,7 @@ plt.show()
 \subsection{Plots von Flächen}
 Für die Darstellung von Flächen im Dreidimensionalen muss die Zuordnung von X-Y-Koordinaten zur Z-Koordinate derselben Logik folgen wie bei den Vektorfeldern (siehe Seite \pageref{ssc:vecFields}): Wir brauchen zwei \emph{zweidimensionale Arrays} \texttt{X, Y}, die so das \emph{Meshgrid} aufspannen. \texttt{X[i][j]} enthält dann die X-Koordinate des \texttt{i}-ten Punkts in Zeilenrichtung und des \texttt{j}-ten Punkts in Spaltenrichtung. Gleiches gilt für \texttt{Y} bezüglich der Y-Koordinaten.
 
-Die zugeordneten Daten \texttt{Z} müssen als \emph{zweidimensionales numpy-Array} vorliegen. Im Detail wird das Modul \texttt{numpy} erst in Kapitel \ref{chp:Numpy} besprochen; es kann jedoch direkt aus einer \emph{zweidimensionalen} \inPy{list} über den Konstruktor von \texttt{numpy.array} erzeugt werden.
+Die zugeordneten Daten \texttt{Z} müssen als \emph{zweidimensionales NumPy-Array} vorliegen. Im Detail wird das Modul \texttt{numpy} erst in Kapitel \ref{chp:Numpy} besprochen; es kann jedoch direkt aus einer \emph{zweidimensionalen} \inPy{list} über den Konstruktor von \texttt{numpy.array} erzeugt werden.
 
 Der folgende Code erzeugt die Daten, die wir in den weiteren Beispielen für die Plots verwenden werden:
 \begin{codebox}[Beispiel: Datenerzeugung: Sattelfläche]
@@ -1436,7 +1436,7 @@ Z=np.array(Z)
 \end{minted}
 \end{codebox}
 
-\begin{tcolorbox}[title=Sneak Preview: numpy]
+\begin{tcolorbox}[title=Sneak Preview: NumPy]
 Die Plot-Daten können mit dem Modul \texttt{numpy} auch so erzeugt werden:
 
 \vspace{6pt}
@@ -1492,7 +1492,7 @@ drw = fig.add_subplot(
     projection='3d'
 )
 
-drw.plot_wireframe(X, Y, Z)
+drw.plot_surface(X, Y, Z)
 
 plt.show()
 \end{minted}
