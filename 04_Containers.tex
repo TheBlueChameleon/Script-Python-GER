@@ -892,7 +892,7 @@ print("myList after sort  : ", myList)
 \end{minted}
 \end{codebox}
 
-\begin{cmdbox}[Ausgabe]
+\begin{cmdbox}[Ausgabe: \texttt{sort} vs. \texttt{sorted}]
 \begin{minted}{text}
 myList after sorted: [5, 9, 2]
 sortedList         : [2, 5, 9]
@@ -903,7 +903,7 @@ myList after sort  : [2, 5, 9]
 
 Dies lässt sich auch auf \inPy{dict}s anwenden. Achten Sie darauf, dass ohne weitere Angaben nur die Schlüssel des \inPy{dict}s herangezogen werden:
 
-\begin{codebox}[Beispiel: \texttt{dict}s : und \texttt{sorted}]
+\begin{codebox}[Beispiel: \texttt{dict}s und \texttt{sorted}]
 \begin{minted}[linenos]{python3}
 houseStark = {"Sigil" : "A grey direwolf on a white field",
               "Words" : "Winter Is Coming", "Seat"  : "Winterfell"}
@@ -913,7 +913,7 @@ print( sorted(houseStark.items()) )
 \end{minted}
 \end{codebox}
 
-\begin{cmdbox}[Ausgabe]
+\begin{cmdbox}[Ausgabe: \texttt{dict}s und \texttt{sorted}]
 \begin{minted}{text}
 ['Seat', 'Sigil', 'Words']
 [('Seat', 'Winterfell'), ('Sigil', 'A grey direwolf on a white field'), 
@@ -926,7 +926,7 @@ Wie schon angesprochen ist die Anordnung der Elemente in \inPy{dict}s nicht fest
 \subsubsection{\inPy{zip}}
 Mit dem Befehl \inPy{zip} können Listen zu Tabellen zusammengeschlossen werden. Jede einzelne Liste liefert die Daten einer Spalte. Das Ergebnis ist eine Datensammlung, die man zum Beispiel wieder zu einer \emph{Liste von Zeilen} machen kann:
 
-\begin{codebox}[Beispiel: \texttt{dict}s : und \texttt{sorted}]
+\begin{codebox}[Beispiel: \texttt{zip}]
 \begin{minted}[linenos]{python3}
 categories     = ["House", "Sigil", "Words", "Seat"]
 houseStark     = ["Stark", "A grey direwolf on a white field",
@@ -942,13 +942,36 @@ print( houses )
 \end{minted}
 \end{codebox}
 
-\begin{cmdbox}[Ausgabe]
+\begin{cmdbox}[Ausgabe: \texttt{zip}]
 \begin{minted}{text}
 [('House', 'Stark', 'Lannister', 'Tyrell'), 
  ('Sigil', 'A grey direwolf on a white field', 'A gold lion, 
    on a crimson field', 'A golden rose on a green field'), 
  ('Words', 'Winter Is Coming', 'Hear Me Roar!', 'Growing Strong'), 
  ('Seat', 'Winterfell', 'Casterly Rock', 'Highgarden')]  
+\end{minted}
+\end{cmdbox}
+
+\subsubsection{\inPy{min} und \inPy{max}}
+Wie der Name vermuten lässt, durchsuchen diese beiden Befehle einen Container nach seinem kleinsten bzw. größsten Element. Dabei werden dieselben Regeln angewandt, die schon für die Vergleichsoperatoren (\texttt{<} und \texttt{>}) besprochen wurden:
+
+\begin{codebox}[Beispiel: \texttt{min} und \texttt{max}]
+\begin{minted}[linenos]{python3}
+dataNumbers = [4, 3.7, -2112]
+dataStrings = ["Victoria", "Epsi", "Charlotte"]
+dataLists   = [ [1], [1, 2], [2, 2]]
+
+print( min(dataNumbers), max(dataNumbers) )
+print( min(dataStrings), max(dataStrings) )
+print( min(dataLists  ), max(dataLists  ) )
+\end{minted}
+\end{codebox}
+
+\begin{cmdbox}[Ausgabe: \texttt{min} und \texttt{max}]
+\begin{minted}{text}
+-2112 4
+Charlotte Victoria
+[1] [2, 2]
 \end{minted}
 \end{cmdbox}
 
@@ -1013,7 +1036,7 @@ print( houses )
 
 \begin{figure}
 	\centering
-	\includegraphics[width=.3\linewidth]{./gfx/xkcd-types} \\
+	\includegraphics[width=.4\linewidth]{./gfx/xkcd-types} \\
 	\enquote{\texttt{colors.rgb('{}'blue'{}')} yields \texttt{'{}'\#0000FF'{}'}.
 	 \texttt{colors.rgb('{}'yellowish blue'{}')} yields \texttt{NaN}. 
 	 \texttt{colors.sort()} yields \texttt{'{}'rainbow'{}'}}
