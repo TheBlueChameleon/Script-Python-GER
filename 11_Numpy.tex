@@ -198,7 +198,7 @@ print(npTab .ndim, len(npTab.shape))
 \begin{cmdbox}[Anzahl Elemente \& Dimensionen, width=.4\linewidth, nobeforeafter, equal height group = grpXmpSimpleNDimsElements]
 \begin{minted}{text}
 3 3
-12 12
+6 6
 
 1 1
 2 2
@@ -2032,7 +2032,7 @@ folgt. Dabei ist \texttt{A} die Matrix (bzw. der Vektor oder Tensor), deren Norm
 
 Eine Maßzahl in der Numerik ist die \emph{Kondition} einer Matrix. Sie gibt die \enquote{Störungsanfälligkeit} einer Matrix an und sollte im Optimalfall klein sein (kleiner als 100). Berechnet wird sie über die Norm der Matrix mit dem Befehl \texttt{linalg.cond}. Dieser folgt der Syntax
 \begin{center}
-	np.linalg.cond(A, ord)
+	\texttt{np.linalg.cond(A, ord)}
 \end{center}
 wobei \texttt{A} die Matrix ist, deren Norm berechnet werden soll, und \texttt{ord} die Norm identifiziert, mit der gearbeitet werden soll. Erlaubt sind dieselben Werte wie auch für \texttt{linalg.norm}, also die in Tabelle \ref{tab:NumPy-MatrixNorms} aufgelisteten Optionen.
 
@@ -2071,7 +2071,7 @@ Effektiv bedeutet das, dass die erste Zahl einer Zufallsfolge schon die gesamte 
 Charakterisiert werden Zufallsgeneratoren (also die oben angesprochene Funktion $f$) nach drei Kenngrößen: Periode, Zeitbedarf und Korrelation. Mit Periode ist die Anzahl der Zufallszahlen, nach denen sich die Zufallszahlen wiederholen. Zeitbedarf meint der Rechen- bzw. Zeitaufwand, der nötig ist, um eine neue Zahl der Folge zu finden. Die Korrelation ist ein Maß dafür, \enquote{wie zufällig} eine Zahlenreihe ist (also beispielsweise, wie wahrscheinlich es ist, dass auf eine kleine Zahl eine zweite kleine Zahl folgt).
 \end{hintbox}
 
-Der Standard-Generator von NumPy ist der PGC64, der zwar eine bedeutend kürzere Periode hat als der MT19937 ($2^{128} \approx 3.4 \cdot 10^{38}$), dafür aber auch schneller berechnet werden kann und einige statistische Vorteile bietet.
+Der Standard-Generator von NumPy ist der PCG64, der zwar eine bedeutend kürzere Periode hat als der MT19937 ($2^{128} \approx 3.4 \cdot 10^{38}$), dafür aber auch schneller berechnet werden kann und einige statistische Vorteile bietet.
 
 Der Link \url{https://numpy.org/doc/stable/reference/random/performance.html} listet die von NumPy unterstützten Zufallsgeneratoren sowie deren Zeitbedarf auf.
 
@@ -2099,7 +2099,7 @@ print( rng.uniform() )    # Erzeugt eine zufällige Zahl zwischen 0 und 1
 \end{minted}
 \end{codebox}
 
-Dieses Vorgehen mag Ihnen unnötig aufwändig erscheinen. Für den -- von den EntwicklerInnen von NumPy empfohlenen -- Generator PGC64 ist das Generator-Objekt schon vorbereitet und kann über \emph{Funktionen} von NumPy direkt angesprochen werden:
+Dieses Vorgehen mag Ihnen unnötig aufwändig erscheinen. Für den -- von den EntwicklerInnen von NumPy empfohlenen -- Generator PCG64 ist das Generator-Objekt schon vorbereitet und kann über \emph{Funktionen} von NumPy direkt angesprochen werden:
 
 \begin{codebox}[Standard-Zufallsgenerator verwenden]
 \begin{minted}[linenos]{python3}
@@ -2214,7 +2214,7 @@ Schließlich kann \texttt{choice} genutzt werden, um zufällige Elemente aus ein
                   raster equal height,
                   nobeforeafter,
                   raster column skip=0.5cm]
-\begin{codebox}[Beispiel: \texttt{uniform} und \texttt{randint}]
+\begin{codebox}[Beispiel: \texttt{shuffle} und \texttt{permutation}]
 \begin{minted}[linenos]{python3}
 import numpy as np
 from numpy import random
@@ -2230,7 +2230,7 @@ print(A)
 \end{minted}
 \end{codebox}
 %
-\begin{cmdbox}[Ausgabe: \texttt{uniform} und \texttt{randint}]
+\begin{cmdbox}[Ausgabe: \texttt{shuffle} und \texttt{permutation}]
 \begin{minted}{text}
 [[ 0  1  2  3  4]
  [ 5  6  7  8  9]

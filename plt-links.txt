@@ -1,0 +1,19 @@
+### done
+barplots     : https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.bar.html
+pie diagram  : https://matplotlib.org/3.1.0/gallery/pie_and_polar_charts/pie_features.html#sphx-glr-gallery-pie-and-polar-charts-pie-features-py
+Stackplot    : https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/stackplot_demo.html#sphx-glr-gallery-lines-bars-and-markers-stackplot-demo-py
+Quiver       : https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.quiver.html#matplotlib.axes.Axes.quiver
+Subplots     : https://matplotlib.org/3.3.3/api/_as_gen/matplotlib.pyplot.subplots.html
+custom ticker: https://matplotlib.org/3.1.1/gallery/ticks_and_spines/custom_ticker1.html#sphx-glr-gallery-ticks-and-spines-custom-ticker1-py
+polar + annot: https://matplotlib.org/3.1.0/gallery/pyplots/annotation_polar.html#sphx-glr-gallery-pyplots-annotation-polar-py
+gallery      : https://matplotlib.org/3.1.0/gallery/index.html
+histMultiplot: https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/scatter_hist.html#sphx-glr-gallery-lines-bars-and-markers-scatter-hist-py
+
+### todo
+3D-Plots     : https://matplotlib.org/mpl_toolkits/mplot3d/tutorial.html
+
+### keep
+Tutorial     : https://matplotlib.org/tutorials/introductory/pyplot.html
+Full Ref     : https://matplotlib.org/api/pyplot_api.html
+hline / vline: https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/vline_hline_demo.html#sphx-glr-gallery-lines-bars-and-markers-vline-hline-demo-py
+Timeline     : https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/timeline.html#sphx-glr-gallery-lines-bars-and-markers-timeline-py

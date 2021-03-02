@@ -118,7 +118,7 @@ für einen Graphen aus blauen Punkten, die durch mit einer Linie verbunden sind.
 \begin{center}
 	\begin{tabular}{cc|cc|cc|cc}
 		Symbol     & Linie        & Symbol      & Linie       & Symbol     & Linie     & Symbol      & Linie       \tabcrlf
-		\texttt{-} & durchgezogen & \texttt{--} & gestrichelt & \texttt{:} & gepunktet & \texttt{-.} & strichpunkt \\
+		\texttt{-} & durchgezogen & \texttt{-{}-} & gestrichelt & \texttt{:} & gepunktet & \texttt{-.} & strichpunkt \\
 	\end{tabular}
 \end{center}
 \end{tcolorbox}
@@ -296,7 +296,7 @@ In Abbildung \ref{gfx:PlotLinear} können wir kaum Details erkennen: Beide Plots
 
 Wir haben diese Verzerrung erreicht, indem wir in Zeile 19 die y-Achse logarithmisch skaliert haben. Ebenso könnten wir mit \inPy{plt.xscale("log")} auch die x-Achse verzerren.
 
-Der Logarithmus von 0 oder negativen Werten ist nicht definiert\footnote{liebe MathematikerInnen: natürlich beziehe ich mich auf den reellwertigen Logarithmus bzw. auf den Hauptzweig des Logarithmus.}. Um dennoch mit Werten umzugehen, die das Vorzeichen wechseln können und aber sinnvoller logarithmisch aufgetragen werden sollten, existiert auch die Option \inPy{"symlog"}. Hier wird jeweils der Logarithmus \emph{des Betrags} der Werte aufgetragen; abhängig vom Vorzeichen geschieht dies dann nach oben oder unten (\inPy{plt.yscale("simlog")} bzw. nach links oder rechts (\inPy{plt.xscale("simlog")}. Werte nahe der 0 werden linear aufgetragen. Was als nahe der 0 gelten soll, kann mit den Keyword-Arguments \texttt{linthreshx} bzw. \texttt{linthreshy} bestimmt werden. Die Grenzen des linearen bereichs sind auch als Hilfslinien sichtbar, wenn \texttt{grid} benutzt wird.
+Der Logarithmus von 0 oder negativen Werten ist nicht definiert\footnote{liebe MathematikerInnen: natürlich beziehe ich mich auf den reellwertigen Logarithmus bzw. auf den Hauptzweig des Logarithmus.}. Um dennoch mit Werten umzugehen, die das Vorzeichen wechseln können und aber sinnvoller logarithmisch aufgetragen werden sollten, existiert auch die Option \inPy{"symlog"}. Hier wird jeweils der Logarithmus \emph{des Betrags} der Werte aufgetragen; abhängig vom Vorzeichen geschieht dies dann nach oben oder unten (\inPy{plt.yscale("symlog")} bzw. nach links oder rechts (\inPy{plt.xscale("symlog")}. Werte nahe der 0 werden linear aufgetragen. Was als nahe der 0 gelten soll, kann mit den Keyword-Arguments \texttt{linthreshx} bzw. \texttt{linthreshy} bestimmt werden. Die Grenzen des linearen bereichs sind auch als Hilfslinien sichtbar, wenn \texttt{grid} benutzt wird.
 
 Für statistische Auswertungen ist manchmal auch der \enquote{Logit} einer Wahrscheinlichkeit interessant ($\text{logit}(y) = \log(\frac{y}{1-y})$). Für y-Werte zwischen 0 und 1 kann so auch \inPy{plt.xscale("logit")} eingestellt werden.
 
